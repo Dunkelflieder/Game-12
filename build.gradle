@@ -1,0 +1,39 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'distribution'
+
+repositories {
+    jcenter()
+}
+
+version = '0.1.0'
+
+dependencies {
+    compile project(':noise-engine')
+
+    // Use JUnit test framework
+    testCompile 'junit:junit:4.12'
+
+}
+
+task createRun(type: Copy) {
+    from 'dist'
+    from 'src/main/dist'
+    into 'run'
+}
+
+run.workingDir 'run'
+run.dependsOn createRun
+
+clean.dependsOn cleanCreateRun
+
+distributions {
+    main {
+        contents {
+            from 'dist'
+            from 'src/main/dist'
+        }
+    }
+}
+
+mainClassName = 'strategy.ClientMain'

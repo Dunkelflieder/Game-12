@@ -1,0 +1,29 @@
+{
+	"core": [
+		{
+			"name": "bounding",
+			"class": "BoundingComponent"
+		},
+		{
+			"name": "player",
+			"class": "PlayerComponent"
+		}
+	],
+	"client": [
+		{
+			"name": "render",
+			"class": "RenderComponent"
+		},
+		{
+			"name": "interpolatePosition",
+			"class": "InterpolatePositionComponent"
+		},
+		{
+			"name": "light",
+			"class": "LightComponent"
+		}
+	],
+	"server": [
+
+	]
+}

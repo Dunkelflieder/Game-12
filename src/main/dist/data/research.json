@@ -1,0 +1,50 @@
+{
+	"start": [
+		"main",
+		"lumberjack",
+		"lumberjackBase",
+		"mine",
+		"storage1",
+		"energy1",
+		"energy2",
+		"woodProcessing1"
+	],
+	"locations": [
+		{
+			"name": "basic",
+			"list": [
+				"mine",
+				"lumberjack"
+			]
+		},
+		{
+			"name": "weapons1",
+			"list": [
+				"tree"
+			]
+		}
+	],
+	"research": [
+		{
+			"name": "mine",
+			"researchTime": 10.0,
+			"requires": [
+				"main"
+			]
+		},
+		{
+			"name": "lumberjack",
+			"researchTime": 10.0,
+			"requires": [
+				"main"
+			]
+		},
+		{
+			"name": "tree",
+			"researchTime": 10.0,
+			"requires": [
+				"main"
+			]
+		}
+	]
+}

@@ -1,0 +1,4 @@
+rootProject.name = 'game-12'
+
+include ':noise-engine'
+project(':noise-engine').projectDir = new File(rootProject.projectDir, '../NoiseEngine')

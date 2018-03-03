@@ -1,0 +1,23 @@
+{
+	"name": "entity",
+	"components": {
+		"core": [
+			{
+				"name": "bounding",
+				"data": {
+					"type": "sphere",
+					"radius": 0.5
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "interpolatePosition",
+				"data": {}
+			}
+		],
+		"server": [
+		]
+	}
+
+}

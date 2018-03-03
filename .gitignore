@@ -1,0 +1,15 @@
+# Intellij
+.idea/
+*.iml
+out/
+
+# Run
+run/
+
+# Resources
+/dist
+*.txt
+
+# gradle
+.gradle/
+build/
