@@ -13,6 +13,7 @@ import game12.client.PerformanceProfiler;
 import game12.client.event.BeforeRenderEvent;
 import game12.client.event.ClientChangeEvent;
 import game12.client.event.WindowSizeChangeEvent;
+import game12.client.gui.GuiConstants;
 import game12.client.gui.GuiContainer;
 import game12.core.Components;
 
@@ -41,6 +42,7 @@ public class ClientMain {
 		// game
 		Components.init();
 
+		GuiConstants.init();
 	}
 
 	private static void init() {

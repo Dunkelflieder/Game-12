@@ -1,6 +1,7 @@
 package game12.core;
 
 import game12.core.map.CoreMap;
+import game12.core.systems.MapSystem;
 import game12.server.systems.PositionLookupSystem;
 
 public abstract class MapSystemContainer<T extends CoreMap> extends SystemContainer {
@@ -21,6 +22,8 @@ public abstract class MapSystemContainer<T extends CoreMap> extends SystemContai
 	@Override
 	protected void addSystems() {
 		addSystem(new PositionLookupSystem());
+
+		addSystem(new MapSystem(10, 10));
 	}
 
 	@Override
