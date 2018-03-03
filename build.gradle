@@ -36,4 +36,4 @@ distributions {
     }
 }
 
-mainClassName = 'strategy.ClientMain'
+mainClassName = 'game12.ClientMain'
