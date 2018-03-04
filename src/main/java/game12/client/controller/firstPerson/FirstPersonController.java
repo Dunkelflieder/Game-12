@@ -10,37 +10,76 @@ import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
+import game12.core.systems.MapSystem;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 
 public class FirstPersonController extends Controller {
 
-	private static final float CAMERA_SPEED = 5f;
+	private static final float CAMERA_SPEED = 3f;
+	private ClientMap map;
+
 	private final Camera   camera;
 	private final Vector2f cameraPosition;
 	private       float    yaw;
+
+	private final MapSystem mapSystem;
 
 	public FirstPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
 			GuiContainer guiContainer) {
 		super(window, eventManager, maps, networkAdapter, guiContainer);
 
+		this.map = maps.get(0);
+		this.mapSystem = map.getSystem(MapSystem.class);
+
 		Gui gui = new FirstPersonGui(eventManager);
 		this.guiContainer.setActiveGui(gui);
 
-		maps.get(0).setActive(true);
+		map.setActive(true);
 
-		cameraPosition = new Vector2f();
-		camera = maps.get(0).getSystem(RenderSystem.class).getCamera();
-
-		camera.setXYZ(0, 0.5f, 0);
+		cameraPosition = new Vector2f(2f, 2f);
+		yaw = (float) (Math.PI * 1.5);
+		camera = map.getSystem(RenderSystem.class).getCamera();
 	}
 
 	@Override
 	public void update(float timeDelta) {
 		inputHandler.setMouseHiding(true);
 
-		yaw += inputHandler.getCursorDeltaX() * -0.003f;
+		yaw += inputHandler.getCursorDeltaX() * -0.015f;
+
+		float deltaXlocal = 0;
+		float deltaYlocal = 0;
+
+		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_A)) deltaXlocal -= 1;
+		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_D)) deltaXlocal += 1;
+		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_W)) deltaYlocal -= 1;
+		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_S)) deltaYlocal += 1;
+
+		float norm = (float) Math.sqrt(deltaXlocal * deltaXlocal + deltaYlocal * deltaYlocal);
+
+		if (norm > 0) {
+			deltaXlocal /= norm;
+			deltaYlocal /= norm;
+		}
+
+		deltaXlocal *= CAMERA_SPEED * timeDelta;
+		deltaYlocal *= CAMERA_SPEED * timeDelta;
+
+		float deltaX = (float) (deltaXlocal * Math.cos(yaw) + deltaYlocal * Math.sin(yaw));
+		float deltaY = (float) (deltaXlocal * Math.sin(-yaw) + deltaYlocal * Math.cos(-yaw));
+
+		if (mapSystem.get((int) (cameraPosition.getX() + deltaX), (int) (cameraPosition.getY())) != MapSystem.VOID) {
+			cameraPosition.addX(deltaX);
+		}
+		if (mapSystem.get((int) (cameraPosition.getX()), (int) (cameraPosition.getY() + deltaY)) != MapSystem.VOID) {
+			cameraPosition.addY(deltaY);
+		}
+
+		camera.setXYZ(cameraPosition.getX(), 0.5f, cameraPosition.getY());
 		camera.setYaw(yaw);
+
 	}
 
 }
