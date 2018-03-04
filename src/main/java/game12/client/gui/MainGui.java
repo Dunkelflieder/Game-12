@@ -6,6 +6,7 @@ import de.nerogar.noise.render.Shader;
 import de.nerogar.noise.render.ShaderLoader;
 import de.nerogar.noise.render.fontRenderer.Font;
 import de.nerogar.noise.util.Color;
+import game12.client.Client;
 import game12.client.Menu;
 import game12.client.event.BeforeRenderEvent;
 
@@ -22,7 +23,7 @@ public class MainGui extends Gui {
 	private EventListener<BeforeRenderEvent> beforeRenderEventListener;
 	private float                            time;
 
-	private final int PANEL_SIZE    = 500;
+	private final int PANEL_SIZE    = 800;
 	private final int BUTTON_OFFSET = 50;
 	private final int BUTTON_SIZE   = PANEL_SIZE - BUTTON_OFFSET;
 
@@ -63,36 +64,40 @@ public class MainGui extends Gui {
 		mainPanel = new GPanel(new Color(0.3f, 0.3f, 0.3f, 0.0f), PANEL_SIZE, 0);
 		backgroundPanel.addElement(mainPanel, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, 0, 0);
 
-		GButton localButton = new GButton(font, "start local game", BUTTON_SIZE, 40, () -> blendPanelOut(menu::startLocalGame));
-		localButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(localButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 50);
+		GButton localButtonFP = new GButton(font, "start local game (first person)", BUTTON_SIZE, 40, () -> blendPanelOut(() -> menu.startLocalGame(Client.ControllerType.FIRST_PERSON)));
+		localButtonFP.setColors(fontColor, fontHoverColor);
+		mainPanel.addElement(localButtonFP, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 50);
 
-		GButton startServerButton = new GButton(font, "start server", BUTTON_SIZE, 40, () -> blendPanelOut(menu::startServer));
+		GButton localButtonTP = new GButton(font, "start local game (third person)", BUTTON_SIZE, 40, () -> blendPanelOut(() -> menu.startLocalGame(Client.ControllerType.THIRD_PERSON)));
+		localButtonTP.setColors(fontColor, fontHoverColor);
+		mainPanel.addElement(localButtonTP, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 100);
+
+		GButton startServerButton = new GButton(font, "start server", BUTTON_SIZE, 40, () -> blendPanelOut(() -> menu.startServer(Client.ControllerType.FIRST_PERSON)));
 		startServerButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(startServerButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 100);
+		mainPanel.addElement(startServerButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 200);
 
-		GButton connectButton = new GButton(font, "connect local", BUTTON_SIZE, 40, () -> blendPanelOut(menu::connectLocal));
+		GButton connectButton = new GButton(font, "connect local", BUTTON_SIZE, 40, () -> blendPanelOut(() -> menu.connectLocal(Client.ControllerType.FIRST_PERSON)));
 		connectButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(connectButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 150);
+		mainPanel.addElement(connectButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 250);
 
-		GButton connectStartButton = new GButton(font, "connect local and start", BUTTON_SIZE, 40, () -> blendPanelOut(menu::connectStartServer));
+		GButton connectStartButton = new GButton(font, "connect local and start", BUTTON_SIZE, 40, () -> blendPanelOut(() -> menu.connectStartServer(Client.ControllerType.FIRST_PERSON)));
 		connectStartButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(connectStartButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 200);
+		mainPanel.addElement(connectStartButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 300);
 
 		GButton blendOutButton = new GButton(font, "blend out", BUTTON_SIZE, 40, () -> backgroundBlendOut = 0.001f);
 		blendOutButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(blendOutButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 300);
+		mainPanel.addElement(blendOutButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 350);
 
 		GButton resetBlendOutButton = new GButton(font, "reset blend out", BUTTON_SIZE, 40, () -> backgroundBlendOut = 0.0f);
 		resetBlendOutButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(resetBlendOutButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 350);
+		mainPanel.addElement(resetBlendOutButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 400);
 
 		GButton testPanelButton = new GButton(font, "switch panels", BUTTON_SIZE, 40, () -> {
 			mainBlendDirection = 10;
 			testBlendDirection = -10;
 		});
 		testPanelButton.setColors(fontColor, fontHoverColor);
-		mainPanel.addElement(testPanelButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 450);
+		mainPanel.addElement(testPanelButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, 500);
 	}
 
 	private void createTestPanel(Font font, Color fontColor, Color fontHoverColor) {

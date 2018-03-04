@@ -26,7 +26,7 @@ public class Menu {
 	private boolean          activeGame;
 	private ServerMainThread serverMainThread;
 	private Connection       connection;
-	private INetworkAdapter networkAdapter;
+	private INetworkAdapter  networkAdapter;
 
 	public Menu(GLWindow window, GuiContainer guiContainer, EventManager eventManager) {
 		this.window = window;
@@ -38,7 +38,7 @@ public class Menu {
 		guiContainer.setActiveGui(mainGui);
 	}
 
-	public boolean startLocalGame() {
+	public boolean startLocalGame(Client.ControllerType controllerType) {
 		if (activeGame) return false;
 		activeGame = true;
 
@@ -51,7 +51,7 @@ public class Menu {
 			networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 
 			// start client
-			Client client = new Client(connection, window, eventManager, guiContainer);
+			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
 			ClientMain.setClient(client);
 
 			// start game
@@ -67,7 +67,7 @@ public class Menu {
 		return true;
 	}
 
-	public boolean startServer() {
+	public boolean startServer(Client.ControllerType controllerType) {
 		if (activeGame) return false;
 		activeGame = true;
 
@@ -79,7 +79,7 @@ public class Menu {
 			connection = new Connection(new Socket("localhost", 34543));
 
 			// start client
-			Client client = new Client(connection, window, eventManager, guiContainer);
+			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
 			ClientMain.setClient(client);
 
 		} catch (IOException e) {
@@ -89,7 +89,7 @@ public class Menu {
 		return true;
 	}
 
-	public boolean connectLocal() {
+	public boolean connectLocal(Client.ControllerType controllerType) {
 		if (activeGame) return false;
 		activeGame = true;
 
@@ -98,7 +98,7 @@ public class Menu {
 			connection = new Connection(new Socket("localhost", 34543));
 
 			// start client
-			Client client = new Client(connection, window, eventManager, guiContainer);
+			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
 			ClientMain.setClient(client);
 		} catch (IOException e) {
 			e.printStackTrace(Game12.logger.getErrorStream());
@@ -107,7 +107,7 @@ public class Menu {
 		return true;
 	}
 
-	public boolean connectStartServer() {
+	public boolean connectStartServer(Client.ControllerType controllerType) {
 		if (activeGame) return false;
 		activeGame = true;
 
@@ -116,7 +116,7 @@ public class Menu {
 			connection = new Connection(new Socket("localhost", 34543));
 
 			// start client
-			Client client = new Client(connection, window, eventManager, guiContainer);
+			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
 			ClientMain.setClient(client);
 
 			// start game

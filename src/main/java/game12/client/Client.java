@@ -9,6 +9,7 @@ import de.nerogar.noise.render.GLWindow;
 import de.nerogar.noise.render.RenderHelper;
 import de.nerogar.noise.util.Color;
 import game12.Game12;
+import game12.client.controller.firstPerson.FirstPersonController;
 import game12.client.controller.thirdPirson.ThirdPersonController;
 import game12.client.event.RenderEvent;
 import game12.client.event.SystemSyncEvent;
@@ -31,6 +32,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Client {
 
+	public enum ControllerType {
+		FIRST_PERSON,
+		THIRD_PERSON
+	}
+
 	private Connection      connection;
 	private INetworkAdapter networkAdapter;
 	private INetworkAdapter wildcardNetworkAdapter;
@@ -47,6 +53,7 @@ public class Client {
 	private List<ClientMap>                   currentMaps;
 	private Faction[]                         factions;
 	private Faction                           ownFaction;
+	private ControllerType                    controllerType;
 	private Controller                        controller;
 
 	// gui
@@ -57,7 +64,7 @@ public class Client {
 	private ClientMapLoader clientMapLoader;
 	private boolean         clientMapLoaderDone;
 
-	public Client(Connection connection, GLWindow window, EventManager eventManager, GuiContainer guiContainer) {
+	public Client(Connection connection, GLWindow window, EventManager eventManager, GuiContainer guiContainer, ControllerType controllerType) {
 		this.connection = connection;
 		this.networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 		this.wildcardNetworkAdapter = connection.getWildcardNetworkAdapter();
@@ -65,6 +72,7 @@ public class Client {
 		this.eventManager = eventManager;
 
 		this.guiContainer = guiContainer;
+		this.controllerType = controllerType;
 
 		windowSizeChangeListener = this::onWindowResize;
 		eventManager.register(WindowSizeChangeEvent.class, windowSizeChangeListener);
@@ -268,11 +276,14 @@ public class Client {
 	}
 
 	private void setupController() {
-		controller = new ThirdPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
-		//controller = new FirstPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
-
-		//controller = new PlayerController(window, eventManager, currentMaps, ownFaction, networkAdapter, guiContainer);
-		//controller = new EditorController(window, currentMaps, connection, camera, guiContainer);
+		switch (controllerType) {
+			case FIRST_PERSON:
+				controller = new FirstPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
+				break;
+			case THIRD_PERSON:
+				controller = new ThirdPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
+				break;
+		}
 	}
 
 	private void closeMap() {
