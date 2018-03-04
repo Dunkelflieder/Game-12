@@ -21,8 +21,8 @@ public class MapRenderSystem extends LogicSystem {
 
 	private boolean shouldRecreate = true;
 
-	private Texture2D color  = Texture2DLoader.loadTexture("res/map/color.png", Texture2D.InterpolationType.NEAREST_MIPMAP);
-	private Texture2D normal = Texture2DLoader.loadTexture("res/map/normal.png", Texture2D.InterpolationType.NEAREST_MIPMAP);
+	private Texture2D color  = Texture2DLoader.loadTexture("res/map/color.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
+	private Texture2D normal = Texture2DLoader.loadTexture("res/map/normal.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
 	private Texture2D red    = Texture2DLoader.loadTexture("<red.png>");
 
 	private Shader mapShader = DeferredContainer.createSurfaceShader("shaders/map/map.vert", "shaders/map/map.frag", true);
@@ -97,23 +97,26 @@ public class MapRenderSystem extends LogicSystem {
 					createWall(vertexList, x + 0, y + 0, x + 0, y + 1, 1, 0,
 					           mapSystem.get(x - 1, y - 1) > MapSystem.VOID || mapSystem.get(x, y - 1) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y + 1) > MapSystem.VOID || mapSystem.get(x, y + 1) > MapSystem.VOID,
-					           mapSystem.get(x - 1, y) <= MapSystem.VOID
-
+					           mapSystem.get(x - 1, y) <= MapSystem.VOID,
+					           mapSystem.get(x - 1, y) == MapSystem.DOOR
 					          );
 					createWall(vertexList, x + 0, y + 1, x + 1, y + 1, 0, -1,
 					           mapSystem.get(x - 1, y + 1) > MapSystem.VOID || mapSystem.get(x - 1, y) > MapSystem.VOID,
 					           mapSystem.get(x + 1, y + 1) > MapSystem.VOID || mapSystem.get(x + 1, y) > MapSystem.VOID,
-					           mapSystem.get(x, y + 1) <= 0
+					           mapSystem.get(x, y + 1) <= 0,
+					           mapSystem.get(x, y + 1) == MapSystem.DOOR
 					          );
 					createWall(vertexList, x + 1, y + 1, x + 1, y + 0, -1, 0,
 					           mapSystem.get(x + 1, y + 1) > MapSystem.VOID || mapSystem.get(x, y + 1) > MapSystem.VOID,
 					           mapSystem.get(x + 1, y - 1) > MapSystem.VOID || mapSystem.get(x, y - 1) > MapSystem.VOID,
-					           mapSystem.get(x + 1, y) <= 0
+					           mapSystem.get(x + 1, y) <= 0,
+					           mapSystem.get(x + 1, y) == MapSystem.DOOR
 					          );
 					createWall(vertexList, x + 1, y + 0, x + 0, y + 0, 0, 1,
 					           mapSystem.get(x + 1, y - 1) > MapSystem.VOID || mapSystem.get(x + 1, y) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y - 1) > MapSystem.VOID || mapSystem.get(x - 1, y) > MapSystem.VOID,
-					           mapSystem.get(x, y - 1) <= 0
+					           mapSystem.get(x, y - 1) <= 0,
+					           mapSystem.get(x, y - 1) == MapSystem.DOOR
 					          );
 				} else {
 					float u = 1;
@@ -142,7 +145,7 @@ public class MapRenderSystem extends LogicSystem {
 		return mesh;
 	}
 
-	private void createWall(VertexList vertexList, float x0, float y0, float x1, float y1, float dx, float dy, boolean connect0, boolean connect1, boolean connect) {
+	private void createWall(VertexList vertexList, float x0, float y0, float x1, float y1, float dx, float dy, boolean connect0, boolean connect1, boolean connect, boolean door) {
 		float u = 0;
 		float v = 7;
 
@@ -155,6 +158,7 @@ public class MapRenderSystem extends LogicSystem {
 
 			vertexList.addIndex(index1, index2, index3);
 			vertexList.addIndex(index1, index3, index4);
+
 		} else {
 
 			// wall connection
@@ -165,6 +169,7 @@ public class MapRenderSystem extends LogicSystem {
 
 				vertexList.addIndex(index1, index2, index3);
 			}
+
 			if (connect && connect1) {
 				int index4 = vertexList.addVertex(x1, 0, y1, u, v, 1, 1, 1);
 				int index5 = vertexList.addVertex(x1 + (dx + x0 - x1) * WALL_OFFSET, 1, y1 + (dy + y0 - y1) * WALL_OFFSET, u + WALL_OFFSET, v + 1, 1, 1, 1);
@@ -173,17 +178,18 @@ public class MapRenderSystem extends LogicSystem {
 				vertexList.addIndex(index4, index5, index6);
 			}
 
-			// ceiling (
-			/*{
-				int index1 = vertexList.addVertex(x0 + (x1 - x0) * WALL_OFFSET, 1, y0 + (y1 - y0) * WALL_OFFSET, 0, 0, 1, 1, 1);
-				int index2 = vertexList.addVertex(x1 + (x0 - x1) * WALL_OFFSET, 1, y1 + (y0 - y1) * WALL_OFFSET, 1, 0, 1, 1, 1);
-				int index3 = vertexList.addVertex(x1 + (dx + x0 - x1) * WALL_OFFSET, 1, y1 + (dy + y0 - y1) * WALL_OFFSET, 1, 1, 1, 1, 1);
-				int index4 = vertexList.addVertex(x0 + (dx + x1 - x0) * WALL_OFFSET, 1, y0 + (dy + y1 - y0) * WALL_OFFSET, 0, 1, 1, 1, 1);
+			if (door) {
+				int index1 = vertexList.addVertex(x0, 0, y0, u, v, 1, 1, 1);
+				int index2 = vertexList.addVertex(x1, 0, y1, u + 1, v, 1, 1, 1);
+				int index3 = vertexList.addVertex(x1 + (x0 - x1) * WALL_OFFSET, 1, y1 + (y0 - y1) * WALL_OFFSET, u + (1 - WALL_OFFSET), v + 1, 1, 1, 1);
+				int index4 = vertexList.addVertex(x0 + (x1 - x0) * WALL_OFFSET, 1, y0 + (y1 - y0) * WALL_OFFSET, u + (WALL_OFFSET), v + 1, 1, 1, 1);
 
 				vertexList.addIndex(index1, index2, index3);
 				vertexList.addIndex(index1, index3, index4);
-			}*/
+			}
+
 		}
+
 	}
 
 	@Override
