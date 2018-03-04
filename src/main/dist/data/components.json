@@ -7,6 +7,10 @@
 		{
 			"name": "player",
 			"class": "PlayerComponent"
+		},
+		{
+			"name": "followPath",
+			"class": "FollowPathComponent"
 		}
 	],
 	"client": [

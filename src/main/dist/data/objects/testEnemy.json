@@ -1,0 +1,33 @@
+{
+	"name": "TestEnemy",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "bounding",
+				"data": {
+					"type": "sphere",
+					"radius": 0.5
+				}
+			},
+			{
+				"name": "followPath",
+				"data": {
+					"speed": 1.0
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "render",
+				"data": {
+					"skinIDs": ["tree"]
+				}
+			}
+		],
+		"server": [
+		]
+	}
+}

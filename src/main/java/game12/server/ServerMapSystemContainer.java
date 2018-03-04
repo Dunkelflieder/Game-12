@@ -4,6 +4,7 @@ import game12.core.EntityFactorySystem;
 import game12.core.MapSystemContainer;
 import game12.core.Side;
 import game12.server.map.ServerMap;
+import game12.server.systems.EnemyPathingSystem;
 import game12.server.systems.SendEntityMoveSystem;
 import game12.server.systems.SendEntitySystem;
 import game12.server.systems.request.ComponentDebugRequestSystem;
@@ -22,6 +23,8 @@ public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
 
 		addSystem(new SendEntitySystem());
 		addSystem(new SendEntityMoveSystem());
+
+		addSystem(new EnemyPathingSystem(getMap()));
 
 		// debug
 		addSystem(new ComponentDebugRequestSystem(getMap()));
