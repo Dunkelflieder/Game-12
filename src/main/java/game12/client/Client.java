@@ -9,7 +9,7 @@ import de.nerogar.noise.render.GLWindow;
 import de.nerogar.noise.render.RenderHelper;
 import de.nerogar.noise.util.Color;
 import game12.Game12;
-import game12.client.controller.PlayerController;
+import game12.client.controller.thirdPirson.ThirdPersonController;
 import game12.client.event.RenderEvent;
 import game12.client.event.SystemSyncEvent;
 import game12.client.event.WindowSizeChangeEvent;
@@ -268,7 +268,8 @@ public class Client {
 	}
 
 	private void setupController() {
-		controller = new PlayerController(window, eventManager, currentMaps, networkAdapter, guiContainer);
+		controller = new ThirdPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
+		//controller = new FirstPersonController(window, eventManager, currentMaps, networkAdapter, guiContainer);
 
 		//controller = new PlayerController(window, eventManager, currentMaps, ownFaction, networkAdapter, guiContainer);
 		//controller = new EditorController(window, currentMaps, connection, camera, guiContainer);

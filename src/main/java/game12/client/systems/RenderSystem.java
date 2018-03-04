@@ -1,6 +1,7 @@
 package game12.client.systems;
 
 import de.nerogar.noise.event.EventListener;
+import de.nerogar.noise.render.Camera;
 import de.nerogar.noise.render.PerspectiveCamera;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderer;
 import game12.ClientMain;
@@ -16,7 +17,7 @@ public class RenderSystem extends LogicSystem {
 
 	private EventListener<WindowSizeChangeEvent> windowSizeChangeListener;
 	private EventListener<RenderEvent>           renderEventListener;
-	private PerspectiveCamera                    camera;
+	private Camera                               camera;
 
 	public RenderSystem(ClientMap map) {
 		this.map = map;
@@ -40,10 +41,13 @@ public class RenderSystem extends LogicSystem {
 
 	public DeferredRenderer getRenderer() { return renderer; }
 
-	public PerspectiveCamera getCamera()  { return camera; }
+	public Camera getCamera()             { return camera; }
+
+	public void setCamera(Camera camera)  { this.camera = camera; }
 
 	private void windowSizeChangeListenerFunction(WindowSizeChangeEvent event) {
 		renderer.setFrameBufferResolution(event.getWidth(), event.getHeight());
+
 		camera.setAspect(event.getAspect());
 	}
 

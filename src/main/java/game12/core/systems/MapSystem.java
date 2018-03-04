@@ -10,19 +10,31 @@ import java.io.IOException;
 
 public class MapSystem extends SynchronizedSystem {
 
+	public static final int VOID = 0;
+
 	private int   width;
 	private int   height;
 	private int[] map;
 
 	public MapSystem(int width, int height) {
-		this.width = 4;//width;
-		this.height = 4;//height;
+		this.width = width;
+		this.height = height;
 		this.map = new int[width * height];
+
+		// test
+		this.width = 10;
+		this.height = 10;
 		map = new int[] {
-				0, 0, 0, 1,
-				0, 0, 0, 1,
-				0, 0, 1, 1,
-				1, 1, 1, 1
+				1, 1, 1, 1, 0, 2, 2, 2, 2, 2,
+				1, 1, 1, 1, 0, 2, 2, 2, 2, 2,
+				1, 1, 1, 1, 0, 2, 2, 2, 2, 2,
+				0, 0, 0, 0, 0, 2, 2, 2, 2, 2,
+				5, 5, 5, 5, 0, 2, 2, 0, 0, 0,
+				5, 5, 5, 5, 0, 2, 2, 0, 3, 3,
+				0, 0, 0, 0, 0, 0, 0, 0, 3, 3,
+				4, 4, 4, 4, 4, 4, 4, 0, 3, 3,
+				4, 4, 4, 4, 4, 4, 4, 0, 3, 3,
+				4, 4, 4, 4, 4, 4, 4, 0, 3, 3,
 		};
 	}
 
@@ -31,6 +43,9 @@ public class MapSystem extends SynchronizedSystem {
 	public int getHeight() { return height; }
 
 	public int get(int x, int y) {
+		x = Math.max(0, Math.min(width - 1, x));
+		y = Math.max(0, Math.min(height - 1, y));
+
 		return map[y * width + x];
 	}
 
