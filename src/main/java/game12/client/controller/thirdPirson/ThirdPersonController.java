@@ -2,7 +2,6 @@ package game12.client.controller.thirdPirson;
 
 import de.nerogar.noise.event.EventManager;
 import de.nerogar.noise.network.INetworkAdapter;
-import de.nerogar.noise.render.Camera;
 import de.nerogar.noise.render.GLWindow;
 import de.nerogar.noise.render.OrthographicCamera;
 import de.nerogar.noise.render.deferredRenderer.Light;
@@ -20,9 +19,10 @@ import java.util.List;
 
 public class ThirdPersonController extends Controller {
 
-	private static final float CAMERA_SPEED = 5f;
-	private final Camera   camera;
-	private final Vector2f cameraPosition;
+	private static final float CAMERA_SPEED = 1f;
+	private final OrthographicCamera camera;
+	private final Vector2f           cameraPosition;
+	private float zoom = 10;
 
 	private Light light;
 
@@ -64,10 +64,14 @@ public class ThirdPersonController extends Controller {
 		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_W)) deltaY -= 1;
 		if (inputHandler.isKeyDown(GLFW.GLFW_KEY_S)) deltaY += 1;
 
-		cameraPosition.addX(deltaX * CAMERA_SPEED * timeDelta);
-		cameraPosition.addY(deltaY * CAMERA_SPEED * timeDelta);
+		cameraPosition.addX(deltaX * CAMERA_SPEED * zoom * timeDelta);
+		cameraPosition.addY(deltaY * CAMERA_SPEED * zoom * timeDelta);
+		zoom -= inputHandler.getScrollDeltaY()*2;
+		zoom = Math.max(4, Math.min(40, zoom));
+
 
 		camera.setXYZ(cameraPosition.getX(), 10, cameraPosition.getY());
+		camera.setHeight(zoom);
 
 		light.position.set(cameraPosition.getX(), 0.5f, cameraPosition.getY());
 
