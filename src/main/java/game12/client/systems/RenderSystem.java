@@ -31,7 +31,7 @@ public class RenderSystem extends LogicSystem {
 		renderEventListener = this::renderEventListenerFunction;
 		getEventManager().registerImmediate(RenderEvent.class, renderEventListener);
 
-		renderer = new DeferredRenderer(ClientMain.window.getWidth(), ClientMain.window.getHeight());
+		renderer = new DeferredRenderer(ClientMain.window.getWidth() / 4, ClientMain.window.getHeight() / 4);
 		renderer.setSunLightBrightness(1.0f);
 
 		camera = new PerspectiveCamera(90, (float) ClientMain.window.getWidth() / ClientMain.window.getHeight(), 0.1f, 1000f);
@@ -46,7 +46,7 @@ public class RenderSystem extends LogicSystem {
 	public void setCamera(Camera camera)  { this.camera = camera; }
 
 	private void windowSizeChangeListenerFunction(WindowSizeChangeEvent event) {
-		renderer.setFrameBufferResolution(event.getWidth(), event.getHeight());
+		renderer.setFrameBufferResolution(event.getWidth() / 4, event.getHeight() / 4);
 
 		camera.setAspect(event.getAspect());
 	}
