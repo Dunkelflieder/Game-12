@@ -227,7 +227,7 @@ public class Client {
 	}
 
 	private void updateSystemsPackets() {
-		List<Packet> packets = networkAdapter.getPackets(StrategyPacketInfo.SYSTEMS_PACKET_CHANNEL);
+		List<Packet> packets = wildcardNetworkAdapter.getPackets(StrategyPacketInfo.SYSTEMS_PACKET_CHANNEL);
 
 		for (Packet p : packets) {
 			if (p instanceof SystemSyncParameter) {

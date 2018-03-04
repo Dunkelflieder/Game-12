@@ -13,6 +13,7 @@ import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
+import game12.core.request.MapChangeRequestPacket;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -66,14 +67,28 @@ public class ThirdPersonController extends Controller {
 
 		cameraPosition.addX(deltaX * CAMERA_SPEED * zoom * timeDelta);
 		cameraPosition.addY(deltaY * CAMERA_SPEED * zoom * timeDelta);
-		zoom -= inputHandler.getScrollDeltaY()*2;
+		zoom -= inputHandler.getScrollDeltaY() * 2;
 		zoom = Math.max(4, Math.min(40, zoom));
-
 
 		camera.setXYZ(cameraPosition.getX(), 10, cameraPosition.getY());
 		camera.setHeight(zoom);
 
 		light.position.set(cameraPosition.getX(), 0.5f, cameraPosition.getY());
+
+		// test
+
+		int mouseX = (int) ((inputHandler.getCursorPosX() / window.getWidth() - 0.5f) * (zoom * camera.getAspect()) + cameraPosition.getX());
+		int mouseY = (int) (-(inputHandler.getCursorPosY() / window.getHeight() - 0.5f) * zoom + cameraPosition.getY());
+
+		System.out.println(mouseX + " : " + mouseY);
+
+		if (inputHandler.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+			maps.get(0).getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, 0));
+		}
+
+		if (inputHandler.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
+			maps.get(0).getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, 1));
+		}
 
 	}
 
