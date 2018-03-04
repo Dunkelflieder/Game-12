@@ -80,8 +80,6 @@ public class ThirdPersonController extends Controller {
 		int mouseX = (int) ((inputHandler.getCursorPosX() / window.getWidth() - 0.5f) * (zoom * camera.getAspect()) + cameraPosition.getX());
 		int mouseY = (int) (-(inputHandler.getCursorPosY() / window.getHeight() - 0.5f) * zoom + cameraPosition.getY());
 
-		System.out.println(mouseX + " : " + mouseY);
-
 		if (inputHandler.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 			maps.get(0).getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, 0));
 		}

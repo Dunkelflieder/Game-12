@@ -15,6 +15,8 @@ public class RenderSystem extends LogicSystem {
 	private ClientMap        map;
 	private DeferredRenderer renderer;
 
+	private int resolution = 1;
+
 	private EventListener<WindowSizeChangeEvent> windowSizeChangeListener;
 	private EventListener<RenderEvent>           renderEventListener;
 	private Camera                               camera;
@@ -31,10 +33,15 @@ public class RenderSystem extends LogicSystem {
 		renderEventListener = this::renderEventListenerFunction;
 		getEventManager().registerImmediate(RenderEvent.class, renderEventListener);
 
-		renderer = new DeferredRenderer(ClientMain.window.getWidth() / 4, ClientMain.window.getHeight() / 4);
+		renderer = new DeferredRenderer(ClientMain.window.getWidth() / resolution, ClientMain.window.getHeight() / resolution);
 		renderer.setSunLightBrightness(1.0f);
 
 		camera = new PerspectiveCamera(90, (float) ClientMain.window.getWidth() / ClientMain.window.getHeight(), 0.1f, 1000f);
+	}
+
+	public void setResolution(int resolution) {
+		this.resolution = resolution;
+		renderer.setFrameBufferResolution(ClientMain.window.getWidth() / resolution, ClientMain.window.getHeight() / resolution);
 	}
 
 	public ClientMap getMap()             { return map; }
@@ -46,7 +53,7 @@ public class RenderSystem extends LogicSystem {
 	public void setCamera(Camera camera)  { this.camera = camera; }
 
 	private void windowSizeChangeListenerFunction(WindowSizeChangeEvent event) {
-		renderer.setFrameBufferResolution(event.getWidth() / 4, event.getHeight() / 4);
+		renderer.setFrameBufferResolution(event.getWidth() / resolution, event.getHeight() / resolution);
 
 		camera.setAspect(event.getAspect());
 	}
