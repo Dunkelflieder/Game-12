@@ -113,7 +113,7 @@ public class MapRenderSystem extends LogicSystem {
 
 	private void createWall(VertexList vertexList, float x0, float y0, float x1, float y1, float dx, float dy, boolean connect) {
 		// wall
-		{
+		if (!connect) {
 			int index1 = vertexList.addVertex(x0, 0, y0, 0, 0, 0, 0, 0);
 			int index2 = vertexList.addVertex(x1, 0, y1, 1, 0, 0, 0, 0);
 			int index3 = vertexList.addVertex(x1 + (dx + x0 - x1) * WALL_OFFSET, 1, y1 + (dy + y0 - y1) * WALL_OFFSET, 1 - WALL_OFFSET, 1, 0, 0, 0);
@@ -121,9 +121,7 @@ public class MapRenderSystem extends LogicSystem {
 
 			vertexList.addIndex(index1, index2, index3);
 			vertexList.addIndex(index1, index3, index4);
-		}
-
-		if (connect) {
+		} else {
 
 			// wall connection
 			{
@@ -140,8 +138,8 @@ public class MapRenderSystem extends LogicSystem {
 				vertexList.addIndex(index4, index5, index6);
 			}
 
-			// ceiling
-			{
+			// ceiling (
+			/*{
 				int index1 = vertexList.addVertex(x0 + (x1 - x0) * WALL_OFFSET, 1, y0 + (y1 - y0) * WALL_OFFSET, 0, 0, 0, 0, 0);
 				int index2 = vertexList.addVertex(x1 + (x0 - x1) * WALL_OFFSET, 1, y1 + (y0 - y1) * WALL_OFFSET, 1, 0, 0, 0, 0);
 				int index3 = vertexList.addVertex(x1 + (dx + x0 - x1) * WALL_OFFSET, 1, y1 + (dy + y0 - y1) * WALL_OFFSET, 1, 1, 0, 0, 0);
@@ -149,7 +147,7 @@ public class MapRenderSystem extends LogicSystem {
 
 				vertexList.addIndex(index1, index2, index3);
 				vertexList.addIndex(index1, index3, index4);
-			}
+			}*/
 		}
 	}
 
