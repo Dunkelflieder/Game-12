@@ -5,11 +5,13 @@ import de.nerogar.noise.network.INetworkAdapter;
 import de.nerogar.noise.render.Camera;
 import de.nerogar.noise.render.GLWindow;
 import de.nerogar.noise.util.Vector2f;
+import de.nerogar.noise.util.Vector3f;
 import game12.client.Controller;
 import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
+import game12.core.request.PlayerPositionUpdateRequest;
 import game12.core.systems.MapSystem;
 import org.lwjgl.glfw.GLFW;
 
@@ -80,6 +82,11 @@ public class FirstPersonController extends Controller {
 		camera.setXYZ(cameraPosition.getX(), 0.5f, cameraPosition.getY());
 		camera.setYaw(yaw);
 
+		map.getNetworkAdapter().send(PlayerPositionUpdateRequest.of(new Vector3f(
+				camera.getX(),
+				camera.getY(),
+				camera.getZ()
+		)));
 	}
 
 }

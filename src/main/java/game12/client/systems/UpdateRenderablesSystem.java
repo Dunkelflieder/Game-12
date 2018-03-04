@@ -32,7 +32,9 @@ public class UpdateRenderablesSystem extends LogicSystem {
 
 	private void moveListenerFunction(EntityMoveEvent event) {
 		RenderComponent renderComponent = event.getEntity().getComponent(RenderComponent.class);
-		renderComponent.updatePosition(event.getNewX(), event.getNewY(), event.getNewZ(), event.getNewRotation(), event.getNewScale());
+		if (renderComponent != null) {
+			renderComponent.updatePosition(event.getNewX(), event.getNewY(), event.getNewZ(), event.getNewRotation(), event.getNewScale());
+		}
 	}
 
 	public void unregisterEntity(RenderComponent component) {

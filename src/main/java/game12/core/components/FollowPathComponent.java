@@ -3,12 +3,16 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.core.EventTimer;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
+import game12.core.utils.Vector2i;
+import game12.server.ai.Pathfinder;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class FollowPathComponent extends SynchronizedComponent {
 
@@ -19,7 +23,30 @@ public class FollowPathComponent extends SynchronizedComponent {
 
 	private float speed;
 
+	EventTimer timer = new EventTimer(0.5f, true, -1);
+	;
+
 	public FollowPathComponent() {
+	}
+
+	public void updatePath(Vector3f targetPosition, Pathfinder pathfinder) {
+		PositionComponent positionComponent = getEntity().getComponent(PositionComponent.class);
+		while (timer.trigger()) {
+			Vector2i intPos = Vector2i.of((int) positionComponent.getX(), (int) positionComponent.getZ());
+			List<Vector2i> path = pathfinder.getPath(intPos, Vector2i.of((int) targetPosition.getX(), (int) targetPosition.getZ()));
+			if (path == null || path.isEmpty()) {
+				stop();
+			} else {
+				Vector3f[] path3fArray = new Vector3f[path.size() + 1];
+				for (int i = 0; i < path.size(); i++) {
+					Vector2i vec = path.get(i);
+					path3fArray[i + 1] = new Vector3f(vec.x + 0.5f, 0, vec.y + 0.5f);
+				}
+				path3fArray[0] = new Vector3f(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
+				path3fArray[path3fArray.length - 1] = new Vector3f(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
+				newPath(path3fArray);
+			}
+		}
 	}
 
 	public FollowPathComponent(float speed) {
@@ -56,6 +83,7 @@ public class FollowPathComponent extends SynchronizedComponent {
 	}
 
 	public void update(float timeDelta) {
+		timer.update(timeDelta);
 		if (path == null) return;
 
 		float deltaProgress = timeDelta * speed;
