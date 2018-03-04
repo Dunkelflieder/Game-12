@@ -77,6 +77,7 @@ public class Menu {
 
 			// connection
 			connection = new Connection(new Socket("localhost", 34543));
+			networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 
 			// start client
 			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
@@ -96,6 +97,7 @@ public class Menu {
 		try {
 			// connection
 			connection = new Connection(new Socket("localhost", 34543));
+			networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 
 			// start client
 			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
@@ -114,6 +116,7 @@ public class Menu {
 		try {
 			// connection
 			connection = new Connection(new Socket("localhost", 34543));
+			networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 
 			// start client
 			Client client = new Client(connection, window, eventManager, guiContainer, controllerType);
