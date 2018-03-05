@@ -1,0 +1,38 @@
+{
+	"name": "Projectile",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "projectile",
+				"data": {
+					"speed": 5.0,
+					"lifetime": 3.0
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "light",
+				"data": {
+					"color": [
+						1.0,
+						1.0,
+						1.0
+					],
+					"position": [
+						0.0,
+						0.0,
+						0.0
+					],
+					"reach": 1.0,
+					"intensity": 3.0
+				}
+			}
+		],
+		"server": [
+		]
+	}
+}

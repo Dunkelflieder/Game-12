@@ -4,13 +4,11 @@ import game12.core.EntityFactorySystem;
 import game12.core.MapSystemContainer;
 import game12.core.Side;
 import game12.server.map.ServerMap;
-import game12.server.systems.EnemyPathingSystem;
-import game12.server.systems.GameSetupSystem;
-import game12.server.systems.SendEntityMoveSystem;
-import game12.server.systems.SendEntitySystem;
+import game12.server.systems.*;
 import game12.server.systems.request.ComponentDebugRequestSystem;
 import game12.server.systems.request.MapChangeRequestSystem;
 import game12.server.systems.request.PlayerPositionUpdateRequestSystem;
+import game12.server.systems.request.ShootRequestSystem;
 
 public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
 
@@ -29,9 +27,11 @@ public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
 
 		addSystem(new EnemyPathingSystem(getMap()));
 		addSystem(new GameSetupSystem(getMap()));
+		addSystem(new ProjectileSystem(getMap()));
 
 		addSystem(new MapChangeRequestSystem(getMap()));
 		addSystem(new PlayerPositionUpdateRequestSystem(getMap()));
+		addSystem(new ShootRequestSystem(getMap()));
 
 		// debug
 		addSystem(new ComponentDebugRequestSystem(getMap()));

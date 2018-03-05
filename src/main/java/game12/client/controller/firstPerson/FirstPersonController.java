@@ -1,6 +1,7 @@
 package game12.client.controller.firstPerson;
 
 import de.nerogar.noise.event.EventManager;
+import de.nerogar.noise.input.MouseButtonEvent;
 import de.nerogar.noise.network.INetworkAdapter;
 import de.nerogar.noise.render.Camera;
 import de.nerogar.noise.render.GLWindow;
@@ -11,7 +12,8 @@ import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
-import game12.core.request.PlayerPositionUpdateRequest;
+import game12.core.request.PlayerPositionUpdateRequestPacket;
+import game12.core.request.ShootRequestPacket;
 import game12.core.systems.MapSystem;
 import org.lwjgl.glfw.GLFW;
 
@@ -84,11 +86,18 @@ public class FirstPersonController extends Controller {
 		camera.setXYZ(cameraPosition.getX(), 0.5f, cameraPosition.getY());
 		camera.setYaw(yaw);
 
-		map.getNetworkAdapter().send(PlayerPositionUpdateRequest.of(new Vector3f(
+		Vector3f camPos = new Vector3f(
 				camera.getX(),
 				camera.getY(),
 				camera.getZ()
-		)));
+		);
+		map.makeRequest(PlayerPositionUpdateRequestPacket.of(camPos));
+
+		for (MouseButtonEvent event : inputHandler.getMouseButtonEvents()) {
+			if (event.action == GLFW.GLFW_PRESS && event.button == 0) {
+				map.makeRequest(new ShootRequestPacket(ShootRequestPacket.TYPE_SHOTGUN, camPos, camera.getDirectionAt()));
+			}
+		}
 	}
 
 }

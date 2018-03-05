@@ -7,12 +7,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class PlayerPositionUpdateRequest extends FactionRequestPacket {
+public class PlayerPositionUpdateRequestPacket extends FactionRequestPacket {
 
 	public Vector3f pos;
 
-	public static PlayerPositionUpdateRequest of(Vector3f pos) {
-		PlayerPositionUpdateRequest request = new PlayerPositionUpdateRequest();
+	public static PlayerPositionUpdateRequestPacket of(Vector3f pos) {
+		PlayerPositionUpdateRequestPacket request = new PlayerPositionUpdateRequestPacket();
 		request.pos = pos;
 		return request;
 	}

@@ -1,18 +1,24 @@
 {
-  "name": "Player",
-  "components": {
-    "super": [
-      "entity"
-    ],
-    "core": [
-      {
-        "name": "player",
-        "data": {}
-      }
-    ],
-    "client": [
-    ],
-    "server": [
-    ]
-  }
+	"name": "Player",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "player",
+				"data": {}
+			},
+			{
+				"name": "actor",
+				"data": {
+					"isPlayer": true
+				}
+			}
+		],
+		"client": [
+		],
+		"server": [
+		]
+	}
 }

@@ -11,6 +11,18 @@
 		{
 			"name": "followPath",
 			"class": "FollowPathComponent"
+		},
+		{
+			"name": "health",
+			"class": "HealthComponent"
+		},
+		{
+			"name": "projectile",
+			"class": "ProjectileComponent"
+		},
+		{
+			"name": "actor",
+			"class": "ActorComponent"
 		}
 	],
 	"client": [

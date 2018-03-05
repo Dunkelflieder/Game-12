@@ -17,6 +17,12 @@
 				"data": {
 					"speed": 1.0
 				}
+			},
+			{
+				"name": "actor",
+				"data": {
+					"isPlayer": false
+				}
 			}
 		],
 		"client": [
