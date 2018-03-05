@@ -9,6 +9,9 @@ import game12.core.event.UpdateEvent;
 import game12.server.event.ProjectileHitEvent;
 import game12.server.map.ServerMap;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ProjectileSystem extends LogicSystem {
 
 	private final ServerMap            map;
@@ -25,6 +28,7 @@ public class ProjectileSystem extends LogicSystem {
 	}
 
 	private void update(UpdateEvent event) {
+		Set<Integer> toRemove = new HashSet<>();
 		for (ProjectileComponent projectile : map.getEntityList().getComponents(ProjectileComponent.class)) {
 			PositionComponent position = projectile.getEntity().getComponent(PositionComponent.class);
 			position.setPosition(
@@ -33,7 +37,6 @@ public class ProjectileSystem extends LogicSystem {
 					position.getZ() + projectile.direction.getZ() * event.getDelta()
 			                    );
 			BoundingComponent bounding = projectile.getEntity().getComponent(BoundingComponent.class);
-			boolean didCollide = false;
 			for (BoundingComponent hit : positionLookupSystem.getBoundings(bounding.getBounding())) {
 				if (hit.getEntity().getID() == projectile.getEntity().getID()) continue;
 				ActorComponent actor = hit.getEntity().getComponent(ActorComponent.class);
@@ -42,11 +45,9 @@ public class ProjectileSystem extends LogicSystem {
 				ProjectileHitEvent hitEvent = new ProjectileHitEvent(hit.getEntity().getID());
 				map.getNetworkAdapter().send(hitEvent);
 				getEventManager().trigger(hitEvent);
-				didCollide = true;
-			}
-			if (didCollide) {
-				map.getEntityList().remove(projectile.getEntity().getID());
+				toRemove.add(projectile.getEntity().getID());
 			}
 		}
+		toRemove.forEach(map.getEntityList()::remove);
 	}
 }
