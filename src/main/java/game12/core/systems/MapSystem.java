@@ -111,18 +111,27 @@ public class MapSystem extends SynchronizedSystem {
 	}
 
 	private boolean checkSpace(int x, int y, int roomId) {
+		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return false;
+
 		if (roomId > VOID && cellCount[roomId] > 0) {
 			if (get(x - 1, y) != roomId && get(x + 1, y) != roomId && get(x, y - 1) != roomId && get(x, y + 1) != roomId) return false;
 		}
 
-		if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
-		if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
-		if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
-		if (get(x + 1, y + 1) > VOID && get(x + 1, y + 1) != roomId) return false;
-		if (get(x + 1, y) > VOID && get(x + 1, y) != roomId) return false;
-		if (get(x + 1, y - 1) > VOID && get(x + 1, y - 1) != roomId) return false;
-		if (get(x, y - 1) > VOID && get(x, y - 1) != roomId) return false;
-		if (get(x - 1, y - 1) > VOID && get(x - 1, y - 1) != roomId) return false;
+		if (roomId == DOOR) {
+			if (get(x, y) == VOID) {
+				return ((get(x - 1, y) > VOID && get(x + 1, y) > VOID))
+						|| ((get(x, y - 1) > VOID && get(x, y + 1) > VOID));
+			}
+		} else {
+			if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
+			if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
+			if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
+			if (get(x + 1, y + 1) > VOID && get(x + 1, y + 1) != roomId) return false;
+			if (get(x + 1, y) > VOID && get(x + 1, y) != roomId) return false;
+			if (get(x + 1, y - 1) > VOID && get(x + 1, y - 1) != roomId) return false;
+			if (get(x, y - 1) > VOID && get(x, y - 1) != roomId) return false;
+			if (get(x - 1, y - 1) > VOID && get(x - 1, y - 1) != roomId) return false;
+		}
 
 		return true;
 	}
