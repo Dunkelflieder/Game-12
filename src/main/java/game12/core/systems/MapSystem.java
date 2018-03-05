@@ -10,8 +10,6 @@ import game12.core.event.MapChangeEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 public class MapSystem extends SynchronizedSystem {
 
@@ -50,20 +48,23 @@ public class MapSystem extends SynchronizedSystem {
 
 	}
 
+	private static final int MAX_ROOMS     = 1024;
+	private static final int MIN_ROOM_SIZE = 20;
+
 	public static final int DOOR = -1;
 	public static final int VOID = 0;
 
-	private int          width;
-	private int          height;
-	private int[]        rooms;
-	private Set<Integer> lockedRooms;
+	private int   width;
+	private int   height;
+	private int[] rooms;
+
+	private boolean[] lockedRooms = new boolean[MAX_ROOMS];
+	private int[]     cellCount   = new int[MAX_ROOMS];
 
 	public MapSystem(int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.rooms = new int[width * height];
-
-		lockedRooms = new HashSet<>();
 
 		for (int x = 1; x <= 5; x++) {
 			for (int y = 1; y <= 5; y++) {
@@ -98,9 +99,11 @@ public class MapSystem extends SynchronizedSystem {
 
 		int oldRoom = rooms[y * width + x];
 
-		if (!(lockedRooms.contains(oldRoom))) {
+		if (!isRoomLocked(oldRoom)) {
 			if (checkSpace(x, y, roomId)) {
 				rooms[y * width + x] = roomId;
+				if (roomId > VOID) cellCount[roomId]++;
+				if (oldRoom > VOID) cellCount[oldRoom]--;
 				getEventManager().trigger(new MapChangeEvent(x, y));
 				callSyncFunction(new UpdateSyncParameter(x, y, roomId));
 			}
@@ -108,6 +111,10 @@ public class MapSystem extends SynchronizedSystem {
 	}
 
 	private boolean checkSpace(int x, int y, int roomId) {
+		if (roomId > VOID && cellCount[roomId] > 0) {
+			if (get(x - 1, y) != roomId && get(x + 1, y) != roomId && get(x, y - 1) != roomId && get(x, y + 1) != roomId) return false;
+		}
+
 		if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
 		if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
 		if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
@@ -120,8 +127,16 @@ public class MapSystem extends SynchronizedSystem {
 		return true;
 	}
 
+	public boolean isRoomLocked(int roomId) {
+		if (roomId >= 0) {
+			return lockedRooms[roomId];
+		} else {
+			return false;
+		}
+	}
+
 	public void lockRoom(int roomId) {
-		lockedRooms.add(roomId);
+		lockedRooms[roomId] = true;
 	}
 
 	private void syncSet(UpdateSyncParameter parameter) {
@@ -144,4 +159,9 @@ public class MapSystem extends SynchronizedSystem {
 		height = stream.readInt();
 		rooms = stream.readIntArray();
 	}
+
+	public boolean checkRoom(int roomId) {
+		return cellCount[roomId] >= MIN_ROOM_SIZE;
+	}
+
 }

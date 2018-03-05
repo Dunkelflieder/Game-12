@@ -1,6 +1,5 @@
 package game12.core.systems;
 
-import game12.core.EventTimer;
 import game12.core.Side;
 import game12.core.SynchronizedSystem;
 import game12.core.SystemSyncParameter;
@@ -13,17 +12,20 @@ import java.io.IOException;
 
 public class GameProgressSystem extends SynchronizedSystem {
 
+	private static final float ROOM_TIME      = 120;
+	private static final float OVERTIME       = 30;
+	private static final int   OVERTIME_COUNT = 2;
+
 	private CoreMap map;
 
-	private int currentRoom = 2;
-	private EventTimer nextRoomTimer;
+	private int   currentRoom;
+	private float time;
+	private int   state; // 0 = room build tim, >0 = overtime
 
 	private MapSystem mapSystem;
 
 	public GameProgressSystem(CoreMap map) {
 		this.map = map;
-
-		nextRoomTimer = new EventTimer(20, false, -1);
 	}
 
 	@Override
@@ -32,11 +34,12 @@ public class GameProgressSystem extends SynchronizedSystem {
 
 		this.mapSystem = getContainer().getSystem(MapSystem.class);
 
-		registerSyncFunction(NextRoomSyncParameter.class, this::syncNextRoom);
+		time = ROOM_TIME;
+		currentRoom = 2;
 
-		if (checkSide(Side.SERVER)) {
-			getEventManager().register(UpdateEvent.class, this::onUpdate);
-		}
+		registerSyncFunction(StateSyncParameter.class, this::syncNextRoom);
+
+		getEventManager().register(UpdateEvent.class, this::onUpdate);
 	}
 
 	@Override
@@ -49,27 +52,76 @@ public class GameProgressSystem extends SynchronizedSystem {
 
 	}
 
-	public int getCurrentRoom() {
-		return currentRoom;
-	}
+	public int getCurrentRoom() { return currentRoom; }
 
-	private void syncNextRoom(NextRoomSyncParameter parameter) {
-		mapSystem.lockRoom(currentRoom);
-		currentRoom++;
+	public float getTime()      { return time; }
+
+	public int getState()       { return state; }
+
+	private void syncNextRoom(StateSyncParameter parameter) {
+		nextState(parameter.state, parameter.time, parameter.currentRoom);
 	}
 
 	private void onUpdate(UpdateEvent event) {
-		nextRoomTimer.update(event.getDelta());
+		time -= event.getDelta();
+		if (!checkSide(Side.SERVER)) return;
 
-		while (nextRoomTimer.trigger()) {
-			mapSystem.lockRoom(currentRoom);
-			currentRoom++;
-			callSyncFunction(new NextRoomSyncParameter());
+		if (time <= 0) {
+			boolean isValid = mapSystem.checkRoom(currentRoom);
+
+			if (isValid) {
+				nextState(0, ROOM_TIME, currentRoom + 1);
+				callSyncFunction(new StateSyncParameter(state, time, currentRoom));
+			} else {
+				if (state < OVERTIME_COUNT) {
+					nextState(state + 1, OVERTIME, currentRoom);
+					callSyncFunction(new StateSyncParameter(state, time, currentRoom));
+				} else {
+					// TODO end the game
+					System.out.println("game lost!");
+				}
+			}
 		}
-
 	}
 
-	public static class NextRoomSyncParameter extends SystemSyncParameter {
+	private void nextState(int state, float time, int currentRoom) {
+		this.state = state;
+		this.time = time;
+		this.currentRoom = currentRoom;
+	}
+
+	public static class StateSyncParameter extends SystemSyncParameter {
+
+		private int   state;
+		private float time;
+		private int   currentRoom;
+
+		public StateSyncParameter() {
+		}
+
+		public StateSyncParameter(int state, float time, int currentRoom) {
+			this.state = state;
+			this.time = time;
+			this.currentRoom = currentRoom;
+		}
+
+		@Override
+		public void fromStream(DataInputStream in) throws IOException {
+			super.fromStream(in);
+
+			state = in.readInt();
+			time = in.readFloat();
+			currentRoom = in.readInt();
+		}
+
+		@Override
+		public void toStream(DataOutputStream out) throws IOException {
+			super.toStream(out);
+
+			out.writeInt(state);
+			out.writeFloat(time);
+			out.writeInt(currentRoom);
+		}
 
 	}
 

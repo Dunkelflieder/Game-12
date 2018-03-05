@@ -97,6 +97,7 @@ public class ThirdPersonController extends Controller {
 		}
 
 		gui.setCurrentRoom(gameProgressSystem.getCurrentRoom());
+		gui.setTime(gameProgressSystem.getTime());
 
 	}
 
