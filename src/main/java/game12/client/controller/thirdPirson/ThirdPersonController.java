@@ -9,11 +9,12 @@ import de.nerogar.noise.util.Color;
 import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;
 import game12.client.Controller;
-import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
 import game12.core.request.MapChangeRequestPacket;
+import game12.core.systems.GameProgressSystem;
+import game12.core.systems.MapSystem;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -21,24 +22,32 @@ import java.util.List;
 public class ThirdPersonController extends Controller {
 
 	private static final float CAMERA_SPEED = 1f;
+
+	private final ThirdPersonGui     gui;
+	private final ClientMap          map;
 	private final OrthographicCamera camera;
 	private final Vector2f           cameraPosition;
 	private float zoom = 10;
 
 	private Light light;
 
+	private GameProgressSystem gameProgressSystem;
+
 	public ThirdPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
 			GuiContainer guiContainer) {
 		super(window, eventManager, maps, networkAdapter, guiContainer);
 
-		Gui gui = new ThirdPersonGui(eventManager);
+		gui = new ThirdPersonGui(eventManager);
 		this.guiContainer.setActiveGui(gui);
 
-		maps.get(0).setActive(true);
+		map = maps.get(0);
+		map.setActive(true);
+
+		gameProgressSystem = map.getSystem(GameProgressSystem.class);
 
 		cameraPosition = new Vector2f();
 		camera = new OrthographicCamera(10, (float) window.getWidth() / window.getHeight(), 0f, -1000f);
-		maps.get(0).getSystem(RenderSystem.class).setCamera(camera);
+		map.getSystem(RenderSystem.class).setCamera(camera);
 
 		//camera = maps.get(0).getSystem(RenderSystem.class).getCamera();
 
@@ -51,7 +60,7 @@ public class ThirdPersonController extends Controller {
 				8,
 				5
 		);
-		maps.get(0).getSystem(RenderSystem.class).getRenderer().getLightContainer().add(light);
+		map.getSystem(RenderSystem.class).getRenderer().getLightContainer().add(light);
 	}
 
 	@Override
@@ -75,18 +84,19 @@ public class ThirdPersonController extends Controller {
 
 		light.position.set(cameraPosition.getX(), 0.5f, cameraPosition.getY());
 
-		// test
-
+		// room building
 		int mouseX = (int) ((inputHandler.getCursorPosX() / window.getWidth() - 0.5f) * (zoom * camera.getAspect()) + cameraPosition.getX());
 		int mouseY = (int) (-(inputHandler.getCursorPosY() / window.getHeight() - 0.5f) * zoom + cameraPosition.getY());
 
 		if (inputHandler.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
-			maps.get(0).getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, 0));
+			map.getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, gameProgressSystem.getCurrentRoom()));
 		}
 
 		if (inputHandler.isButtonDown(GLFW.GLFW_MOUSE_BUTTON_RIGHT)) {
-			maps.get(0).getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, 1));
+			map.getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, MapSystem.VOID));
 		}
+
+		gui.setCurrentRoom(gameProgressSystem.getCurrentRoom());
 
 	}
 

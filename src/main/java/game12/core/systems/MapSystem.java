@@ -10,6 +10,8 @@ import game12.core.event.MapChangeEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MapSystem extends SynchronizedSystem {
 
@@ -51,40 +53,25 @@ public class MapSystem extends SynchronizedSystem {
 	public static final int DOOR = -1;
 	public static final int VOID = 0;
 
-	private int   width;
-	private int   height;
-	private int[] map;
+	private int          width;
+	private int          height;
+	private int[]        rooms;
+	private Set<Integer> lockedRooms;
 
 	public MapSystem(int width, int height) {
 		this.width = width;
 		this.height = height;
-		this.map = new int[width * height];
+		this.rooms = new int[width * height];
 
-		// test
-		this.width = 20;
-		this.height = 20;
-		map = new int[] {
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-				0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 0, 5, 5, 5, 5, 5, 5, 0,
-				0, 1, 1, 1, 1, 1, -1, 2, 2, 2, 2, 2, 0, 5, 5, 5, 5, 5, 5, 0,
-				0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, 0, 5, 5, 5, 5, 5, 5, 0,
-				0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2, -1, 5, 5, 5, 5, 5, 5, 0,
-				0, 0, 0, -1, 0, 0, 0, 2, 2, 2, 2, 2, 0, 5, 5, 5, 5, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 0, 2, 2, 2, 2, 2, 0, 5, 5, 5, 5, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 4, 4, 4, 4, 4, 4, 0, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 4, 4, 4, 4, 4, 4, 0, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 4, 4, 4, 4, 4, 4, 0, 5, 5, 0,
-				0, 3, 3, 3, 3, 3, 3, 3, 3, 0, 4, 4, 4, 4, 4, 4, 0, 5, 5, 0,
-				0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 4, 4, 4, 4, 4, 4, 0, 5, 5, 0,
-				0, 7, 7, 7, 7, 7, 7, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0,
-				0, 7, 7, 7, 7, 7, 7, 0, 8, 8, 8, 0, 6, 6, 6, 6, 6, 6, 6, 0,
-				0, 7, 7, 7, 7, 7, 7, 0, 8, 8, 8, 0, 6, 6, 6, 6, 6, 6, 6, 0,
-				0, 7, 7, 7, 7, 7, 7, 0, 8, 8, 8, -1, 6, 6, 6, 6, 6, 6, 6, 0,
-				0, 7, 7, 7, 7, 7, 7, -1, 8, 8, 8, 0, 6, 6, 6, 6, 6, 6, 6, 0,
-				0, 7, 7, 7, 7, 7, 7, 0, 8, 8, 8, 0, 6, 6, 6, 6, 6, 6, 6, 0,
-				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		};
+		lockedRooms = new HashSet<>();
+
+		for (int x = 1; x <= 5; x++) {
+			for (int y = 1; y <= 5; y++) {
+				rooms[y * width + x] = 1;
+			}
+		}
+		lockRoom(1);
+
 	}
 
 	@Override
@@ -101,7 +88,7 @@ public class MapSystem extends SynchronizedSystem {
 	public int get(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= width) return VOID;
 
-		return map[y * width + x];
+		return rooms[y * width + x];
 	}
 
 	public void set(int x, int y, int roomId) {
@@ -109,14 +96,36 @@ public class MapSystem extends SynchronizedSystem {
 
 		if (x < 0 || x >= width || y < 0 || y >= width) return;
 
-		map[y * width + x] = roomId;
+		int oldRoom = rooms[y * width + x];
 
-		getEventManager().trigger(new MapChangeEvent(x, y));
-		callSyncFunction(new UpdateSyncParameter(x, y, roomId));
+		if (!(lockedRooms.contains(oldRoom))) {
+			if (checkSpace(x, y, roomId)) {
+				rooms[y * width + x] = roomId;
+				getEventManager().trigger(new MapChangeEvent(x, y));
+				callSyncFunction(new UpdateSyncParameter(x, y, roomId));
+			}
+		}
+	}
+
+	private boolean checkSpace(int x, int y, int roomId) {
+		if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
+		if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
+		if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
+		if (get(x + 1, y + 1) > VOID && get(x + 1, y + 1) != roomId) return false;
+		if (get(x + 1, y) > VOID && get(x + 1, y) != roomId) return false;
+		if (get(x + 1, y - 1) > VOID && get(x + 1, y - 1) != roomId) return false;
+		if (get(x, y - 1) > VOID && get(x, y - 1) != roomId) return false;
+		if (get(x - 1, y - 1) > VOID && get(x - 1, y - 1) != roomId) return false;
+
+		return true;
+	}
+
+	public void lockRoom(int roomId) {
+		lockedRooms.add(roomId);
 	}
 
 	private void syncSet(UpdateSyncParameter parameter) {
-		map[parameter.y * width + parameter.x] = parameter.roomId;
+		rooms[parameter.y * width + parameter.x] = parameter.roomId;
 		getEventManager().trigger(new MapChangeEvent(parameter.x, parameter.y));
 	}
 
@@ -125,7 +134,7 @@ public class MapSystem extends SynchronizedSystem {
 		NDSDataOutputStream stream = new NDSDataOutputStream(out);
 		stream.writeInt(width);
 		stream.writeInt(height);
-		stream.writeIntArray(map);
+		stream.writeIntArray(rooms);
 	}
 
 	@Override
@@ -133,6 +142,6 @@ public class MapSystem extends SynchronizedSystem {
 		NDSDataInputStream stream = new NDSDataInputStream(in);
 		width = stream.readInt();
 		height = stream.readInt();
-		map = stream.readIntArray();
+		rooms = stream.readIntArray();
 	}
 }
