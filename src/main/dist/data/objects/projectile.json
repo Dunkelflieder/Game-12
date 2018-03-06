@@ -30,6 +30,12 @@
 					"reach": 1.0,
 					"intensity": 3.0
 				}
+			},
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "test"
+				}
 			}
 		],
 		"server": [

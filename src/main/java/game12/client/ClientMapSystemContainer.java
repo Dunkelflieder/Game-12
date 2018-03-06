@@ -24,6 +24,7 @@ public class ClientMapSystemContainer extends MapSystemContainer<ClientMap> {
 
 		addSystem(new UpdateRenderablesSystem(getMap()));
 		addSystem(new UpdateLightsSystem(getMap()));
+		addSystem(new SpriteSystem(getMap()));
 		addSystem(new ReceiveEntitySystem(getMap()));
 		addSystem(new ReceiveEntityMoveSystem(getMap()));
 		addSystem(new ParticleSystem(getMap()));

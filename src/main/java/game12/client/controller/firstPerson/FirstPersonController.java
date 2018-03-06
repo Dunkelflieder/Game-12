@@ -37,7 +37,7 @@ public class FirstPersonController extends Controller {
 		this.map = maps.get(0);
 		this.mapSystem = map.getSystem(MapSystem.class);
 
-		map.getSystem(RenderSystem.class).setResolution(4);
+		map.getSystem(RenderSystem.class).setResolution(480, 270);
 
 		Gui gui = new FirstPersonGui(eventManager);
 		this.guiContainer.setActiveGui(gui);
@@ -47,12 +47,12 @@ public class FirstPersonController extends Controller {
 		cameraPosition = new Vector2f(2f, 2f);
 		yaw = (float) (Math.PI * 1.5);
 		camera = map.getSystem(RenderSystem.class).getCamera();
+
+		inputHandler.setMouseHiding(true);
 	}
 
 	@Override
 	public void update(float timeDelta) {
-		inputHandler.setMouseHiding(true);
-
 		yaw += inputHandler.getCursorDeltaX() * -0.015f;
 
 		float deltaXlocal = 0;
