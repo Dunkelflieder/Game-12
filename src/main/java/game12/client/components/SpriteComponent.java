@@ -4,6 +4,7 @@ import de.nerogar.noise.render.RenderProperties3f;
 import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderable;
 import de.nerogar.noise.serialization.NDSNodeObject;
+import de.nerogar.noise.util.Vector3f;
 import game12.client.map.ClientMap;
 import game12.client.systems.SpriteSystem;
 import game12.core.components.PositionComponent;
@@ -18,11 +19,16 @@ public class SpriteComponent extends Component {
 
 	private String skinId;
 
+	private Vector3f forcedRotation;
+	private Vector3f offset;
+
 	public SpriteComponent() {
 	}
 
-	public SpriteComponent(String skinId) {
+	public SpriteComponent(String skinId, Vector3f forcedRotation, Vector3f offset) {
 		this.skinId = skinId;
+		this.forcedRotation = forcedRotation;
+		this.offset = offset;
 	}
 
 	@Override
@@ -43,9 +49,26 @@ public class SpriteComponent extends Component {
 	@Override
 	public void setData(GameObjectsSystem gameObjectsSystem, NDSNodeObject data) {
 		skinId = data.getStringUTF8("skinId");
+
+		if (data.contains("rotation")) {
+			float[] directionArray = data.getFloatArray("rotation");
+			forcedRotation = new Vector3f(directionArray[0], directionArray[1], directionArray[2]);
+		}
+
+		if (data.contains("offset")) {
+			float[] offsetArray = data.getFloatArray("offset");
+			offset = new Vector3f(offsetArray[0], offsetArray[1], offsetArray[2]);
+		}
+
 	}
 
-	public DeferredRenderable getRenderable() { return renderable; }
+	public DeferredRenderable getRenderable()              { return renderable; }
+
+	public Vector3f getForcedRotation()                    { return forcedRotation; }
+
+	public void setForcedRotation(Vector3f forcedRotation) { this.forcedRotation = forcedRotation; }
+
+	public Vector3f getOffset()                            { return offset; }
 
 	public void updatePosition(float newX, float newY, float newZ, float newScale) {
 		renderProperties.setXYZ(newX, newY * CoreMap.Y_FACTOR, newZ);
@@ -69,7 +92,11 @@ public class SpriteComponent extends Component {
 
 	@Override
 	public Component clone() {
-		return new SpriteComponent(skinId);
+		return new SpriteComponent(
+				skinId,
+				forcedRotation == null ? null : forcedRotation.clone(),
+				offset == null ? null : offset.clone()
+		);
 	}
 
 }

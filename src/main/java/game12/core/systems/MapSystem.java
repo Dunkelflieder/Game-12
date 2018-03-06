@@ -51,8 +51,9 @@ public class MapSystem extends SynchronizedSystem {
 	private static final int MAX_ROOMS     = 1024;
 	private static final int MIN_ROOM_SIZE = 20;
 
-	public static final int DOOR = -1;
-	public static final int VOID = 0;
+	public static final int VOID        = 0;
+	public static final int DOOR        = -1;
+	public static final int LOCKED_DOOR = -2;
 
 	private int   width;
 	private int   height;
@@ -86,54 +87,79 @@ public class MapSystem extends SynchronizedSystem {
 
 	public int getHeight() { return height; }
 
+	public boolean isWalkable(int x, int y, boolean isPlayer) {
+		int tile = get(x, y);
+		if (tile == VOID) return false;
+		if (tile == DOOR) return isPlayer;
+		if (tile == LOCKED_DOOR) return false;
+
+		return true;
+	}
+
 	public int get(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= width) return VOID;
 
 		return rooms[y * width + x];
 	}
 
-	public void set(int x, int y, int roomId) {
-		if (!checkSide(Side.SERVER)) return;
+	public boolean set(int x, int y, int roomId) {
+		if (!checkSide(Side.SERVER)) return false;
 
-		if (x < 0 || x >= width || y < 0 || y >= width) return;
+		if (x < 0 || x >= width || y < 0 || y >= width) return false;
 
 		int oldRoom = rooms[y * width + x];
 
 		if (!isRoomLocked(oldRoom)) {
-			if (checkSpace(x, y, roomId)) {
+			boolean valid = false;
+
+			if (roomId > VOID) {
+				valid = checkSpaceRoom(x, y, roomId);
+			} else if (roomId == DOOR || roomId == LOCKED_DOOR) {
+				valid = checkSpaceDoor(x, y, roomId);
+			}
+
+			if (valid) {
 				rooms[y * width + x] = roomId;
 				if (roomId > VOID) cellCount[roomId]++;
 				if (oldRoom > VOID) cellCount[oldRoom]--;
-				getEventManager().trigger(new MapChangeEvent(x, y));
+				getEventManager().trigger(new MapChangeEvent(x, y, oldRoom, roomId));
 				callSyncFunction(new UpdateSyncParameter(x, y, roomId));
+				return true;
 			}
 		}
+
+		return false;
 	}
 
-	private boolean checkSpace(int x, int y, int roomId) {
+	private boolean checkSpaceRoom(int x, int y, int roomId) {
 		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return false;
 
 		if (roomId > VOID && cellCount[roomId] > 0) {
 			if (get(x - 1, y) != roomId && get(x + 1, y) != roomId && get(x, y - 1) != roomId && get(x, y + 1) != roomId) return false;
 		}
 
-		if (roomId == DOOR) {
-			if (get(x, y) == VOID) {
-				return ((get(x - 1, y) > VOID && get(x + 1, y) > VOID))
-						|| ((get(x, y - 1) > VOID && get(x, y + 1) > VOID));
-			}
-		} else {
-			if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
-			if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
-			if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
-			if (get(x + 1, y + 1) > VOID && get(x + 1, y + 1) != roomId) return false;
-			if (get(x + 1, y) > VOID && get(x + 1, y) != roomId) return false;
-			if (get(x + 1, y - 1) > VOID && get(x + 1, y - 1) != roomId) return false;
-			if (get(x, y - 1) > VOID && get(x, y - 1) != roomId) return false;
-			if (get(x - 1, y - 1) > VOID && get(x - 1, y - 1) != roomId) return false;
-		}
+		if (get(x - 1, y) > VOID && get(x - 1, y) != roomId) return false;
+		if (get(x - 1, y + 1) > VOID && get(x - 1, y + 1) != roomId) return false;
+		if (get(x, y + 1) > VOID && get(x, y + 1) != roomId) return false;
+		if (get(x + 1, y + 1) > VOID && get(x + 1, y + 1) != roomId) return false;
+		if (get(x + 1, y) > VOID && get(x + 1, y) != roomId) return false;
+		if (get(x + 1, y - 1) > VOID && get(x + 1, y - 1) != roomId) return false;
+		if (get(x, y - 1) > VOID && get(x, y - 1) != roomId) return false;
+		if (get(x - 1, y - 1) > VOID && get(x - 1, y - 1) != roomId) return false;
 
 		return true;
+	}
+
+	private boolean checkSpaceDoor(int x, int y, int doorId) {
+		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return false;
+
+		if (get(x, y) == VOID) {
+			if ((get(x - 1, y) > VOID && get(x + 1, y) > VOID) && (get(x, y - 1) == VOID && get(x, y + 1) == VOID)) return true;
+			if ((get(x, y - 1) > VOID && get(x, y + 1) > VOID) && (get(x - 1, y) == VOID && get(x + 1, y) == VOID)) return true;
+			return false;
+		}
+
+		return false;
 	}
 
 	public boolean isRoomLocked(int roomId) {
@@ -149,8 +175,9 @@ public class MapSystem extends SynchronizedSystem {
 	}
 
 	private void syncSet(UpdateSyncParameter parameter) {
+		int oldRoom = rooms[parameter.y * width + parameter.x];
 		rooms[parameter.y * width + parameter.x] = parameter.roomId;
-		getEventManager().trigger(new MapChangeEvent(parameter.x, parameter.y));
+		getEventManager().trigger(new MapChangeEvent(parameter.x, parameter.y, oldRoom, parameter.roomId));
 	}
 
 	@Override

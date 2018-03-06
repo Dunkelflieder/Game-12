@@ -17,6 +17,23 @@
 			}
 		],
 		"client": [
+			{
+				"name": "light",
+				"data": {
+					"position": [0.0, 0.5, 0.0],
+					"color": [0.4, 1.0, 0.2],
+					"reach": 5.0,
+					"intensity": 5.0
+				}
+			},
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "test",
+					"rotation": [0.0, 1.5707963268, 0.0],
+					"offset": [0.0, 2.0, 0.0]
+				}
+			}
 		],
 		"server": [
 		]

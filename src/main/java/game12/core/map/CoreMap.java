@@ -23,7 +23,7 @@ public abstract class CoreMap implements Sided {
 	public static final byte CORNER_SE       = (byte) 0b0000_1000;
 	public static final byte CORNER_ALL      = (byte) 0b0000_1111;
 
-	public static final float Y_FACTOR = 1f / 3f;
+	public static final float Y_FACTOR = 1f / 1f;
 
 	private boolean initialized = false;
 

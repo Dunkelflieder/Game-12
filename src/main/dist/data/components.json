@@ -23,6 +23,10 @@
 		{
 			"name": "actor",
 			"class": "ActorComponent"
+		},
+		{
+			"name": "door",
+			"class": "DoorComponent"
 		}
 	],
 	"client": [

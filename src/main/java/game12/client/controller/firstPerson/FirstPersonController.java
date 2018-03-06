@@ -76,10 +76,10 @@ public class FirstPersonController extends Controller {
 		float deltaX = (float) (deltaXlocal * Math.cos(yaw) + deltaYlocal * Math.sin(yaw));
 		float deltaY = (float) (deltaXlocal * Math.sin(-yaw) + deltaYlocal * Math.cos(-yaw));
 
-		if (mapSystem.get((int) (cameraPosition.getX() + deltaX), (int) (cameraPosition.getY())) != MapSystem.VOID) {
+		if (mapSystem.isWalkable((int) (cameraPosition.getX() + deltaX), (int) cameraPosition.getY(), true)) {
 			cameraPosition.addX(deltaX);
 		}
-		if (mapSystem.get((int) (cameraPosition.getX()), (int) (cameraPosition.getY() + deltaY)) != MapSystem.VOID) {
+		if (mapSystem.isWalkable((int) cameraPosition.getX(), (int) (cameraPosition.getY() + deltaY), true)) {
 			cameraPosition.addY(deltaY);
 		}
 

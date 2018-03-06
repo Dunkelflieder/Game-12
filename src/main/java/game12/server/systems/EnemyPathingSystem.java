@@ -40,11 +40,7 @@ public class EnemyPathingSystem extends LogicSystem {
 		int[] costSquare = new int[mapSystem.getWidth() * mapSystem.getHeight()];
 		for (int x = 0; x < mapSystem.getWidth(); x++) {
 			for (int y = 0; y < mapSystem.getHeight(); y++) {
-				int tile = mapSystem.get(x, y);
-				costSquare[x + y * mapSystem.getWidth()] =
-						tile == MapSystem.VOID ? -1 :
-								tile == MapSystem.DOOR ? 1 :
-										1;
+				costSquare[x + y * mapSystem.getWidth()] = mapSystem.isWalkable(x, y, false) ? 1 : -1;
 			}
 		}
 		Vector2i mapDimensions = Vector2i.of(mapSystem.getWidth(), mapSystem.getHeight());

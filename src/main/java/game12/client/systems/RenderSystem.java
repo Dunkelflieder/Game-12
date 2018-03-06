@@ -39,7 +39,7 @@ public class RenderSystem extends LogicSystem {
 		setResolution();
 		renderer.setSunLightBrightness(1.0f);
 
-		camera = new PerspectiveCamera(90, (float) ClientMain.window.getWidth() / ClientMain.window.getHeight(), 0.1f, 1000f);
+		camera = new PerspectiveCamera(90, (float) ClientMain.window.getWidth() / ClientMain.window.getHeight(), 0.001f, 1000f);
 	}
 
 	private void setResolution() {

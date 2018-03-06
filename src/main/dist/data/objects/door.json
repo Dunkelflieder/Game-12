@@ -1,0 +1,28 @@
+{
+	"name": "door",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "door",
+				"data": {
+					"speed": 5.0
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "test",
+					"rotation": [0.0, 0.0, 0.0],
+					"offset": [0.0, 0.5, 0.0]
+				}
+			}
+		],
+		"server": [
+		]
+	}
+}

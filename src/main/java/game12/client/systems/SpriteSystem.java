@@ -4,9 +4,11 @@ import de.nerogar.noise.event.EventListener;
 import de.nerogar.noise.render.*;
 import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderer;
+import de.nerogar.noise.util.Vector3f;
 import game12.client.components.SpriteComponent;
 import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
+import game12.core.components.PositionComponent;
 import game12.core.event.EntityMoveEvent;
 import game12.core.event.UpdateEvent;
 
@@ -51,13 +53,24 @@ public class SpriteSystem extends LogicSystem {
 	}
 
 	public void registerEntity(SpriteComponent component) {
+		PositionComponent positionComponent = component.getEntity().getComponent(PositionComponent.class);
+		setSpritePosition(component, positionComponent.getX(), positionComponent.getY(), positionComponent.getZ(), positionComponent.getScale());
 		renderer.addObject(component.getRenderable());
 	}
 
+	private void setSpritePosition(SpriteComponent spriteComponent, float x, float y, float z, float scale) {
+		Vector3f offset = spriteComponent.getOffset();
+		if (offset == null) {
+			spriteComponent.updatePosition(x, y, z, scale);
+		} else {
+			spriteComponent.updatePosition(x + offset.getX(), y + offset.getY(), z + offset.getZ(), scale);
+		}
+	}
+
 	private void moveListenerFunction(EntityMoveEvent event) {
-		SpriteComponent renderComponent = event.getEntity().getComponent(SpriteComponent.class);
-		if (renderComponent != null) {
-			renderComponent.updatePosition(event.getNewX(), event.getNewY(), event.getNewZ(), event.getNewScale());
+		SpriteComponent spriteComponent = event.getEntity().getComponent(SpriteComponent.class);
+		if (spriteComponent != null) {
+			setSpritePosition(spriteComponent, event.getNewX(), event.getNewY(), event.getNewZ(), event.getNewScale());
 		}
 	}
 
@@ -65,7 +78,13 @@ public class SpriteSystem extends LogicSystem {
 		Camera camera = map.getSystem(RenderSystem.class).getCamera();
 
 		for (SpriteComponent spriteComponent : map.getEntityList().getComponents(SpriteComponent.class)) {
-			spriteComponent.updateRotation(camera.getYaw(), -camera.getPitch(), camera.getRoll());
+
+			Vector3f forcedRotation = spriteComponent.getForcedRotation();
+			if (forcedRotation == null) {
+				spriteComponent.updateRotation(camera.getYaw(), -camera.getPitch(), camera.getRoll());
+			} else {
+				spriteComponent.updateRotation(forcedRotation.getX(), forcedRotation.getY(), forcedRotation.getZ());
+			}
 		}
 	}
 
@@ -88,13 +107,20 @@ public class SpriteSystem extends LogicSystem {
 
 	private Mesh createMesh() {
 		VertexList vertexList = new VertexList();
-		int index1 = vertexList.addVertex(-0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-		int index2 = vertexList.addVertex(0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-		int index3 = vertexList.addVertex(0.5f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-		int index4 = vertexList.addVertex(-0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+		int index1 = vertexList.addVertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		int index2 = vertexList.addVertex(0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		int index3 = vertexList.addVertex(0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+		int index4 = vertexList.addVertex(-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+
+		int index5 = vertexList.addVertex(0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		int index6 = vertexList.addVertex(-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		int index7 = vertexList.addVertex(-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+		int index8 = vertexList.addVertex(0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
 		vertexList.addIndex(index1, index2, index3);
 		vertexList.addIndex(index1, index3, index4);
+		vertexList.addIndex(index5, index6, index7);
+		vertexList.addIndex(index5, index7, index8);
 
 		return new Mesh(
 				vertexList.getIndexCount(),
