@@ -1,0 +1,25 @@
+{
+	"name": "skeleton",
+	"components": {
+		"super": [
+			"enemy"
+		],
+		"core": [
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "skeleton",
+					"offset": [
+						0.0,
+						0.4,
+						0.0
+					]
+				}
+			}
+		],
+		"server": [
+		]
+	}
+}

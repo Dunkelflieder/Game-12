@@ -1,5 +1,5 @@
 {
-	"name": "Player",
+	"name": "player",
 	"components": {
 		"super": [
 			"entity"
@@ -21,9 +21,13 @@
 				"name": "light",
 				"data": {
 					"position": [0.0, 0.5, 0.0],
-					"color": [0.4, 1.0, 0.2],
-					"reach": 5.0,
-					"intensity": 5.0
+					"color": [
+						1.0,
+						0.35,
+						0.0
+					],
+					"reach": 3.0,
+					"intensity": 1.0
 				}
 			},
 			{

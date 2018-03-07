@@ -22,10 +22,10 @@ public class GameSetupSystem extends LogicSystem {
 	private void start() {
 		EntityFactorySystem entityFactorySystem = getContainer().getSystem(EntityFactorySystem.class);
 
-		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("TestEnemy");
+		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
 		entityFactorySystem.createEntity(testEnemyBlueprintId, 1, 0, 1);
 
-		short playerBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("Player");
+		short playerBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("player");
 		entityFactorySystem.createEntity(playerBlueprintId, 1, 0, 1);
 	}
 }

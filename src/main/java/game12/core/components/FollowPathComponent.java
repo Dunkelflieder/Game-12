@@ -31,6 +31,7 @@ public class FollowPathComponent extends SynchronizedComponent {
 
 	public void updatePath(Vector3f targetPosition, Pathfinder pathfinder) {
 		PositionComponent positionComponent = getEntity().getComponent(PositionComponent.class);
+		float height = positionComponent.getY();
 		while (timer.trigger()) {
 			Vector2i intPos = Vector2i.of((int) positionComponent.getX(), (int) positionComponent.getZ());
 			List<Vector2i> path = pathfinder.getPath(intPos, Vector2i.of((int) targetPosition.getX(), (int) targetPosition.getZ()));
@@ -40,10 +41,10 @@ public class FollowPathComponent extends SynchronizedComponent {
 				Vector3f[] path3fArray = new Vector3f[path.size() + 1];
 				for (int i = 0; i < path.size(); i++) {
 					Vector2i vec = path.get(i);
-					path3fArray[i + 1] = new Vector3f(vec.x + 0.5f, 0, vec.y + 0.5f);
+					path3fArray[i + 1] = new Vector3f(vec.x + 0.5f, height, vec.y + 0.5f);
 				}
 				path3fArray[0] = new Vector3f(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
-				path3fArray[path3fArray.length - 1] = new Vector3f(targetPosition.getX(), targetPosition.getY(), targetPosition.getZ());
+				path3fArray[path3fArray.length - 1] = new Vector3f(targetPosition.getX(), height, targetPosition.getZ());
 				newPath(path3fArray);
 			}
 		}
