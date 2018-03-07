@@ -66,7 +66,7 @@ public class ThirdPersonController extends Controller {
 		cameraPosition.addX(deltaX * CAMERA_SPEED * zoom * timeDelta);
 		cameraPosition.addY(deltaY * CAMERA_SPEED * zoom * timeDelta);
 		zoom -= inputHandler.getScrollDeltaY() * 2;
-		zoom = Math.max(4, Math.min(40, zoom));
+		zoom = Math.max(4, Math.min(80, zoom));
 
 		camera.setXYZ(cameraPosition.getX(), 10, cameraPosition.getY());
 		camera.setHeight(zoom);

@@ -21,14 +21,19 @@ public class MapRenderSystem extends LogicSystem {
 
 	private boolean shouldRecreate = true;
 
-	private Texture2D color  = Texture2DLoader.loadTexture("res/map/color.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
-	private Texture2D normal = Texture2DLoader.loadTexture("res/map/normal.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
-	private Texture2D red    = Texture2DLoader.loadTexture("<red.png>");
+	private Texture2D white         = Texture2DLoader.loadTexture("<white.png>", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
+	private Texture2D red           = Texture2DLoader.loadTexture("<red.png>");
+	private Texture2D defaultNormal = Texture2DLoader.loadTexture("<normal.png>");
+
+	private Texture2D color      = Texture2DLoader.loadTexture("res/map/color.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
+	private Texture2D background = Texture2DLoader.loadTexture("res/background/background.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
+	private Texture2D normal     = Texture2DLoader.loadTexture("res/map/normal.png", Texture2D.InterpolationType.NEAREST_MIPMAP).setAnisotropicFiltering(8f);
 
 	private Shader mapShader = DeferredContainer.createSurfaceShader("shaders/map/map.vert", "shaders/map/map.frag", true);
 
 	private DeferredRenderer   renderer;
 	private DeferredRenderable mapRenderable;
+	private DeferredRenderable backgroundRenderable;
 
 	private MapSystem mapSystem;
 
@@ -48,6 +53,8 @@ public class MapRenderSystem extends LogicSystem {
 		mapShader.deactivate();
 
 		mapSystem = getContainer().getSystem(MapSystem.class);
+
+		addBackgroundMesh();
 	}
 
 	private void onMapChange(MapChangeEvent event) {
@@ -84,6 +91,39 @@ public class MapRenderSystem extends LogicSystem {
 
 			shouldRecreate = false;
 		}
+	}
+
+	private void addBackgroundMesh() {
+		Mesh backgroundMesh = createBackgroundMesh(mapSystem.getWidth(), mapSystem.getHeight());
+
+		DeferredContainer container = new DeferredContainer(backgroundMesh, null, background, defaultNormal, red);
+		backgroundRenderable = new DeferredRenderable(container, new RenderProperties3f());
+
+		renderer.addObject(backgroundRenderable);
+
+	}
+
+	private Mesh createBackgroundMesh(int width, int height) {
+		VertexList vertexList = new VertexList();
+
+		float yOffset = -100f;
+
+		int index1 = vertexList.addVertex(0.0f, yOffset, height, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+		int index2 = vertexList.addVertex(width, yOffset, height, width, 0.0f, 0.0f, 1.0f, 0.0f);
+		int index3 = vertexList.addVertex(width, yOffset, 0.0f, width, height, 0.0f, 1.0f, 0.0f);
+		int index4 = vertexList.addVertex(0.0f, yOffset, 0.0f, 0.0f, height, 0.0f, 1.0f, 0.0f);
+
+		vertexList.addIndex(index1, index2, index3);
+		vertexList.addIndex(index1, index3, index4);
+
+		return new Mesh(
+				vertexList.getIndexCount(),
+				vertexList.getVertexCount(),
+				vertexList.getIndexArray(),
+				vertexList.getPositionArray(),
+				vertexList.getUVArray(),
+				vertexList.getNormalArray()
+		);
 	}
 
 	private Mesh createMesh() {
