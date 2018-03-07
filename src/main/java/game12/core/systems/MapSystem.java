@@ -109,6 +109,8 @@ public class MapSystem extends SynchronizedSystem {
 
 		int oldRoom = rooms[y * width + x];
 
+		if(oldRoom == roomId) return false;
+
 		if (!isRoomLocked(oldRoom)) {
 			boolean valid = false;
 

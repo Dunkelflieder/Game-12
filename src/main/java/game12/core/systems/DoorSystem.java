@@ -54,6 +54,7 @@ public class DoorSystem extends SynchronizedSystem {
 
 		if (doors[index] != null) {
 			map.getEntityList().remove(doors[index].getID());
+			doors[index] = null;
 		}
 
 		if (event.getNewRoom() == MapSystem.DOOR || event.getNewRoom() == MapSystem.LOCKED_DOOR) {
