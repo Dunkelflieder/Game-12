@@ -1,16 +1,22 @@
 package game12.client.controller.thirdPirson;
 
 import de.nerogar.noise.event.EventManager;
+import de.nerogar.noise.render.Texture2DLoader;
+import de.nerogar.noise.util.Color;
 import game12.client.gui.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThirdPersonGui extends Gui {
 
+	private static final int BUTTON_SIZE    = 50;
+	private static final int BUTTON_PADDING = 20;
 	private GLabel roundLabel;
 	private GLabel timeLabel;
 
-	private GPanel  buildPanel;
-	private GButton roomButton;
-	private GButton doorButton;
+	private GPanel             buildPanel;
+	private List<GImageButton> buildPanelButtons;
 
 	public ThirdPersonGui(EventManager eventManager, MapBuilder mapBuilder) {
 		super(eventManager);
@@ -21,17 +27,51 @@ public class ThirdPersonGui extends Gui {
 		timeLabel = new GLabel(GuiConstants.DEFAULT_FONT, GuiConstants.FONT_COLOR, "");
 		addElement(timeLabel, Gui.ALIGNMENT_LEFT, Gui.ALIGNMENT_TOP, 20, 70);
 
-		buildPanel = new GPanel(GuiConstants.GUI_BACKGROUND_COLOR, Integer.MAX_VALUE, 50);
-		addElement(buildPanel, ALIGNMENT_LEFT, ALIGNMENT_BOTTOM, 0, 0);
+		buildPanel = new GPanel(GuiConstants.GUI_BACKGROUND_COLOR, 120, 1000000);
+		addElement(buildPanel, ALIGNMENT_RIGHT, ALIGNMENT_TOP, 0, 0);
+		buildPanelButtons = new ArrayList<>();
 
-		roomButton = new GButton(GuiConstants.DEFAULT_FONT, "room", 100, 20, mapBuilder::roomButton);
-		roomButton.setColors(GuiConstants.FONT_COLOR, GuiConstants.FONT_HOVER_COLOR);
-		buildPanel.addElement(roomButton, ALIGNMENT_LEFT, ALIGNMENT_BOTTOM, 50, 20);
+		createBuildPanel(mapBuilder);
+	}
 
-		doorButton = new GButton(GuiConstants.DEFAULT_FONT, "door", 100, 20, mapBuilder::doorButton);
-		doorButton.setColors(GuiConstants.FONT_COLOR, GuiConstants.FONT_HOVER_COLOR);
-		buildPanel.addElement(doorButton, ALIGNMENT_LEFT, ALIGNMENT_BOTTOM, 200, 20);
+	private void createBuildPanel(MapBuilder mapBuilder) {
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/gui/roomButton.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(0);
+					mapBuilder.roomButton();
+				}
+		));
 
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/gui/doorButton.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(1);
+					mapBuilder.doorButton();
+				}
+		));
+
+		for (int i = 0; i < buildPanelButtons.size(); i++) {
+			buildPanel.addElement(
+					buildPanelButtons.get(i),
+					ALIGNMENT_LEFT,
+					ALIGNMENT_TOP,
+					BUTTON_PADDING,
+					BUTTON_PADDING + (BUTTON_PADDING + BUTTON_SIZE) * i
+			                     );
+		}
+	}
+
+	public void activateButton(int id) {
+		for (GImageButton buildPanelButton : buildPanelButtons) {
+			buildPanelButton.setPressed(false);
+		}
+
+		buildPanelButtons.get(id).setPressed(true);
 	}
 
 	public void setCurrentRoom(int roomId) {

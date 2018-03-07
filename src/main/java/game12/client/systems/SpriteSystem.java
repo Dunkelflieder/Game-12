@@ -12,6 +12,7 @@ import game12.core.components.PositionComponent;
 import game12.core.event.EntityMoveEvent;
 import game12.core.event.UpdateEvent;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public class SpriteSystem extends LogicSystem {
 
 	private Mesh      mesh;
 	private Shader    shader;
-	private Texture2D normal;
+	private Texture2D defaultNormal;
 	private Texture2D light;
 
 	public SpriteSystem(ClientMap map) {
@@ -48,7 +49,7 @@ public class SpriteSystem extends LogicSystem {
 
 		mesh = createMesh();
 		shader = DeferredContainer.createSurfaceShader("shaders/sprite/sprite.vert", "shaders/sprite/sprite.frag", false);
-		normal = Texture2DLoader.loadTexture("<normal.png>");
+		defaultNormal = Texture2DLoader.loadTexture("<normal.png>");
 		light = Texture2DLoader.loadTexture("<red.png>");
 	}
 
@@ -100,7 +101,13 @@ public class SpriteSystem extends LogicSystem {
 
 	public DeferredContainer getDeferredContainer(String skinId) {
 		return deferredContainerMap.computeIfAbsent(skinId, id -> {
-			Texture2D color = Texture2DLoader.loadTexture("res/sprites/" + skinId + ".png", Texture2D.InterpolationType.NEAREST_MIPMAP);
+			Texture2D color = Texture2DLoader.loadTexture("res/sprites/" + skinId + "/color.png", Texture2D.InterpolationType.NEAREST_MIPMAP);
+			Texture2D normal;
+			if (new File("res/sprites/" + skinId + "/normal.png").exists()) {
+				normal = Texture2DLoader.loadTexture("res/sprites/" + skinId + "/normal.png", Texture2D.InterpolationType.NEAREST_MIPMAP);
+			} else {
+				normal = defaultNormal;
+			}
 			return new DeferredContainer(mesh, shader, color, normal, light, false, DeferredContainer.OptimizationStrategy.OPTIMIZATION_FEW);
 		});
 	}

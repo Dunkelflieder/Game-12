@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class MapBuilder {
 
-	private ClientMap map;
+	private ClientMap      map;
 
 	private enum BuildType {
 		ROOM,
