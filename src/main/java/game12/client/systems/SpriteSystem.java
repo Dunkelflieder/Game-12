@@ -64,7 +64,7 @@ public class SpriteSystem extends LogicSystem {
 		if (offset == null) {
 			spriteComponent.updatePosition(x, y, z, scale);
 		} else {
-			spriteComponent.updatePosition(x + offset.getX(), y + offset.getY(), z + offset.getZ(), scale);
+			spriteComponent.updatePosition(x + offset.getX() * scale, y + offset.getY() * scale, z + offset.getZ() * scale, scale);
 		}
 	}
 

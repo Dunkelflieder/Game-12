@@ -2,6 +2,7 @@ package game12.server.systems;
 
 import game12.core.EntityFactorySystem;
 import game12.core.LogicSystem;
+import game12.core.components.PositionComponent;
 import game12.core.event.StartGameEvent;
 import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
@@ -24,16 +25,18 @@ public class GameSetupSystem extends LogicSystem {
 	private void start() {
 		EntityFactorySystem entityFactorySystem = getContainer().getSystem(EntityFactorySystem.class);
 
-		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
-		entityFactorySystem.createEntity(testEnemyBlueprintId, 1, 0, 1);
-
 		short playerBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("player");
 		entityFactorySystem.createEntity(playerBlueprintId, 1, 0, 1);
 
-		for (int i = 0; i < 100; i++) {
-		short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
-		Entity spider = entityFactorySystem.createEntity(spiderBlueprintId, 10, 0, 10);
-		spider.getComponent(JumpBehaviorComponent.class).setOwnRoom(1);
+		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
+		Entity skeleton = entityFactorySystem.createEntity(testEnemyBlueprintId, 1, 0, 1);
+		skeleton.getComponent(PositionComponent.class).setScale(0.8f);
+
+		for (int i = 0; i < 5; i++) {
+			short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
+			Entity spider = entityFactorySystem.createEntity(spiderBlueprintId, 10, 0, 10);
+			spider.getComponent(JumpBehaviorComponent.class).setOwnRoom(1);
+			spider.getComponent(PositionComponent.class).setScale(0.5f);
 		}
 	}
 }

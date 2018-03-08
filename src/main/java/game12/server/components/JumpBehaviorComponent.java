@@ -2,10 +2,13 @@ package game12.server.components;
 
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
+import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.EventTimer;
+import game12.core.components.PlayerComponent;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
+import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
 
@@ -13,13 +16,16 @@ import java.util.Random;
 
 public class JumpBehaviorComponent extends Component {
 
-	private static final float GRAVITY    = -20f;
-	private static final float JUMP_SPEED = 5.0f;
+	private static final float GRAVITY = -20f;
 
-	private float      jumpTime;
+	private float      jumpDelay;
 	private EventTimer jumpTimer;
-	private Vector3f   jumpSource;
-	private Vector3f   jumpTarget;
+	private float      speed;
+	private float      maxDistance;
+	private float      playerProbability;
+
+	private Vector3f jumpSource;
+	private Vector3f jumpTarget;
 
 	private float totalJumpTime;
 	private float jumpProgress;
@@ -34,18 +40,28 @@ public class JumpBehaviorComponent extends Component {
 	private Random            random;
 	private PositionComponent positionComponent;
 
+	private Entity            player;
+	private PositionComponent playerPosition;
+
 	public JumpBehaviorComponent() {
 	}
 
-	public JumpBehaviorComponent(float jumpTime) {
-		this.jumpTime = jumpTime;
-		jumpTimer = new EventTimer(jumpTime, true);
+	public JumpBehaviorComponent(float jumpDelay, float speed, float maxDistance, float playerProbability) {
+		this.jumpDelay = jumpDelay;
+		jumpTimer = new EventTimer(jumpDelay, true);
+		this.speed = speed;
+		this.maxDistance = maxDistance;
+		this.playerProbability = playerProbability;
 	}
 
 	@Override
 	protected void init() {
 		random = new Random();
 		positionComponent = getEntity().getComponent(PositionComponent.class);
+
+		player = getEntity().getMap().getEntityList().getComponents(PlayerComponent.class).iterator().next().getEntity();
+		playerPosition = player.getComponent(PositionComponent.class);
+
 	}
 
 	@Override
@@ -55,11 +71,36 @@ public class JumpBehaviorComponent extends Component {
 
 	@Override
 	public void setData(GameObjectsSystem gameObjectsSystem, NDSNodeObject data) throws NDSException {
-		this.jumpTime = data.getFloat("jumpTime");
+		this.jumpDelay = data.getFloat("jumpDelay");
+		this.speed = data.getFloat("speed");
+		this.maxDistance = data.getFloat("maxDistance");
+		this.playerProbability = data.getFloat("playerProbability");
 	}
 
 	public void setOwnRoom(int ownRoom) {
 		this.ownRoom = ownRoom;
+	}
+
+	private void nextTarget() {
+
+		Vector2f pos = new Vector2f(positionComponent.getX(), positionComponent.getZ());
+		Vector2f playerPos = new Vector2f(playerPosition.getX(), playerPosition.getZ());
+
+		float targetX;
+		float targetY;
+
+		if (pos.subtracted(playerPos).getSquaredValue() < maxDistance * maxDistance && random.nextFloat() < 0.4) {
+			targetX = playerPos.getX();
+			targetY = playerPos.getY();
+		} else {
+			targetX = random.nextFloat() * (maxDistance * 2) - maxDistance + positionComponent.getX();
+			targetY = random.nextFloat() * (maxDistance * 2) - maxDistance + positionComponent.getZ();
+		}
+
+		if (mapSystem.get((int) targetX, (int) targetY) == ownRoom && mapSystem.isWalkable((int) targetX, (int) targetY, false)) {
+			jumpTarget = new Vector3f(targetX, 0.0f, targetY);
+			jumpSource = new Vector3f(positionComponent.getX(), 0.0f, positionComponent.getZ());
+		}
 	}
 
 	public void update(float timeDelta) {
@@ -71,19 +112,15 @@ public class JumpBehaviorComponent extends Component {
 		}
 
 		if (jumpTarget == null) {
-			float targetX = random.nextFloat() * 6 - 3 + positionComponent.getX();
-			float targetY = random.nextFloat() * 6 - 3 + positionComponent.getZ();
 
-			if (mapSystem.get((int) targetX, (int) targetY) == ownRoom && mapSystem.isWalkable((int) targetX, (int) targetY, false)) {
-				jumpTarget = new Vector3f(targetX + 0.5f, 0.0f, targetY + 0.5f);
-				jumpSource = new Vector3f(positionComponent.getX(), 0.0f, positionComponent.getZ());
+			nextTarget();
 
+			if (jumpTarget != null) {
 				jumpX = jumpTarget.getX() - jumpSource.getX();
 				jumpZ = jumpTarget.getZ() - jumpSource.getZ();
 				float jumpDistance = (float) Math.sqrt(jumpX * jumpX + jumpZ * jumpZ);
 
-				totalJumpTime = jumpDistance / JUMP_SPEED;
-
+				totalJumpTime = jumpDistance / speed;
 				jumpX /= totalJumpTime;
 				jumpZ /= totalJumpTime;
 
@@ -129,7 +166,7 @@ public class JumpBehaviorComponent extends Component {
 
 	@Override
 	public Component clone() {
-		return new JumpBehaviorComponent(jumpTime);
+		return new JumpBehaviorComponent(jumpDelay, speed, maxDistance, playerProbability);
 	}
 
 }
