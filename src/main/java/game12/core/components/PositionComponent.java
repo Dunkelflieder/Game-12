@@ -53,9 +53,11 @@ public class PositionComponent extends Component {
 		this.rotation = rotation;
 		this.scale = scale;
 
-		getEntity().getMap().getSystem(PositionLookupSystem.class).updateEntity(getEntity());
+		if (oldX != x || oldY != y || oldZ != z || oldRotation != rotation || oldScale != scale) {
+			getEntity().getMap().getSystem(PositionLookupSystem.class).updateEntity(getEntity());
 
-		getEntity().getMap().getEventManager().trigger(new EntityMoveEvent(getEntity(), oldX, oldY, oldZ, oldRotation, oldScale, x, y, z, rotation, scale));
+			getEntity().getMap().getEventManager().trigger(new EntityMoveEvent(getEntity(), oldX, oldY, oldZ, oldRotation, oldScale, x, y, z, rotation, scale));
+		}
 	}
 
 	@Override

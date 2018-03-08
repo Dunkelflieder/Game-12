@@ -6,6 +6,7 @@ import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderer;
 import de.nerogar.noise.util.Vector3f;
 import game12.client.components.SpriteComponent;
+import game12.client.event.BeforeRenderEvent;
 import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
 import game12.core.components.PositionComponent;
@@ -23,9 +24,6 @@ public class SpriteSystem extends LogicSystem {
 
 	private Map<String, DeferredContainer> deferredContainerMap;
 
-	private EventListener<EntityMoveEvent> moveListener;
-	private EventListener<UpdateEvent>     updateListener;
-
 	private Mesh      mesh;
 	private Shader    shader;
 	private Texture2D defaultNormal;
@@ -39,11 +37,8 @@ public class SpriteSystem extends LogicSystem {
 
 	@Override
 	public void init() {
-		moveListener = this::moveListenerFunction;
-		getEventManager().registerImmediate(EntityMoveEvent.class, moveListener);
-
-		updateListener = this::updateListenerFunction;
-		getEventManager().registerImmediate(UpdateEvent.class, updateListener);
+		getEventManager().registerImmediate(EntityMoveEvent.class, this::moveListenerFunction);
+		getEventManager().register(BeforeRenderEvent.class, this::beforeRenderListenerFunction);
 
 		this.renderer = map.getSystem(RenderSystem.class).getRenderer();
 
@@ -60,12 +55,7 @@ public class SpriteSystem extends LogicSystem {
 	}
 
 	private void setSpritePosition(SpriteComponent spriteComponent, float x, float y, float z, float scale) {
-		Vector3f offset = spriteComponent.getOffset();
-		if (offset == null) {
-			spriteComponent.updatePosition(x, y, z, scale);
-		} else {
-			spriteComponent.updatePosition(x + offset.getX() * scale, y + offset.getY() * scale, z + offset.getZ() * scale, scale);
-		}
+		spriteComponent.updatePosition(x, y, z, scale);
 	}
 
 	private void moveListenerFunction(EntityMoveEvent event) {
@@ -75,7 +65,7 @@ public class SpriteSystem extends LogicSystem {
 		}
 	}
 
-	private void updateListenerFunction(UpdateEvent event) {
+	private void beforeRenderListenerFunction(BeforeRenderEvent event) {
 		Camera camera = map.getSystem(RenderSystem.class).getCamera();
 
 		for (SpriteComponent spriteComponent : map.getEntityList().getComponents(SpriteComponent.class)) {
@@ -91,12 +81,6 @@ public class SpriteSystem extends LogicSystem {
 
 	public void unregisterEntity(SpriteComponent component) {
 		renderer.removeObject(component.getRenderable());
-	}
-
-	@Override
-	public void cleanup() {
-		getEventManager().unregister(EntityMoveEvent.class, moveListener);
-		getEventManager().unregister(UpdateEvent.class, updateListener);
 	}
 
 	public DeferredContainer getDeferredContainer(String skinId) {

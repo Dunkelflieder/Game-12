@@ -18,6 +18,7 @@ public class SpriteComponent extends Component {
 	private DeferredRenderable renderable;
 
 	private String skinId;
+	private float  scale;
 
 	private Vector3f forcedRotation;
 	private Vector3f offset;
@@ -25,8 +26,9 @@ public class SpriteComponent extends Component {
 	public SpriteComponent() {
 	}
 
-	public SpriteComponent(String skinId, Vector3f forcedRotation, Vector3f offset) {
+	public SpriteComponent(String skinId, float scale, Vector3f forcedRotation, Vector3f offset) {
 		this.skinId = skinId;
+		this.scale = scale;
 		this.forcedRotation = forcedRotation;
 		this.offset = offset;
 	}
@@ -40,7 +42,7 @@ public class SpriteComponent extends Component {
 		PositionComponent position = getEntity().getComponent(PositionComponent.class);
 
 		renderProperties = new RenderProperties3f(position.getRotation(), 0, 0, position.getX(), position.getY() * CoreMap.Y_FACTOR, position.getZ());
-		renderProperties.setScale(position.getScale(), position.getScale(), position.getScale());
+		renderProperties.setScale(position.getScale() * scale, position.getScale() * scale, position.getScale() * scale);
 		renderable = new DeferredRenderable(deferredContainer, renderProperties);
 
 		getEntity().getMap().getSystem(SpriteSystem.class).registerEntity(this);
@@ -49,6 +51,7 @@ public class SpriteComponent extends Component {
 	@Override
 	public void setData(GameObjectsSystem gameObjectsSystem, NDSNodeObject data) {
 		skinId = data.getStringUTF8("skinId");
+		scale = data.getFloat("scale");
 
 		if (data.contains("rotation")) {
 			float[] directionArray = data.getFloatArray("rotation");
@@ -71,8 +74,12 @@ public class SpriteComponent extends Component {
 	public Vector3f getOffset()                            { return offset; }
 
 	public void updatePosition(float newX, float newY, float newZ, float newScale) {
-		renderProperties.setXYZ(newX, newY * CoreMap.Y_FACTOR, newZ);
-		renderProperties.setScale(newScale, newScale, newScale);
+		if (offset == null) {
+			renderProperties.setXYZ(newX, newY * CoreMap.Y_FACTOR, newZ);
+		} else {
+			renderProperties.setXYZ(newX + offset.getX() * scale, newY + offset.getY() * CoreMap.Y_FACTOR * scale, newZ + offset.getZ() * scale);
+		}
+		renderProperties.setScale(newScale * scale, newScale * scale, newScale * scale);
 	}
 
 	public void updateRotation(float yaw, float pitch, float roll) {
@@ -94,6 +101,7 @@ public class SpriteComponent extends Component {
 	public Component clone() {
 		return new SpriteComponent(
 				skinId,
+				scale,
 				forcedRotation == null ? null : forcedRotation.clone(),
 				offset == null ? null : offset.clone()
 		);

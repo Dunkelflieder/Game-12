@@ -35,7 +35,8 @@
 			{
 				"name": "sprite",
 				"data": {
-					"skinId": "pellet"
+					"skinId": "pellet",
+					"scale": 0.05,
 				}
 			}
 		],

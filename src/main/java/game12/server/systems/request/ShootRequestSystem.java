@@ -53,8 +53,6 @@ public class ShootRequestSystem extends RequestSystem<ShootRequestPacket> {
 						request.start.getY() - 0.2f,
 						request.start.getZ() + request.direction.getZ() * 0.1f
 				                                          );
-				PositionComponent position = entity.getComponent(PositionComponent.class);
-				position.setScale(0.05f);
 				ProjectileComponent projectile = entity.getComponent(ProjectileComponent.class);
 				projectile.fromPlayer = true;
 				projectile.direction = mutateVector(request.direction, 0.4f);
