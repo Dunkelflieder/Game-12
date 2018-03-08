@@ -30,6 +30,12 @@ public class ProjectileSystem extends LogicSystem {
 	private void update(UpdateEvent event) {
 		Set<Integer> toRemove = new HashSet<>();
 		for (ProjectileComponent projectile : map.getEntityList().getComponents(ProjectileComponent.class)) {
+			projectile.lifetime -= event.getDelta();
+			if (projectile.lifetime <= 0) {
+				toRemove.add(projectile.getEntity().getID());
+				continue;
+			}
+
 			PositionComponent position = projectile.getEntity().getComponent(PositionComponent.class);
 			position.setPosition(
 					position.getX() + projectile.direction.getX() * projectile.speed *event.getDelta(),

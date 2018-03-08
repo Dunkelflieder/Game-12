@@ -1,5 +1,5 @@
 {
-	"name": "Projectile",
+	"name": "shotgun-projectile",
 	"components": {
 		"super": [
 			"entity"
@@ -8,9 +8,9 @@
 			{
 				"name": "projectile",
 				"data": {
-					"speed": 5.0,
-					"lifetime": 3.0,
-					"damage": 1
+					"speed": 20.0,
+					"lifetime": 0.2,
+					"damage": 0.1
 				}
 			}
 		],
@@ -28,14 +28,14 @@
 						0.0,
 						0.0
 					],
-					"reach": 3.0,
-					"intensity": 2.0
+					"reach": 1.0,
+					"intensity": 0.1
 				}
 			},
 			{
 				"name": "sprite",
 				"data": {
-					"skinId": "test"
+					"skinId": "pellet"
 				}
 			}
 		],

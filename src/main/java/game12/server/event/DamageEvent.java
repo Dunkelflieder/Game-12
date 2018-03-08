@@ -9,14 +9,14 @@ import java.io.IOException;
 
 public class DamageEvent extends NetworkEvent {
 
-	public int entityID;
-	public int oldHealth;
-	public int newHealth;
+	public int   entityID;
+	public float oldHealth;
+	public float newHealth;
 
 	public DamageEvent() {
 	}
 
-	public DamageEvent(int entityID, int oldHealth, int newHealth) {
+	public DamageEvent(int entityID, float oldHealth, float newHealth) {
 		this.entityID = entityID;
 		this.oldHealth = oldHealth;
 		this.newHealth = newHealth;
@@ -30,14 +30,14 @@ public class DamageEvent extends NetworkEvent {
 	@Override
 	public void fromStream(DataInputStream in) throws IOException {
 		entityID = in.readInt();
-		oldHealth = in.readInt();
-		newHealth = in.readInt();
+		oldHealth = in.readFloat();
+		newHealth = in.readFloat();
 	}
 
 	@Override
 	public void toStream(DataOutputStream out) throws IOException {
 		out.writeInt(entityID);
-		out.writeInt(oldHealth);
-		out.writeInt(newHealth);
+		out.writeFloat(oldHealth);
+		out.writeFloat(newHealth);
 	}
 }

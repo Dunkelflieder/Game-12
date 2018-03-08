@@ -11,37 +11,37 @@ import java.io.IOException;
 
 public class HealthComponent extends SynchronizedComponent {
 
-	public int health;
-	public int maxHealth;
+	public float health;
+	public float maxHealth;
 
 	public HealthComponent() {
 	}
 
 	@Override
 	public void setData(GameObjectsSystem gameObjectsSystem, NDSNodeObject data) throws NDSException {
-		maxHealth = data.getInt("maxHealth");
+		maxHealth = data.getFloat("maxHealth");
 		if (data.contains("health")) {
-			health = data.getInt("health");
+			health = data.getFloat("health");
 		} else {
 			health = maxHealth;
 		}
 	}
 
-	public HealthComponent(int maxHealth, int health) {
+	public HealthComponent(float maxHealth, float health) {
 		this.maxHealth = maxHealth;
 		this.health = health;
 	}
 
 	@Override
 	public void fromStream(DataInputStream in) throws IOException {
-		maxHealth = in.readInt();
-		health = in.readInt();
+		maxHealth = in.readFloat();
+		health = in.readFloat();
 	}
 
 	@Override
 	public void toStream(DataOutputStream out) throws IOException {
-		out.writeInt(maxHealth);
-		out.writeInt(health);
+		out.writeFloat(maxHealth);
+		out.writeFloat(health);
 	}
 
 	@Override

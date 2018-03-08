@@ -22,9 +22,10 @@ public class HealthSystem extends LogicSystem {
 
 	private void onHit(ProjectileHitEvent event) {
 		Entity entity = map.getEntity(event.entityID);
+		if (entity == null) return;
 		HealthComponent healthComponent = entity.getComponent(HealthComponent.class);
 		if (healthComponent == null) return;
-		int oldHealth = healthComponent.health;
+		float oldHealth = healthComponent.health;
 
 		healthComponent.health -= event.projectile.damage;
 		if (healthComponent.health <= 0) {

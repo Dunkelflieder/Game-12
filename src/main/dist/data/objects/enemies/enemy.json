@@ -26,7 +26,7 @@
 			{
 				"name": "health",
 				"data": {
-					"maxHealth": 10
+					"maxHealth": 10.0
 				}
 			}
 		]
