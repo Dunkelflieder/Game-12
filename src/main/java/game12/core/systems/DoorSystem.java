@@ -1,7 +1,6 @@
 package game12.core.systems;
 
 import de.nerogar.noise.util.Vector3f;
-import game12.client.components.SpriteComponent;
 import game12.core.EntityFactorySystem;
 import game12.core.Side;
 import game12.core.SynchronizedSystem;
@@ -96,11 +95,11 @@ public class DoorSystem extends SynchronizedSystem {
 
 			doorComponent.update(event.getDelta());
 
-			SpriteComponent spriteComponent = doorComponent.getEntity().getComponent(SpriteComponent.class);
+			PositionComponent positionComponent = doorComponent.getEntity().getComponent(PositionComponent.class);
 			if (doorComponent.getOpenDirection().getX() > 0) {
-				spriteComponent.setForcedRotation(new Vector3f(0.0f, 0.0f, 0.0f));
+				positionComponent.setRotation(0);
 			} else {
-				spriteComponent.setForcedRotation(new Vector3f((float) (Math.PI * 0.5f), 0.0f, 0.0f));
+				positionComponent.setRotation((float) (Math.PI / 2f));
 			}
 		}
 	}

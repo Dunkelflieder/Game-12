@@ -9,6 +9,7 @@ import game12.client.components.RenderComponent;
 import game12.core.LogicSystem;
 import game12.core.systems.GameObjectsSystem;
 
+import java.io.File;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,6 +34,10 @@ public class EntityRenderResourcesSystem extends LogicSystem {
 		}
 
 	}
+
+	private static Texture2D defaultColorTexture;
+	private static Texture2D defaultNormalTexture;
+	private static Texture2D defaultLightTexture;
 
 	private GameObjectsSystem gameObjectsSystem;
 
@@ -72,6 +77,10 @@ public class EntityRenderResourcesSystem extends LogicSystem {
 		);
 		*/
 
+		defaultColorTexture = Texture2DLoader.loadTexture("<white.png>");
+		defaultNormalTexture = Texture2DLoader.loadTexture("<normal.png>");
+		defaultLightTexture = Texture2DLoader.loadTexture("<red.png>");
+
 		GameObjectsSystem gameObjectsSystem = getContainer().getSystem(GameObjectsSystem.class);
 
 		for (short entityID : gameObjectsSystem.objectIDs) {
@@ -101,11 +110,31 @@ public class EntityRenderResourcesSystem extends LogicSystem {
 	private boolean addObject(String name) {
 		if (resources.containsKey(name)) return false;
 
+		Texture2D colorTexture;
+		Texture2D normalTexture;
+		Texture2D lightTexture;
+
+		if (new File("res/objects/" + name + "/color.png").exists()) {
+			colorTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/color.png");
+		} else {
+			colorTexture = defaultColorTexture;
+		}
+
+		if (new File("res/objects/" + name + "/normal.png").exists()) {
+			normalTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/normal.png");
+		} else {
+			normalTexture = defaultNormalTexture;
+		}
+
+		if (new File("res/objects/" + name + "/light.png").exists()) {
+			lightTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/light.png");
+		} else {
+			lightTexture = defaultLightTexture;
+		}
+
 		resources.put(name, new ResourceContainer(
 				WavefrontLoader.loadObject("res/objects/" + name + "/mesh.obj"),
-				Texture2DLoader.loadTexture("res/objects/" + name + "/color.png"),
-				Texture2DLoader.loadTexture("res/objects/" + name + "/normal.png"),
-				Texture2DLoader.loadTexture("res/objects/" + name + "/light.png")
+				colorTexture, normalTexture, lightTexture
 		));
 
 		return true;
