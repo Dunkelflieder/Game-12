@@ -22,6 +22,8 @@ public class HealthComponent extends SynchronizedComponent {
 		maxHealth = data.getInt("maxHealth");
 		if (data.contains("health")) {
 			health = data.getInt("health");
+		} else {
+			health = maxHealth;
 		}
 	}
 

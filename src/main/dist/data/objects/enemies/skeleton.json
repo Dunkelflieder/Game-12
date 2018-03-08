@@ -5,6 +5,12 @@
 			"enemy"
 		],
 		"core": [
+			{
+				"name": "followPath",
+				"data": {
+					"speed": 1.0
+				}
+			}
 		],
 		"client": [
 			{

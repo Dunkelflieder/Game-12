@@ -42,7 +42,7 @@ public class ProjectileSystem extends LogicSystem {
 				ActorComponent actor = hit.getEntity().getComponent(ActorComponent.class);
 				if (actor == null) continue;
 				if (actor.isPlayer == projectile.fromPlayer) continue;
-				ProjectileHitEvent hitEvent = new ProjectileHitEvent(hit.getEntity().getID());
+				ProjectileHitEvent hitEvent = new ProjectileHitEvent(projectile, hit.getEntity().getID());
 				map.getNetworkAdapter().send(hitEvent);
 				getEventManager().trigger(hitEvent);
 				toRemove.add(projectile.getEntity().getID());

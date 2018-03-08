@@ -9,7 +9,8 @@
 				"name": "projectile",
 				"data": {
 					"speed": 5.0,
-					"lifetime": 3.0
+					"lifetime": 3.0,
+					"damage": 1
 				}
 			}
 		],

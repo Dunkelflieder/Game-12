@@ -2,7 +2,7 @@
 	"name": "spider",
 	"components": {
 		"super": [
-			"entity"
+			"enemy"
 		],
 		"core": [
 			{
@@ -12,12 +12,6 @@
 					"speed": 5.0,
 					"maxDistance": 5.0,
 					"playerProbability": 0.3
-				}
-			},
-			{
-				"name": "actor",
-				"data": {
-					"isPlayer": false
 				}
 			}
 		],
