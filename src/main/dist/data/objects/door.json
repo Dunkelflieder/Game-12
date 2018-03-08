@@ -17,6 +17,7 @@
 				"name": "sprite",
 				"data": {
 					"skinId": "door",
+					"scale": 1.0,
 					"rotation": [0.0, 0.0, 0.0],
 					"offset": [0.0, 0.5, 0.0]
 				}
