@@ -32,9 +32,9 @@ public class ProjectileSystem extends LogicSystem {
 		for (ProjectileComponent projectile : map.getEntityList().getComponents(ProjectileComponent.class)) {
 			PositionComponent position = projectile.getEntity().getComponent(PositionComponent.class);
 			position.setPosition(
-					position.getX() + projectile.direction.getX() * event.getDelta(),
-					position.getY() + projectile.direction.getY() * event.getDelta(),
-					position.getZ() + projectile.direction.getZ() * event.getDelta()
+					position.getX() + projectile.direction.getX() * projectile.speed *event.getDelta(),
+					position.getY() + projectile.direction.getY() * projectile.speed * event.getDelta(),
+					position.getZ() + projectile.direction.getZ() * projectile.speed * event.getDelta()
 			                    );
 			BoundingComponent bounding = projectile.getEntity().getComponent(BoundingComponent.class);
 			for (BoundingComponent hit : positionLookupSystem.getBoundings(bounding.getBounding())) {

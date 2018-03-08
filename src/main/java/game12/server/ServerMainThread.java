@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class ServerMainThread extends Thread {
 
-	public static final int   TICK_RATE    = 15;
+	public static final int   TICK_RATE    = 60;
 	public static       float SPEED_FACTOR = 1.0f;
 
 	private boolean serverRunning;

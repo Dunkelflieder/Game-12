@@ -3,7 +3,9 @@ package game12.server.systems;
 import game12.core.EntityFactorySystem;
 import game12.core.LogicSystem;
 import game12.core.event.StartGameEvent;
+import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
+import game12.server.components.JumpBehaviorComponent;
 import game12.server.map.ServerMap;
 
 public class GameSetupSystem extends LogicSystem {
@@ -27,5 +29,11 @@ public class GameSetupSystem extends LogicSystem {
 
 		short playerBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("player");
 		entityFactorySystem.createEntity(playerBlueprintId, 1, 0, 1);
+
+		for (int i = 0; i < 100; i++) {
+		short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
+		Entity spider = entityFactorySystem.createEntity(spiderBlueprintId, 10, 0, 10);
+		spider.getComponent(JumpBehaviorComponent.class).setOwnRoom(1);
+		}
 	}
 }

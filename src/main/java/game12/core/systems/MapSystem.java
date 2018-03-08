@@ -67,8 +67,8 @@ public class MapSystem extends SynchronizedSystem {
 		this.height = height;
 		this.rooms = new int[width * height];
 
-		for (int x = 1; x <= 5; x++) {
-			for (int y = 1; y <= 5; y++) {
+		for (int x = 1; x <= 20; x++) {
+			for (int y = 1; y <= 20; y++) {
 				rooms[y * width + x] = 1;
 			}
 		}

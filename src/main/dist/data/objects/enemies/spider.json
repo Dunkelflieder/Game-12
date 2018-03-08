@@ -1,0 +1,37 @@
+{
+	"name": "spider",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "jumpBehavior",
+				"data": {
+					"jumpTime": 5.0
+				}
+			},
+			{
+				"name": "actor",
+				"data": {
+					"isPlayer": false
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "skeleton",
+					"offset": [
+						0.0,
+						0.4,
+						0.0
+					]
+				}
+			},
+		],
+		"server": [
+		]
+	}
+}

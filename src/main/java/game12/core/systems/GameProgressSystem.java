@@ -78,7 +78,7 @@ public class GameProgressSystem extends SynchronizedSystem {
 					callSyncFunction(new StateSyncParameter(state, time, currentRoom));
 				} else {
 					// TODO end the game
-					System.out.println("game lost!");
+					//System.out.println("game lost!");
 				}
 			}
 		}
