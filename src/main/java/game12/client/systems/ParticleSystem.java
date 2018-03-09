@@ -2,8 +2,8 @@ package game12.client.systems;
 
 import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
+import game12.core.event.ProjectileHitEvent;
 import game12.server.event.DamageEvent;
-import game12.server.event.ProjectileHitEvent;
 
 public class ParticleSystem extends LogicSystem {
 

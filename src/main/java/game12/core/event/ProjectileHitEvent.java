@@ -1,5 +1,6 @@
-package game12.server.event;
+package game12.core.event;
 
+import de.nerogar.noise.util.Vector3f;
 import game12.core.components.ProjectileComponent;
 import game12.core.network.NetworkEvent;
 import game12.core.network.StrategyPacketInfo;
@@ -12,13 +13,15 @@ public class ProjectileHitEvent extends NetworkEvent {
 
 	public ProjectileComponent projectile;
 	public int                 entityID;
+	public Vector3f            position;
 
 	public ProjectileHitEvent() {
 	}
 
-	public ProjectileHitEvent(ProjectileComponent projectile, int entityID) {
+	public ProjectileHitEvent(ProjectileComponent projectile, int entityID, Vector3f position) {
 		this.projectile = projectile;
 		this.entityID = entityID;
+		this.position = position;
 	}
 
 	@Override
@@ -28,14 +31,15 @@ public class ProjectileHitEvent extends NetworkEvent {
 
 	@Override
 	public void fromStream(DataInputStream in) throws IOException {
-		projectile = new ProjectileComponent();
-		projectile.fromStream(in);
 		entityID = in.readInt();
+		position = new Vector3f(in.readFloat(), in.readFloat(), in.readFloat());
 	}
 
 	@Override
 	public void toStream(DataOutputStream out) throws IOException {
-		projectile.toStream(out);
 		out.writeInt(entityID);
+		out.writeFloat(position.getX());
+		out.writeFloat(position.getY());
+		out.writeFloat(position.getZ());
 	}
 }

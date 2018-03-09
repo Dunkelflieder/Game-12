@@ -1,12 +1,13 @@
 package game12.server.systems;
 
+import de.nerogar.noise.util.Vector3f;
 import game12.core.LogicSystem;
 import game12.core.components.ActorComponent;
 import game12.core.components.BoundingComponent;
 import game12.core.components.PositionComponent;
 import game12.core.components.ProjectileComponent;
+import game12.core.event.ProjectileHitEvent;
 import game12.core.event.UpdateEvent;
-import game12.server.event.ProjectileHitEvent;
 import game12.server.map.ServerMap;
 
 import java.util.HashSet;
@@ -38,7 +39,7 @@ public class ProjectileSystem extends LogicSystem {
 
 			PositionComponent position = projectile.getEntity().getComponent(PositionComponent.class);
 			position.setPosition(
-					position.getX() + projectile.direction.getX() * projectile.speed *event.getDelta(),
+					position.getX() + projectile.direction.getX() * projectile.speed * event.getDelta(),
 					position.getY() + projectile.direction.getY() * projectile.speed * event.getDelta(),
 					position.getZ() + projectile.direction.getZ() * projectile.speed * event.getDelta()
 			                    );
@@ -48,7 +49,7 @@ public class ProjectileSystem extends LogicSystem {
 				ActorComponent actor = hit.getEntity().getComponent(ActorComponent.class);
 				if (actor == null) continue;
 				if (actor.isPlayer == projectile.fromPlayer) continue;
-				ProjectileHitEvent hitEvent = new ProjectileHitEvent(projectile, hit.getEntity().getID());
+				ProjectileHitEvent hitEvent = new ProjectileHitEvent(projectile, hit.getEntity().getID(), new Vector3f(position.getX(), position.getY(), position.getZ()));
 				map.getNetworkAdapter().send(hitEvent);
 				getEventManager().trigger(hitEvent);
 				toRemove.add(projectile.getEntity().getID());
