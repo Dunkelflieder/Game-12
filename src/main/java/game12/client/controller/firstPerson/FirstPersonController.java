@@ -12,6 +12,7 @@ import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
+import game12.client.systems.SoundSystem;
 import game12.core.request.PlayerPositionUpdateRequestPacket;
 import game12.core.request.ShootRequestPacket;
 import game12.core.systems.MapSystem;
@@ -28,7 +29,8 @@ public class FirstPersonController extends Controller {
 	private final Vector2f cameraPosition;
 	private       float    yaw;
 
-	private final MapSystem mapSystem;
+	private final MapSystem   mapSystem;
+	private final SoundSystem soundSystem;
 
 	public FirstPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
 			GuiContainer guiContainer) {
@@ -50,6 +52,8 @@ public class FirstPersonController extends Controller {
 		camera = map.getSystem(RenderSystem.class).getCamera();
 
 		inputHandler.setMouseHiding(true);
+
+		soundSystem = map.getSystem(SoundSystem.class);
 	}
 
 	@Override
@@ -94,9 +98,16 @@ public class FirstPersonController extends Controller {
 		);
 		map.makeRequest(PlayerPositionUpdateRequestPacket.of(camPos));
 
+		float distanceMultiplier = 3.0f;
+		Vector3f dir = camera.getDirectionAt().normalized();
+		float soundPosX = camera.getX() + dir.getX() * distanceMultiplier;
+		float soundPosY = camera.getY() + dir.getY() * distanceMultiplier;
+		float soundPosZ = camera.getZ() + dir.getZ() * distanceMultiplier;
+
 		for (MouseButtonEvent event : inputHandler.getMouseButtonEvents()) {
 			if (event.action == GLFW.GLFW_PRESS && event.button == 0) {
 				map.makeRequest(new ShootRequestPacket(ShootRequestPacket.TYPE_SHOTGUN, camPos, camera.getDirectionAt()));
+				soundSystem.playSound("res/sound/player/shoot-shotgun.ogg", soundPosX, soundPosY, soundPosZ);
 			}
 		}
 	}
