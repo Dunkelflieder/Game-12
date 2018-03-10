@@ -38,7 +38,7 @@ public class SoundComponent extends Component {
 
 	@Override
 	protected void cleanup() {
-		sound.stop();
+		sound.cleanup();
 	}
 
 	@Override

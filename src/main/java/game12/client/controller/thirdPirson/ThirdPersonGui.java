@@ -1,9 +1,12 @@
 package game12.client.controller.thirdPirson;
 
 import de.nerogar.noise.event.EventManager;
+import de.nerogar.noise.input.InputHandler;
+import de.nerogar.noise.input.MouseButtonEvent;
 import de.nerogar.noise.render.Texture2DLoader;
 import de.nerogar.noise.util.Color;
 import game12.client.gui.*;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,9 @@ public class ThirdPersonGui extends Gui {
 
 	private static final int BUTTON_SIZE    = 50;
 	private static final int BUTTON_PADDING = 20;
+
+	private final MapBuilder mapBuilder;
+
 	private GLabel roundLabel;
 	private GLabel timeLabel;
 
@@ -20,6 +26,7 @@ public class ThirdPersonGui extends Gui {
 
 	public ThirdPersonGui(EventManager eventManager, MapBuilder mapBuilder) {
 		super(eventManager);
+		this.mapBuilder = mapBuilder;
 
 		roundLabel = new GLabel(GuiConstants.DEFAULT_FONT, GuiConstants.FONT_COLOR, "");
 		addElement(roundLabel, Gui.ALIGNMENT_LEFT, Gui.ALIGNMENT_TOP, 20, 20);
@@ -55,6 +62,26 @@ public class ThirdPersonGui extends Gui {
 				}
 		));
 
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/sprites/spider/color.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(2);
+					mapBuilder.spiderButton();
+				}
+		));
+
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/gui/doorButton.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(3);
+					mapBuilder.turretButton();
+				}
+		));
+
 		for (int i = 0; i < buildPanelButtons.size(); i++) {
 			buildPanel.addElement(
 					buildPanelButtons.get(i),
@@ -71,7 +98,9 @@ public class ThirdPersonGui extends Gui {
 			buildPanelButton.setPressed(false);
 		}
 
-		buildPanelButtons.get(id).setPressed(true);
+		if (id >= 0) {
+			buildPanelButtons.get(id).setPressed(true);
+		}
 	}
 
 	public void setCurrentRoom(int roomId) {
@@ -91,4 +120,17 @@ public class ThirdPersonGui extends Gui {
 
 	}
 
+	@Override
+	public void processInput(InputHandler inputHandler, float timeDelta) {
+		super.processInput(inputHandler, timeDelta);
+
+		for (MouseButtonEvent mouseButtonEvent : inputHandler.getMouseButtonEvents()) {
+			if (mouseButtonEvent.action == GLFW.GLFW_PRESS && mouseButtonEvent.button == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+				mapBuilder.noButton();
+				activateButton(-1);
+				mouseButtonEvent.setProcessed();
+			}
+		}
+
+	}
 }

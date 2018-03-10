@@ -44,11 +44,11 @@ public class SoundSystem extends LogicSystem {
 
 		Camera camera = getContainer().getSystem(RenderSystem.class).getCamera();
 
-		soundListener.setPosition(camera.getX(), 0, camera.getZ());
+		soundListener.setPosition(camera.getX(), 0.5f, camera.getZ());
 		soundListener.setDirection(camera.getDirectionAt(), camera.getDirectionUp());
 
 		sounds.forEach(Sound::update);
-		sounds.removeIf(Sound::isDone);
+		sounds.removeIf(Sound::isCleaned);
 
 		for (SoundComponent soundComponent : map.getEntityList().getComponents(SoundComponent.class)) {
 			PositionComponent positionComponent = soundComponent.getEntity().getComponent(PositionComponent.class);

@@ -76,7 +76,10 @@ public class ThirdPersonController extends Controller {
 
 		// room building
 
-		mapBuilder.update(inputHandler, zoom, camera, cameraPosition, gameProgressSystem.getCurrentRoom());
+		int mouseX = (int) ((inputHandler.getCursorPosX() / inputHandler.getWindow().getWidth() - 0.5f) * (zoom * camera.getAspect()) + cameraPosition.getX());
+		int mouseY = (int) (-(inputHandler.getCursorPosY() / inputHandler.getWindow().getHeight() - 0.5f) * zoom + cameraPosition.getY());
+
+		mapBuilder.update(inputHandler, mouseX, mouseY, zoom, camera, cameraPosition, gameProgressSystem.getCurrentRoom());
 
 		gui.setCurrentRoom(gameProgressSystem.getCurrentRoom());
 		gui.setTime(gameProgressSystem.getTime());
