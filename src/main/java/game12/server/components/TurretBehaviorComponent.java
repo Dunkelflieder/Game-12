@@ -1,8 +1,10 @@
 package game12.server.components;
 
 import game12.core.EventTimer;
+import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 import game12.core.map.Entity;
+import game12.core.systems.MapSystem;
 
 public class TurretBehaviorComponent extends BehaviorComponent {
 
@@ -11,15 +13,26 @@ public class TurretBehaviorComponent extends BehaviorComponent {
 	public Entity projectile;
 
 	public static final float MAX_SHOOT_DELAY = 5f;
-	public float shootDelay;
+	public  float shootDelay;
+	private int   ownRoom;
 
 	public TurretBehaviorComponent() {
 		this.shootTimer = new EventTimer(8.0f, true);
 	}
 
 	@Override
+	protected void init() {
+		super.init();
+		MapSystem mapSystem = getEntity().getMap().getSystem(MapSystem.class);
+		PositionComponent positionComponent = getEntity().getComponent(PositionComponent.class);
+		ownRoom = mapSystem.get((int) positionComponent.getX(), (int) positionComponent.getZ());
+	}
+
+	@Override
 	protected void cleanup() {
-		if (projectile != null) getEntity().getMap().getEntityList().remove(projectile.getID());
+		if (projectile != null && projectile.isValid()) {
+			getEntity().getMap().getEntityList().remove(projectile.getID());
+		}
 	}
 
 	@Override
@@ -29,6 +42,6 @@ public class TurretBehaviorComponent extends BehaviorComponent {
 
 	@Override
 	public int getOwnRoom() {
-		return 0; // TODO
+		return ownRoom;
 	}
 }
