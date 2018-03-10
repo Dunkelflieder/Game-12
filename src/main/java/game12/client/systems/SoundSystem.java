@@ -36,7 +36,7 @@ public class SoundSystem extends LogicSystem {
 
 		getEventManager().register(UpdateEvent.class, this::onUpdate);
 
-		AL10.alDistanceModel(AL11.AL_LINEAR_DISTANCE_CLAMPED);
+		AL10.alDistanceModel(AL11.AL_EXPONENT_DISTANCE_CLAMPED);
 	}
 
 	private void onUpdate(UpdateEvent event) {
