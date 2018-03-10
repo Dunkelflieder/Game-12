@@ -44,7 +44,12 @@ public class BoundingComponent extends Component {
 		if (bounding instanceof BoundingSphere) {
 			((BoundingSphere) bounding).setCenter(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
 		} if (bounding instanceof BoundingAABB) {
-			((BoundingAABB) bounding).setPosition(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
+			BoundingAABB aabb = (BoundingAABB) bounding;
+			aabb.setPosition(
+					positionComponent.getX() - aabb.getSize().getX() / 2f,
+					positionComponent.getY() - aabb.getSize().getY() / 2f,
+					positionComponent.getZ() - aabb.getSize().getZ() / 2f
+			                );
 		}
 
 		getEntity().getMap().getEventManager().trigger(new BoundingChangeEvent(this));
