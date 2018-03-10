@@ -14,7 +14,7 @@ public class ProjectileComponent extends SynchronizedComponent {
 
 	public float   speed;
 	public float   lifetime;
-	public float   damage;
+	public int     damage;
 	public boolean fromPlayer;
 
 	public Vector3f direction;
@@ -26,10 +26,10 @@ public class ProjectileComponent extends SynchronizedComponent {
 	public void setData(GameObjectsSystem gameObjectsSystem, NDSNodeObject data) throws NDSException {
 		speed = data.getFloat("speed");
 		lifetime = data.getFloat("lifetime");
-		damage = data.getFloat("damage");
+		damage = data.getInt("damage");
 	}
 
-	public ProjectileComponent(float speed, float lifetime, float damage, boolean fromPlayer, Vector3f direction) {
+	public ProjectileComponent(float speed, float lifetime, int damage, boolean fromPlayer, Vector3f direction) {
 		this.speed = speed;
 		this.lifetime = lifetime;
 		this.damage = damage;

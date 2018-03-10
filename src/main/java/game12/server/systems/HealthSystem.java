@@ -25,7 +25,7 @@ public class HealthSystem extends LogicSystem {
 		if (entity == null) return;
 		HealthComponent healthComponent = entity.getComponent(HealthComponent.class);
 		if (healthComponent == null) return;
-		float oldHealth = healthComponent.health;
+		int oldHealth = healthComponent.health;
 
 		healthComponent.health -= event.projectile.damage;
 		if (healthComponent.health <= 0) {
