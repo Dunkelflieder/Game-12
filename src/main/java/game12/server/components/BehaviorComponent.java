@@ -4,5 +4,13 @@ import game12.core.map.Component;
 
 public abstract class BehaviorComponent extends Component {
 
-	public abstract int getOwnRoom();
+	private int ownRoom;
+
+	public int getOwnRoom() {
+		return ownRoom;
+	}
+
+	public void setOwnRoom(int ownRoom) {
+		this.ownRoom = ownRoom;
+	}
 }

@@ -35,7 +35,6 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 
 	private MapSystem    mapSystem;
 	private PlayerSystem playerSystem;
-	private int ownRoom = -1;
 
 	private Random            random;
 	private PositionComponent positionComponent;
@@ -72,14 +71,6 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 		this.playerProbability = data.getFloat("playerProbability");
 	}
 
-	public void setOwnRoom(int ownRoom) {
-		this.ownRoom = ownRoom;
-	}
-
-	public int getOwnRoom() {
-		return ownRoom;
-	}
-
 	private void nextTarget() {
 
 		Vector2f pos = new Vector2f(positionComponent.getX(), positionComponent.getZ());
@@ -96,7 +87,7 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 			targetY = random.nextFloat() * (maxDistance * 2) - maxDistance + positionComponent.getZ();
 		}
 
-		if (mapSystem.get((int) targetX, (int) targetY) == ownRoom && mapSystem.isWalkable((int) targetX, (int) targetY, false)) {
+		if (mapSystem.get((int) targetX, (int) targetY) == getOwnRoom() && mapSystem.isWalkable((int) targetX, (int) targetY, false)) {
 			jumpTarget = new Vector3f(targetX, 0.0f, targetY);
 			jumpSource = new Vector3f(positionComponent.getX(), 0.0f, positionComponent.getZ());
 		}

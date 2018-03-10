@@ -14,7 +14,6 @@ public class TurretBehaviorComponent extends BehaviorComponent {
 
 	public static final float MAX_SHOOT_DELAY = 5f;
 	public  float shootDelay;
-	private int   ownRoom;
 
 	public TurretBehaviorComponent() {
 		this.shootTimer = new EventTimer(8.0f, true);
@@ -25,7 +24,6 @@ public class TurretBehaviorComponent extends BehaviorComponent {
 		super.init();
 		MapSystem mapSystem = getEntity().getMap().getSystem(MapSystem.class);
 		PositionComponent positionComponent = getEntity().getComponent(PositionComponent.class);
-		ownRoom = mapSystem.get((int) positionComponent.getX(), (int) positionComponent.getZ());
 	}
 
 	@Override
@@ -40,8 +38,4 @@ public class TurretBehaviorComponent extends BehaviorComponent {
 		return new TurretBehaviorComponent();
 	}
 
-	@Override
-	public int getOwnRoom() {
-		return ownRoom;
-	}
 }
