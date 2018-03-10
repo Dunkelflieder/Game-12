@@ -49,6 +49,7 @@
 			{
 				"name": "sound",
 				"data": {
+					"soundFile": "res/sound/turretProjectile/flame.ogg"
 				}
 			}
 		],
