@@ -12,7 +12,7 @@
 		],
 		"client": [
 			{
-				"name": "interpolatePosition",
+				"name": "extrapolatePosition",
 				"data": {}
 			}
 		],

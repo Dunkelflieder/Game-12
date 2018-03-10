@@ -18,6 +18,8 @@ public class ProjectileSystem extends LogicSystem {
 	private final ServerMap            map;
 	private       PositionLookupSystem positionLookupSystem;
 
+	private Set<Integer> toRemove = new HashSet<>();
+
 	public ProjectileSystem(ServerMap map) {
 		this.map = map;
 	}
@@ -29,7 +31,8 @@ public class ProjectileSystem extends LogicSystem {
 	}
 
 	private void update(UpdateEvent event) {
-		Set<Integer> toRemove = new HashSet<>();
+		toRemove.forEach(map.getEntityList()::remove);
+		toRemove.clear();
 		for (ProjectileComponent projectile : map.getEntityList().getComponents(ProjectileComponent.class)) {
 			if (projectile.direction == null) continue;
 
@@ -57,6 +60,5 @@ public class ProjectileSystem extends LogicSystem {
 				toRemove.add(projectile.getEntity().getID());
 			}
 		}
-		toRemove.forEach(map.getEntityList()::remove);
 	}
 }
