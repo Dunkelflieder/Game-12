@@ -36,7 +36,7 @@ public class TurretBehaviorSystem extends OnUpdateSystem {
 			EventTimer shootTimer = turretComponent.shootTimer;
 
 			shootTimer.update(event.getDelta());
-			while (shootTimer.trigger()) {
+			if (shootTimer.trigger()) {
 				turretComponent.projectile = map.getSystem(EntityFactorySystem.class)
 						.createEntity(
 								projectileBlueprintId,

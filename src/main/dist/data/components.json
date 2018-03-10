@@ -49,6 +49,10 @@
 		{
 			"name": "sprite",
 			"class": "SpriteComponent"
+		},
+		{
+			"name": "sound",
+			"class": "SoundComponent"
 		}
 	],
 	"server": [

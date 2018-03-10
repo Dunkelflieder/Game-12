@@ -45,6 +45,11 @@
 					"skinId": "test",
 					"scale": 0.3
 				}
+			},
+			{
+				"name": "sound",
+				"data": {
+				}
 			}
 		],
 		"server": [

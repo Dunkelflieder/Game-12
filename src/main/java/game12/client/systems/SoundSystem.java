@@ -1,15 +1,16 @@
 package game12.client.systems;
 
 import de.nerogar.noise.input.InputHandler;
-import de.nerogar.noise.input.KeyboardKeyEvent;
 import de.nerogar.noise.render.Camera;
 import de.nerogar.noise.sound.Sound;
 import de.nerogar.noise.sound.SoundListener;
 import de.nerogar.noise.sound.SoundOGGLoader;
 import game12.ClientMain;
+import game12.client.components.SoundComponent;
+import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
+import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.AL11;
 
@@ -18,9 +19,14 @@ import java.util.List;
 
 public class SoundSystem extends LogicSystem {
 
-	private SoundListener soundListener;
+	private ClientMap map;
 
-	private List<Sound> sounds;
+	private SoundListener soundListener;
+	private List<Sound>   sounds;
+
+	public SoundSystem(ClientMap map) {
+		this.map = map;
+	}
 
 	@Override
 	public void init() {
@@ -36,13 +42,6 @@ public class SoundSystem extends LogicSystem {
 	private void onUpdate(UpdateEvent event) {
 		InputHandler inputHandler = ClientMain.window.getInputHandler();
 
-		for (KeyboardKeyEvent keyboardKeyEvent : inputHandler.getKeyboardKeyEvents()) {
-			if (keyboardKeyEvent.key == GLFW.GLFW_KEY_R && keyboardKeyEvent.action == GLFW.GLFW_PRESS) {
-
-				keyboardKeyEvent.setProcessed();
-			}
-		}
-
 		Camera camera = getContainer().getSystem(RenderSystem.class).getCamera();
 
 		soundListener.setPosition(camera.getX(), 0, camera.getZ());
@@ -50,6 +49,15 @@ public class SoundSystem extends LogicSystem {
 
 		sounds.forEach(Sound::update);
 		sounds.removeIf(Sound::isDone);
+
+		for (SoundComponent soundComponent : map.getEntityList().getComponents(SoundComponent.class)) {
+			PositionComponent positionComponent = soundComponent.getEntity().getComponent(PositionComponent.class);
+			soundComponent.sound.setPosition(
+					positionComponent.getX(),
+					positionComponent.getY(),
+					positionComponent.getZ()
+			                                );
+		}
 	}
 
 	public Sound playSound(String filename, float x, float y, float z) {
@@ -57,7 +65,7 @@ public class SoundSystem extends LogicSystem {
 	}
 
 	public Sound playSound(String filename, float x, float y, float z, float maxDistacne) {
-		Sound sound = SoundOGGLoader.loadSound(false, filename);
+		Sound sound = SoundOGGLoader.loadSound(true, filename);
 		AL10.alSourcef(sound.getAlSourceHandle(), AL10.AL_ROLLOFF_FACTOR, 1);
 		AL10.alSourcef(sound.getAlSourceHandle(), AL10.AL_REFERENCE_DISTANCE, 1);
 		AL10.alSourcef(sound.getAlSourceHandle(), AL10.AL_MAX_DISTANCE, maxDistacne);

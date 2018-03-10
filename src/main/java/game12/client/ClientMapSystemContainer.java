@@ -33,7 +33,7 @@ public class ClientMapSystemContainer extends MapSystemContainer<ClientMap> {
 
 		//addSystem(new SynchronizeComponentSystem(getMap()));
 
-		addSystem(new SoundSystem());
+		addSystem(new SoundSystem(getMap()));
 
 	}
 

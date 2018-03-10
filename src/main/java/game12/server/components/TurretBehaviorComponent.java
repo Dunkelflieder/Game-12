@@ -18,6 +18,11 @@ public class TurretBehaviorComponent extends Component {
 	}
 
 	@Override
+	protected void cleanup() {
+		if (projectile != null) getEntity().getMap().getEntityList().remove(projectile.getID());
+	}
+
+	@Override
 	public Component clone() {
 		return new TurretBehaviorComponent();
 	}
