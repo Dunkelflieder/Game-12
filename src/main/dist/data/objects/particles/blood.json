@@ -10,7 +10,7 @@
 			{
 				"name": "sprite",
 				"data": {
-					"skinId": "blood",
+					"skinId": "particles/blood",
 					"scale": 0.02
 				}
 			}
