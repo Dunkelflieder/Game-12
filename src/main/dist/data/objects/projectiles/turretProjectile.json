@@ -2,7 +2,7 @@
 	"name": "turret-projectile",
 	"components": {
 		"super": [
-			"entity"
+			"projectile"
 		],
 		"core": [
 			{
@@ -16,7 +16,6 @@
 				"name": "projectile",
 				"data": {
 					"speed": 5.0,
-					"lifetime": 5.0,
 					"damage": 1
 				}
 			}
@@ -54,6 +53,12 @@
 			}
 		],
 		"server": [
+			{
+				"name": "lifetime",
+				"data": {
+					"lifetime": 5.0
+				}
+			}
 		]
 	}
 }

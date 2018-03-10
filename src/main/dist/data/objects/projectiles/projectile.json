@@ -1,0 +1,34 @@
+{
+	"name": "projectile",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+			{
+				"name": "projectile",
+				"data": {
+					"speed": 20.0,
+					"damage": 1
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "pellet",
+					"scale": 0.05
+				}
+			}
+		],
+		"server": [
+			{
+				"name": "lifetime",
+				"data": {
+					"lifetime": 0.2
+				}
+			}
+		]
+	}
+}

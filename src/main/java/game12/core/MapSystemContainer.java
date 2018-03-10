@@ -3,6 +3,7 @@ package game12.core;
 import game12.core.map.CoreMap;
 import game12.core.systems.DoorSystem;
 import game12.core.systems.GameProgressSystem;
+import game12.core.systems.LifetimeSystem;
 import game12.core.systems.MapSystem;
 import game12.server.systems.PositionLookupSystem;
 
@@ -28,6 +29,7 @@ public abstract class MapSystemContainer<T extends CoreMap> extends SystemContai
 		addSystem(new MapSystem(100, 100));
 		addSystem(new DoorSystem(getMap()));
 		addSystem(new GameProgressSystem(getMap()));
+		addSystem(new LifetimeSystem(getMap()));
 	}
 
 	@Override

@@ -1,15 +1,14 @@
 {
-	"name": "shotgun-projectile",
+	"name": "pellet-projectile",
 	"components": {
 		"super": [
-			"entity"
+			"projectile"
 		],
 		"core": [
 			{
 				"name": "projectile",
 				"data": {
 					"speed": 20.0,
-					"lifetime": 0.2,
 					"damage": 1
 				}
 			}
@@ -36,11 +35,17 @@
 				"name": "sprite",
 				"data": {
 					"skinId": "pellet",
-					"scale": 0.05,
+					"scale": 0.05
 				}
 			}
 		],
 		"server": [
+			{
+				"name": "lifetime",
+				"data": {
+					"lifetime": 0.2
+				}
+			}
 		]
 	}
 }

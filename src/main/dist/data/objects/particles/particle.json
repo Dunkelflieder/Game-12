@@ -1,0 +1,31 @@
+{
+	"name": "particle",
+	"components": {
+		"super": [
+			"entity"
+		],
+		"core": [
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "test",
+					"scale": 1.0
+				}
+			},
+			{
+				"name": "lifetime",
+				"data": {
+					"lifetime": 1.0
+				}
+			},
+			{
+				"name": "particlePhysics",
+				"data": {}
+			}
+		],
+		"server": [
+		]
+	}
+}

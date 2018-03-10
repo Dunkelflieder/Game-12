@@ -1,0 +1,21 @@
+{
+	"name": "blood-particle",
+	"components": {
+		"super": [
+			"particle"
+		],
+		"core": [
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "blood",
+					"scale": 0.02
+				}
+			}
+		],
+		"server": [
+		]
+	}
+}

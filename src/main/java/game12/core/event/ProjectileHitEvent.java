@@ -33,6 +33,8 @@ public class ProjectileHitEvent extends NetworkEvent {
 	public void fromStream(DataInputStream in) throws IOException {
 		entityID = in.readInt();
 		position = new Vector3f(in.readFloat(), in.readFloat(), in.readFloat());
+		projectile = new ProjectileComponent();
+		projectile.fromStream(in);
 	}
 
 	@Override
@@ -41,5 +43,6 @@ public class ProjectileHitEvent extends NetworkEvent {
 		out.writeFloat(position.getX());
 		out.writeFloat(position.getY());
 		out.writeFloat(position.getZ());
+		projectile.toStream(out);
 	}
 }

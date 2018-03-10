@@ -31,16 +31,14 @@ public class ProjectileSystem extends LogicSystem {
 	}
 
 	private void update(UpdateEvent event) {
-		toRemove.forEach(map.getEntityList()::remove);
+		for (int entityID : toRemove) {
+			if (map.getEntity(entityID) != null) {
+				map.removeEntity(entityID);
+			}
+		}
 		toRemove.clear();
 		for (ProjectileComponent projectile : map.getEntityList().getComponents(ProjectileComponent.class)) {
 			if (projectile.direction == null) continue;
-
-			projectile.lifetime -= event.getDelta();
-			if (projectile.lifetime <= 0) {
-				toRemove.add(projectile.getEntity().getID());
-				continue;
-			}
 
 			PositionComponent position = projectile.getEntity().getComponent(PositionComponent.class);
 			position.setPosition(
