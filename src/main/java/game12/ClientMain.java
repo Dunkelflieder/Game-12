@@ -42,7 +42,6 @@ public class ClientMain {
 		// game
 		Components.init();
 
-		GuiConstants.init();
 	}
 
 	private static void init() {
@@ -51,6 +50,8 @@ public class ClientMain {
 
 		window = new GLWindow("", 1280, 720, true, 0, null, null);
 		window.setSizeChangeListener(ClientMain::windowSizeChanged);
+
+		GuiConstants.init();
 
 		try {
 			clContext = new CLContext(window.getGLContext());
