@@ -3,6 +3,7 @@ package game12.server.systems;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.EntityFactorySystem;
 import game12.core.EventTimer;
+import game12.core.components.LifetimeComponent;
 import game12.core.components.PlayerComponent;
 import game12.core.components.PositionComponent;
 import game12.core.components.ProjectileComponent;
@@ -48,6 +49,11 @@ public class TurretBehaviorSystem extends OnUpdateSystem {
 			}
 
 			if (turretComponent.projectile != null) {
+				if (!turretComponent.projectile.isValid()) {
+					turretComponent.projectile = null;
+					return;
+				}
+
 				turretComponent.shootDelay -= event.getDelta();
 
 				turretComponent.projectile.getComponent(PositionComponent.class).setPosition(
@@ -71,6 +77,9 @@ public class TurretBehaviorSystem extends OnUpdateSystem {
 					turretComponent.projectile.getComponent(ProjectileComponent.class).direction = direction;
 
 					turretComponent.projectile = null;
+				} else {
+					LifetimeComponent lifetimeComponent = turretComponent.projectile.getComponent(LifetimeComponent.class);
+					lifetimeComponent.lifetime = lifetimeComponent.initialLifetime;
 				}
 
 			}
