@@ -16,7 +16,7 @@ public class ClientMapSystemContainer extends MapSystemContainer<ClientMap> {
 	protected void addSystems() {
 		super.addSystems();
 
-		addSystem(new EntityFactorySystem(getMap(), false));
+		addSystem(new EntityFactorySystem(getMap(), true));
 		addSystem(new RenderSystem(getMap()));
 
 		// TODO remove network events and only use synchronized systems
@@ -28,6 +28,7 @@ public class ClientMapSystemContainer extends MapSystemContainer<ClientMap> {
 		addSystem(new ReceiveEntitySystem(getMap()));
 		addSystem(new ReceiveEntityMoveSystem(getMap()));
 		addSystem(new ParticleSystem(getMap()));
+		addSystem(new ParticlePhysicsSystem(getMap()));
 
 		addSystem(new MapRenderSystem());
 
