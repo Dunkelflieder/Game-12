@@ -3,6 +3,8 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.client.event.DoorCloseEvent;
+import game12.client.event.DoorOpenEvent;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
 
@@ -59,6 +61,13 @@ public class DoorComponent extends SynchronizedComponent {
 			this.targetState = targetState;
 
 			synchronize();
+
+			if (open) {
+				getEntity().getMap().getEventManager().trigger(new DoorOpenEvent(position));
+			} else {
+				getEntity().getMap().getEventManager().trigger(new DoorCloseEvent(position));
+			}
+
 		}
 	}
 

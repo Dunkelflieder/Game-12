@@ -1,6 +1,9 @@
 package game12.core.systems;
 
 import de.nerogar.noise.util.Vector3f;
+import game12.client.event.DoorCloseEvent;
+import game12.client.event.DoorOpenEvent;
+import game12.client.systems.SoundSystem;
 import game12.core.EntityFactorySystem;
 import game12.core.Side;
 import game12.core.SynchronizedSystem;
@@ -41,6 +44,8 @@ public class DoorSystem extends SynchronizedSystem {
 
 		if (checkSide(Side.CLIENT)) {
 			getEventManager().register(UpdateEvent.class, this::updateVisual);
+			getEventManager().register(DoorOpenEvent.class, this::onDoorOpen);
+			getEventManager().register(DoorCloseEvent.class, this::onDoorClose);
 		}
 
 		if (checkSide(Side.SERVER)) {
@@ -102,6 +107,14 @@ public class DoorSystem extends SynchronizedSystem {
 				positionComponent.setRotation((float) (Math.PI / 2f));
 			}
 		}
+	}
+
+	private void onDoorOpen(DoorOpenEvent event) {
+		getContainer().getSystem(SoundSystem.class).playSound("res/sound/door/open.ogg", event.position.getX(), event.position.getY(), event.position.getZ());
+	}
+
+	private void onDoorClose(DoorCloseEvent event) {
+		getContainer().getSystem(SoundSystem.class).playSound("res/sound/door/close.ogg", event.position.getX(), event.position.getY(), event.position.getZ());
 	}
 
 	private Vector3f getPlayerPosition() {
