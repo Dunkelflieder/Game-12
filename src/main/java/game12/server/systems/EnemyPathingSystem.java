@@ -3,11 +3,10 @@ package game12.server.systems;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.LogicSystem;
 import game12.core.components.FollowPathComponent;
-import game12.core.components.PlayerComponent;
-import game12.core.components.PositionComponent;
 import game12.core.event.MapChangeEvent;
 import game12.core.event.UpdateEvent;
 import game12.core.systems.MapSystem;
+import game12.core.systems.PlayerSystem;
 import game12.core.utils.Vector2i;
 import game12.server.ai.Pathfinder;
 import game12.server.map.ServerMap;
@@ -17,9 +16,10 @@ import game12.server.map.ServerMap;
  */
 public class EnemyPathingSystem extends LogicSystem {
 
-	private final ServerMap  map;
-	private       Pathfinder pathfinder;
-	private       MapSystem  mapSystem;
+	private final ServerMap    map;
+	private       Pathfinder   pathfinder;
+	private       MapSystem    mapSystem;
+	private       PlayerSystem playerSystem;
 
 	public EnemyPathingSystem(ServerMap map) {
 		this.map = map;
@@ -28,6 +28,7 @@ public class EnemyPathingSystem extends LogicSystem {
 	@Override
 	public void init() {
 		mapSystem = getContainer().getSystem(MapSystem.class);
+		playerSystem = getContainer().getSystem(PlayerSystem.class);
 		pathfinder = new Pathfinder(mapSystem.getWidth(), mapSystem.getHeight());
 
 		getEventManager().register(UpdateEvent.class, this::update);
@@ -48,9 +49,7 @@ public class EnemyPathingSystem extends LogicSystem {
 	}
 
 	public void update(UpdateEvent event) {
-		PlayerComponent player = map.getEntityList().getComponents(PlayerComponent.class).iterator().next();
-		PositionComponent playerPositionComponent = player.getEntity().getComponent(PositionComponent.class);
-		Vector3f playerPosition = new Vector3f(playerPositionComponent.getX(), playerPositionComponent.getY(), playerPositionComponent.getZ());
+		Vector3f playerPosition = playerSystem.getPlayerPosition();
 		for (FollowPathComponent followPathComponent : map.getEntityList().getComponents(FollowPathComponent.class)) {
 			followPathComponent.update(event.getDelta());
 			followPathComponent.updatePath(playerPosition, pathfinder);

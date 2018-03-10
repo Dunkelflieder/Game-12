@@ -8,7 +8,6 @@ import game12.core.EntityFactorySystem;
 import game12.core.Side;
 import game12.core.SynchronizedSystem;
 import game12.core.components.DoorComponent;
-import game12.core.components.PlayerComponent;
 import game12.core.components.PositionComponent;
 import game12.core.event.MapChangeEvent;
 import game12.core.event.UpdateEvent;
@@ -18,7 +17,6 @@ import game12.core.map.Entity;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
 public class DoorSystem extends SynchronizedSystem {
 
@@ -26,9 +24,10 @@ public class DoorSystem extends SynchronizedSystem {
 
 	private Entity[] doors;
 
-	private CoreMap   map;
-	private MapSystem mapSystem;
-	private short     doorEntityId;
+	private CoreMap      map;
+	private MapSystem    mapSystem;
+	private short        doorEntityId;
+	private PlayerSystem playerSystem;
 
 	public DoorSystem(CoreMap map) {
 		this.map = map;
@@ -37,6 +36,7 @@ public class DoorSystem extends SynchronizedSystem {
 	@Override
 	public void init() {
 		mapSystem = getContainer().getSystem(MapSystem.class);
+		playerSystem = getContainer().getSystem(PlayerSystem.class);
 
 		doors = new Entity[mapSystem.getWidth() * mapSystem.getWidth()];
 
@@ -85,7 +85,7 @@ public class DoorSystem extends SynchronizedSystem {
 
 	private void updateVisual(UpdateEvent event) {
 
-		Vector3f playerPosition = getPlayerPosition();
+		Vector3f playerPosition = playerSystem.getPlayerPosition();
 		Vector3f temp = new Vector3f();
 		for (DoorComponent doorComponent : map.getEntityList().getComponents(DoorComponent.class)) {
 
@@ -115,13 +115,6 @@ public class DoorSystem extends SynchronizedSystem {
 
 	private void onDoorClose(DoorCloseEvent event) {
 		getContainer().getSystem(SoundSystem.class).playSound("res/sound/door/close.ogg", event.position.getX(), event.position.getY(), event.position.getZ());
-	}
-
-	private Vector3f getPlayerPosition() {
-		Iterator<PlayerComponent> iterator = map.getEntityList().getComponents(PlayerComponent.class).iterator();
-		if (!iterator.hasNext()) return new Vector3f();
-		PositionComponent positionComponent = iterator.next().getEntity().getComponent(PositionComponent.class);
-		return new Vector3f(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
 	}
 
 	@Override

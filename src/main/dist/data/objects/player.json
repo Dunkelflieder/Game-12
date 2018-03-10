@@ -19,6 +19,12 @@
 				"data": {}
 			},
 			{
+				"name": "health",
+				"data": {
+					"maxHealth": 10
+				}
+			},
+			{
 				"name": "actor",
 				"data": {
 					"isPlayer": true

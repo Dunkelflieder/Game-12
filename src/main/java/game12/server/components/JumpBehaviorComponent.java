@@ -5,16 +5,15 @@ import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.EventTimer;
-import game12.core.components.PlayerComponent;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
-import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
+import game12.core.systems.PlayerSystem;
 
 import java.util.Random;
 
-public class JumpBehaviorComponent extends Component {
+public class JumpBehaviorComponent extends BehaviorComponent {
 
 	private static final float GRAVITY = -20f;
 
@@ -34,14 +33,12 @@ public class JumpBehaviorComponent extends Component {
 	private float jumpParabolaA;
 	private float jumpParabolaB;
 
-	private MapSystem mapSystem;
+	private MapSystem    mapSystem;
+	private PlayerSystem playerSystem;
 	private int ownRoom = -1;
 
 	private Random            random;
 	private PositionComponent positionComponent;
-
-	private Entity            player;
-	private PositionComponent playerPosition;
 
 	public JumpBehaviorComponent() {
 	}
@@ -52,21 +49,19 @@ public class JumpBehaviorComponent extends Component {
 		this.speed = speed;
 		this.maxDistance = maxDistance;
 		this.playerProbability = playerProbability;
+
 	}
 
 	@Override
 	protected void init() {
 		random = new Random();
 		positionComponent = getEntity().getComponent(PositionComponent.class);
-
-		player = getEntity().getMap().getEntityList().getComponents(PlayerComponent.class).iterator().next().getEntity();
-		playerPosition = player.getComponent(PositionComponent.class);
-
 	}
 
 	@Override
 	protected void initSystems() {
 		mapSystem = getEntity().getMap().getSystem(MapSystem.class);
+		playerSystem = getEntity().getMap().getSystem(PlayerSystem.class);
 	}
 
 	@Override
@@ -81,10 +76,14 @@ public class JumpBehaviorComponent extends Component {
 		this.ownRoom = ownRoom;
 	}
 
+	public int getOwnRoom() {
+		return ownRoom;
+	}
+
 	private void nextTarget() {
 
 		Vector2f pos = new Vector2f(positionComponent.getX(), positionComponent.getZ());
-		Vector2f playerPos = new Vector2f(playerPosition.getX(), playerPosition.getZ());
+		Vector2f playerPos = new Vector2f(playerSystem.getPlayerPosition().getX(), playerSystem.getPlayerPosition().getZ());
 
 		float targetX;
 		float targetY;

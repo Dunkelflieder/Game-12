@@ -4,7 +4,7 @@ import game12.core.EventTimer;
 import game12.core.map.Component;
 import game12.core.map.Entity;
 
-public class TurretBehaviorComponent extends Component {
+public class TurretBehaviorComponent extends BehaviorComponent {
 
 	public EventTimer shootTimer;
 
@@ -27,4 +27,8 @@ public class TurretBehaviorComponent extends Component {
 		return new TurretBehaviorComponent();
 	}
 
+	@Override
+	public int getOwnRoom() {
+		return 0; // TODO
+	}
 }

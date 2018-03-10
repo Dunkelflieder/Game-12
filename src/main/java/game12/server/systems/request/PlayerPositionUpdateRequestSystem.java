@@ -1,25 +1,25 @@
 package game12.server.systems.request;
 
-import game12.core.components.PlayerComponent;
-import game12.core.components.PositionComponent;
 import game12.core.request.PlayerPositionUpdateRequestPacket;
-import game12.server.map.ServerMap;
+import game12.core.systems.PlayerSystem;
 import game12.server.systems.RequestSystem;
 
 public class PlayerPositionUpdateRequestSystem extends RequestSystem<PlayerPositionUpdateRequestPacket> {
 
-	private ServerMap map;
+	private PlayerSystem playerSystem;
 
-	public PlayerPositionUpdateRequestSystem(ServerMap map) {
+	public PlayerPositionUpdateRequestSystem() {
 		super(PlayerPositionUpdateRequestPacket.class);
-		this.map = map;
+	}
+
+	@Override
+	public void init() {
+		super.init();
+		playerSystem = getContainer().getSystem(PlayerSystem.class);
 	}
 
 	@Override
 	protected void requestFunction(PlayerPositionUpdateRequestPacket request) {
-		for (PlayerComponent playerComponent : map.getEntityList().getComponents(PlayerComponent.class)) {
-			PositionComponent positionComponent = playerComponent.getEntity().getComponent(PositionComponent.class);
-			positionComponent.setPosition(request.pos.getX(), request.pos.getY(), request.pos.getZ());
-		}
+		playerSystem.setPlayerPosition(request.pos);
 	}
 }
