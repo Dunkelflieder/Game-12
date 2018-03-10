@@ -5,6 +5,15 @@
 			"enemy"
 		],
 		"core": [
+			{
+				"name": "bounding",
+				"data": {
+					"type": "aabb",
+					"sizeX": 0.8,
+					"sizeY": 10.0,
+					"sizeZ": 0.8
+				}
+			}
 		],
 		"client": [
 			{

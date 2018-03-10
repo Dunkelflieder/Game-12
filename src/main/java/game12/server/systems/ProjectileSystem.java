@@ -46,8 +46,7 @@ public class ProjectileSystem extends LogicSystem {
 					position.getY() + projectile.direction.getY() * projectile.speed * event.getDelta(),
 					position.getZ() + projectile.direction.getZ() * projectile.speed * event.getDelta()
 			                    );
-			BoundingComponent bounding = projectile.getEntity().getComponent(BoundingComponent.class);
-			for (BoundingComponent hit : positionLookupSystem.getBoundings(bounding.getBounding())) {
+			for (BoundingComponent hit : positionLookupSystem.getBoundingsAround(projectile.getEntity(), 0.01f)) {
 				if (hit.getEntity().getID() == projectile.getEntity().getID()) continue;
 				ActorComponent actor = hit.getEntity().getComponent(ActorComponent.class);
 				if (actor == null) continue;

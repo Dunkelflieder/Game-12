@@ -8,11 +8,12 @@
 			{
 				"name": "bounding",
 				"data": {
-					"type": "sphere",
-					"radius": 0.5
+					"type": "aabb",
+					"sizeX": 0.5,
+					"sizeY": 10.0,
+					"sizeZ": 0.5
 				}
 			},
-
 			{
 				"name": "actor",
 				"data": {

@@ -45,9 +45,10 @@ public class ParticleSystem extends LogicSystem {
 			LifetimeComponent lifetimeComponent = entity.getComponent(LifetimeComponent.class);
 			lifetimeComponent.lifetime *= RANDOM_LIFETIME_FACTOR * (random.nextFloat() - 0.5f) + 1;
 			ParticlePhysicsComponent particlePhysicsComponent = entity.getComponent(ParticlePhysicsComponent.class);
-			particlePhysicsComponent.velocity = VectorUtils.mutateVector(dir, 1f);
-			particlePhysicsComponent.velocity.multiply(-1);
-			particlePhysicsComponent.velocity.setValue(3f);
+			particlePhysicsComponent.velocity = VectorUtils.mutateVector(dir, 5f);
+			if (i % 2 == 0) {
+				particlePhysicsComponent.velocity.multiply(-1);
+			}
 		}
 	}
 }
