@@ -52,5 +52,9 @@
 			"name": "jumpBehavior",
 			"class": "JumpBehaviorComponent"
 		},
+		{
+			"name": "turretBehavior",
+			"class": "TurretBehaviorComponent"
+		},
 	]
 }

@@ -1,0 +1,27 @@
+{
+	"name": "turret",
+	"components": {
+		"super": [
+			"enemy"
+		],
+		"core": [
+		],
+		"client": [
+			{
+				"name": "render",
+				"data": {
+					"skinIDs": [
+						"turret"
+					]
+				}
+			},
+		],
+		"server": [
+			{
+				"name": "turretBehavior",
+				"data": {
+				}
+			}
+		]
+	}
+}

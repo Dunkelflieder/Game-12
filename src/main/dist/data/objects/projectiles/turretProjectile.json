@@ -1,5 +1,5 @@
 {
-	"name": "player",
+	"name": "turret-projectile",
 	"components": {
 		"super": [
 			"entity"
@@ -8,20 +8,16 @@
 			{
 				"name": "bounding",
 				"data": {
-					"type": "aabb",
-					"sizeX": 0.3,
-					"sizeY": 2.0,
-					"sizeZ": 0.3
+					"type": "sphere",
+					"radius": 0.1
 				}
 			},
 			{
-				"name": "player",
-				"data": {}
-			},
-			{
-				"name": "actor",
+				"name": "projectile",
 				"data": {
-					"isPlayer": true
+					"speed": 5.0,
+					"lifetime": 5.0,
+					"damage": 0.1
 				}
 			}
 		],
@@ -29,13 +25,17 @@
 			{
 				"name": "light",
 				"data": {
-					"position": [0.0, 0.5, 0.0],
 					"color": [
-						1.0,
-						0.35,
+						0.78,
+						0.50,
+						0.08
+					],
+					"position": [
+						0.0,
+						0.0,
 						0.0
 					],
-					"reach": 3.0,
+					"reach": 4.0,
 					"intensity": 1.0
 				}
 			},
@@ -43,9 +43,7 @@
 				"name": "sprite",
 				"data": {
 					"skinId": "test",
-					"scale": 1.0,
-					"rotation": [0.0, 1.5707963268, 0.0],
-					"offset": [0.0, 2.0, 0.0]
+					"scale": 0.3
 				}
 			}
 		],

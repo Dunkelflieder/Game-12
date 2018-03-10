@@ -20,6 +20,7 @@ public class MapRenderSystem extends LogicSystem {
 
 	private final Color COLOR_CURRENT_ROOM = new Color(0.4f, 1.0f, 0.1f, 1.0f);
 	private final Color COLOR_LOCKED_ROOM  = new Color(1.0f, 0.2f, 0.0f, 1.0f);
+	private boolean markRooms;
 
 	private EventListener<MapChangeEvent>    mapChangeEventListener;
 	private EventListener<BeforeRenderEvent> beforeRenderEventListener;
@@ -62,6 +63,11 @@ public class MapRenderSystem extends LogicSystem {
 		gameProgressSystem = getContainer().getSystem(GameProgressSystem.class);
 
 		addBackgroundMesh();
+	}
+
+	public void setMarkRooms(boolean markRooms) {
+		this.markRooms = markRooms;
+		shouldRecreate = true;
 	}
 
 	private void onMapChange(MapChangeEvent event) {
@@ -139,12 +145,14 @@ public class MapRenderSystem extends LogicSystem {
 		for (int x = 0; x < mapSystem.getWidth(); x++) {
 			for (int y = 0; y < mapSystem.getHeight(); y++) {
 				int tile = mapSystem.get(x, y);
-				Color color = Color.WHITE;
+				Color color = Color.BLACK;
 
-				if (tile == gameProgressSystem.getCurrentRoom()) {
-					color = COLOR_CURRENT_ROOM;
-				} else if (mapSystem.isRoomLocked(tile)) {
-					color = COLOR_LOCKED_ROOM;
+				if (markRooms) {
+					if (tile == gameProgressSystem.getCurrentRoom()) {
+						color = COLOR_CURRENT_ROOM;
+					} else if (mapSystem.isRoomLocked(tile)) {
+						color = COLOR_LOCKED_ROOM;
+					}
 				}
 
 				if (tile == MapSystem.VOID) {

@@ -8,6 +8,7 @@ import de.nerogar.noise.util.Vector3f;
 import game12.client.Controller;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
+import game12.client.systems.MapRenderSystem;
 import game12.client.systems.RenderSystem;
 import game12.core.systems.GameProgressSystem;
 import org.lwjgl.glfw.GLFW;
@@ -40,6 +41,8 @@ public class ThirdPersonController extends Controller {
 		this.guiContainer.setActiveGui(gui);
 
 		gameProgressSystem = map.getSystem(GameProgressSystem.class);
+
+		map.getSystem(MapRenderSystem.class).setMarkRooms(true);
 
 		cameraPosition = new Vector3f();
 		camera = new OrthographicCamera(10, (float) window.getWidth() / window.getHeight(), 0f, -1000f);

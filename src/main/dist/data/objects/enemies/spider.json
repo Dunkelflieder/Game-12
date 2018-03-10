@@ -5,15 +5,6 @@
 			"enemy"
 		],
 		"core": [
-			{
-				"name": "jumpBehavior",
-				"data": {
-					"jumpDelay": 4.0,
-					"speed": 5.0,
-					"maxDistance": 5.0,
-					"playerProbability": 0.3
-				}
-			}
 		],
 		"client": [
 			{
@@ -30,6 +21,15 @@
 			},
 		],
 		"server": [
+			{
+				"name": "jumpBehavior",
+				"data": {
+					"jumpDelay": 4.0,
+					"speed": 5.0,
+					"maxDistance": 5.0,
+					"playerProbability": 0.3
+				}
+			}
 		]
 	}
 }

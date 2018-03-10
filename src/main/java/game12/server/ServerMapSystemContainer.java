@@ -27,6 +27,7 @@ public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
 
 		addSystem(new EnemyPathingSystem(getMap()));
 		addSystem(new JumpBehaviorSystem(getMap()));
+		addSystem(new TurretBehaviorSystem(getMap()));
 		addSystem(new GameSetupSystem(getMap()));
 		addSystem(new ProjectileSystem(getMap()));
 		addSystem(new HealthSystem(getMap()));

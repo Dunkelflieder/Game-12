@@ -115,19 +115,19 @@ public class EntityRenderResourcesSystem extends LogicSystem {
 		Texture2D lightTexture;
 
 		if (new File("res/objects/" + name + "/color.png").exists()) {
-			colorTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/color.png");
+			colorTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/color.png", Texture2D.InterpolationType.NEAREST);
 		} else {
 			colorTexture = defaultColorTexture;
 		}
 
 		if (new File("res/objects/" + name + "/normal.png").exists()) {
-			normalTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/normal.png");
+			normalTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/normal.png", Texture2D.InterpolationType.NEAREST);
 		} else {
 			normalTexture = defaultNormalTexture;
 		}
 
 		if (new File("res/objects/" + name + "/light.png").exists()) {
-			lightTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/light.png");
+			lightTexture = Texture2DLoader.loadTexture("res/objects/" + name + "/light.png", Texture2D.InterpolationType.NEAREST);
 		} else {
 			lightTexture = defaultLightTexture;
 		}
