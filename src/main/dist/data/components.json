@@ -39,13 +39,17 @@
 			"class": "InterpolatePositionComponent"
 		},
 		{
+			"name": "extrapolatePosition",
+			"class": "ExtrapolatePositionComponent"
+		},
+		{
 			"name": "light",
 			"class": "LightComponent"
 		},
 		{
 			"name": "sprite",
 			"class": "SpriteComponent"
-		},
+		}
 	],
 	"server": [
 		{

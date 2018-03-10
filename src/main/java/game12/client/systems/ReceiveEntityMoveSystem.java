@@ -1,6 +1,7 @@
 package game12.client.systems;
 
 import de.nerogar.noise.event.EventListener;
+import game12.client.components.ExtrapolatePositionComponent;
 import game12.client.components.InterpolatePositionComponent;
 import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
@@ -33,9 +34,16 @@ public class ReceiveEntityMoveSystem extends LogicSystem {
 		Entity entity = map.getEntity(packet.getEntityID());
 
 		InterpolatePositionComponent interpolateComponent = entity.getComponent(InterpolatePositionComponent.class);
+		ExtrapolatePositionComponent extrapolateComponent = entity.getComponent(ExtrapolatePositionComponent.class);
 
 		if (interpolateComponent != null) {
 			interpolateComponent.newMovement(packet.getTime(), packet.getX(), packet.getY(), packet.getZ(), packet.getRotation(), packet.getScale());
+		} else {
+			PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
+			positionComponent.setPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getRotation(), packet.getScale());
+		}
+		if (extrapolateComponent != null) {
+			extrapolateComponent.newMovement(packet.getTime(), packet.getX(), packet.getY(), packet.getZ(), packet.getRotation(), packet.getScale());
 		} else {
 			PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
 			positionComponent.setPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getRotation(), packet.getScale());
@@ -46,6 +54,9 @@ public class ReceiveEntityMoveSystem extends LogicSystem {
 	private void updateListenerFunction(UpdateEvent event) {
 		for (InterpolatePositionComponent interpolatePositionComponent : map.getEntityList().getComponents(InterpolatePositionComponent.class)) {
 			interpolatePositionComponent.update(event.getDelta());
+		}
+		for (ExtrapolatePositionComponent extrapolatePositionComponent : map.getEntityList().getComponents(ExtrapolatePositionComponent.class)) {
+			extrapolatePositionComponent.update(event.getDelta());
 		}
 	}
 
