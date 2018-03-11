@@ -20,6 +20,7 @@ public class SendEntityMoveSystem extends LogicSystem {
 
 	private void moveListenerFunction(EntityMoveEvent event) {
 		Entity entity = event.getEntity();
+		if (!entity.isValid()) return;
 		PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
 		EntityMovePacket packet = new EntityMovePacket(
 				entity.getID(),
