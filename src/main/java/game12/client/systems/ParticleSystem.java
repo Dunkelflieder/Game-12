@@ -10,7 +10,7 @@ import game12.core.event.ProjectileHitEvent;
 import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.utils.VectorUtils;
-import game12.server.event.DamageEvent;
+import game12.server.event.HealthChangedEvent;
 
 import java.util.Random;
 
@@ -34,7 +34,7 @@ public class ParticleSystem extends LogicSystem {
 		short blood = gameObjectsSystem.getID("blood-particle");
 
 		getEventManager().register(ProjectileHitEvent.class, event -> spawnParticles(blood, 10, event.position, event.projectile.direction));
-		getEventManager().register(DamageEvent.class, event -> {
+		getEventManager().register(HealthChangedEvent.class, event -> {
 			System.out.println("Damage taken: " + event.entityID + " from " + event.oldHealth + " to " + event.newHealth);
 		});
 	}

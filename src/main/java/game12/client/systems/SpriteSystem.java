@@ -1,6 +1,5 @@
 package game12.client.systems;
 
-import de.nerogar.noise.event.EventListener;
 import de.nerogar.noise.render.*;
 import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderer;
@@ -11,7 +10,6 @@ import game12.client.map.ClientMap;
 import game12.core.LogicSystem;
 import game12.core.components.PositionComponent;
 import game12.core.event.EntityMoveEvent;
-import game12.core.event.UpdateEvent;
 
 import java.io.File;
 import java.util.HashMap;

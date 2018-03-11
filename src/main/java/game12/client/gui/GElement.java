@@ -45,12 +45,16 @@ public abstract class GElement {
 			posX = distanceX;
 		} else if (alignmentX == ALIGNMENT_RIGHT) {
 			posX = parentWidth - distanceX - width;
+		} else if (alignmentX == ALIGNMENT_CENTER) {
+			posX = (parentWidth - width) / 2;
 		}
 
 		if (alignmentY == ALIGNMENT_BOTTOM) {
 			posY = distanceY;
 		} else if (alignmentY == ALIGNMENT_TOP) {
 			posY = parentHeight - distanceY - height;
+		} else if (alignmentY == ALIGNMENT_CENTER) {
+			posY = (parentHeight - height) / 2;
 		}
 
 		posX += parentX;

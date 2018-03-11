@@ -5,7 +5,6 @@ import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderable;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
-import game12.client.map.ClientMap;
 import game12.client.systems.SpriteSystem;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
@@ -35,9 +34,8 @@ public class SpriteComponent extends Component {
 
 	@Override
 	protected void initSystems() {
-		ClientMap clientMap = (ClientMap) getEntity().getMap();
-
-		DeferredContainer deferredContainer = clientMap.getSystem(SpriteSystem.class).getDeferredContainer(skinId);
+		SpriteSystem spriteSystem = getEntity().getMap().getSystem(SpriteSystem.class);
+		DeferredContainer deferredContainer = spriteSystem.getDeferredContainer(skinId);
 
 		PositionComponent position = getEntity().getComponent(PositionComponent.class);
 
@@ -45,7 +43,7 @@ public class SpriteComponent extends Component {
 		renderProperties.setScale(position.getScale() * scale, position.getScale() * scale, position.getScale() * scale);
 		renderable = new DeferredRenderable(deferredContainer, renderProperties);
 
-		getEntity().getMap().getSystem(SpriteSystem.class).registerEntity(this);
+		spriteSystem.registerEntity(this);
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class FirstPersonController extends Controller {
 		//map.getSystem(RenderSystem.class).setResolution(480, 270);
 		map.getSystem(RenderSystem.class).setResolution(640, 360);
 
-		Gui gui = new FirstPersonGui(eventManager);
+		Gui gui = new FirstPersonGui(eventManager, map);
 		this.guiContainer.setActiveGui(gui);
 
 		map.setActive(true);

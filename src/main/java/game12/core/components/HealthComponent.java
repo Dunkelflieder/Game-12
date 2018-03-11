@@ -4,6 +4,7 @@ import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
+import game12.server.event.HealthChangedEvent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,6 +16,12 @@ public class HealthComponent extends SynchronizedComponent {
 	public int maxHealth;
 
 	public HealthComponent() {
+	}
+
+	@Override
+	protected void init() {
+		getEntity().getMap().getEventManager().trigger(
+				new HealthChangedEvent(getEntity().getID(), 0, 0, health, maxHealth));
 	}
 
 	@Override

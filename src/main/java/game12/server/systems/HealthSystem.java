@@ -4,7 +4,7 @@ import game12.core.LogicSystem;
 import game12.core.components.HealthComponent;
 import game12.core.event.ProjectileHitEvent;
 import game12.core.map.Entity;
-import game12.server.event.DamageEvent;
+import game12.server.event.HealthChangedEvent;
 import game12.server.map.ServerMap;
 
 public class HealthSystem extends LogicSystem {
@@ -28,14 +28,20 @@ public class HealthSystem extends LogicSystem {
 		int oldHealth = healthComponent.health;
 
 		healthComponent.health -= event.projectile.damage;
-		if (healthComponent.health <= 0) {
+		if (healthComponent.health < 0) healthComponent.health = 0;
+		final HealthChangedEvent healthChangedEvent = new HealthChangedEvent(
+				entity.getID(),
+				oldHealth,
+				healthComponent.maxHealth,
+				healthComponent.health,
+				healthComponent.maxHealth
+		);
+		getEventManager().trigger(healthChangedEvent);
+		map.getNetworkAdapter().send(healthChangedEvent);
+		if (healthComponent.health == 0) {
 			map.getEntityList().remove(entity.getID());
 			// die
 			// TODO
-		} else {
-			DamageEvent damageEvent = new DamageEvent(entity.getID(), oldHealth, healthComponent.health);
-			getEventManager().trigger(damageEvent);
-			map.getNetworkAdapter().send(damageEvent);
 		}
 	}
 }

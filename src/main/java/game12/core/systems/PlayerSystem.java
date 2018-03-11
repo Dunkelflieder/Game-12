@@ -1,11 +1,14 @@
 package game12.core.systems;
 
 import de.nerogar.noise.util.Vector3f;
+import game12.core.components.HealthComponent;
 import game12.core.components.PlayerComponent;
 import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.CoreMap;
 import game12.core.map.Entity;
+import game12.core.utils.EventContainer;
+import game12.server.event.HealthChangedEvent;
 
 import java.util.Iterator;
 
@@ -25,6 +28,12 @@ public class PlayerSystem extends OnUpdateSystem {
 	public void init() {
 		super.init();
 		mapSystem = getContainer().getSystem(MapSystem.class);
+		getEventManager().register(game12.server.event.HealthChangedEvent.class, event -> {
+			Entity entity = map.getEntity(event.entityID);
+			if (entity != null && entity.isValid() && entity.hasComponent(PlayerComponent.class)) {
+				playerHealthChangedEvent.trigger(event);
+			}
+		});
 	}
 
 	@Override
@@ -59,5 +68,19 @@ public class PlayerSystem extends OnUpdateSystem {
 		} else {
 			return mapSystem.get((int) playerPosition.getX(), (int) playerPosition.getZ());
 		}
+	}
+
+	public HealthComponent getPlayerHealth() {
+		if (player == null) {
+			return new HealthComponent(1, 0);
+		} else {
+			return player.getComponent(HealthComponent.class);
+		}
+	}
+
+	private final EventContainer<HealthChangedEvent> playerHealthChangedEvent = new EventContainer<>();
+
+	public EventContainer<HealthChangedEvent> getPlayerHealthChangedEvent() {
+		return playerHealthChangedEvent;
 	}
 }
