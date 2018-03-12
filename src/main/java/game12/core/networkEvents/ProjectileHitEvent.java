@@ -3,7 +3,6 @@ package game12.core.networkEvents;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.components.ProjectileComponent;
 import game12.core.network.NetworkEvent;
-import game12.core.network.StrategyPacketInfo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,11 +21,6 @@ public class ProjectileHitEvent extends NetworkEvent {
 		this.projectile = projectile;
 		this.entityID = entityID;
 		this.position = position;
-	}
-
-	@Override
-	public int getChannel() {
-		return StrategyPacketInfo.EVENT_PACKET_CHANNEL;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package game12.core.networkEvents;
 
 import game12.core.network.NetworkEvent;
-import game12.core.network.StrategyPacketInfo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,11 +23,6 @@ public class HealthChangedEvent extends NetworkEvent {
 		this.oldMaxHealth = oldMaxHealth;
 		this.newHealth = newHealth;
 		this.newMaxHealth = newMaxHealth;
-	}
-
-	@Override
-	public int getChannel() {
-		return StrategyPacketInfo.EVENT_PACKET_CHANNEL;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package game12.core.networkEvents;
 
 import game12.core.network.NetworkEvent;
-import game12.core.network.StrategyPacketInfo;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -53,10 +52,5 @@ public class EntitySpawnPacket extends NetworkEvent {
 	public float getY()        { return y; }
 
 	public float getZ()        { return z; }
-
-	@Override
-	public int getChannel() {
-		return StrategyPacketInfo.EVENT_PACKET_CHANNEL;
-	}
 
 }

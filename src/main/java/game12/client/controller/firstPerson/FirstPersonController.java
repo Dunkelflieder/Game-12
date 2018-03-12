@@ -13,8 +13,12 @@ import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
 import game12.client.systems.SoundSystem;
+import game12.core.components.PositionComponent;
+import game12.core.map.Entity;
+import game12.core.networkEvents.EntityJumpEvent;
 import game12.core.request.PlayerPositionUpdateRequestPacket;
 import game12.core.request.ShootRequestPacket;
+import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
 import org.lwjgl.glfw.GLFW;
 
@@ -22,7 +26,8 @@ import java.util.List;
 
 public class FirstPersonController extends Controller {
 
-	private static final float CAMERA_SPEED = 3f;
+	private static final float  CAMERA_SPEED        = 3f;
+	private static final double SCREEN_SHAKE_FACTOR = 0.1f;
 	private ClientMap map;
 
 	private final Camera   camera;
@@ -31,6 +36,8 @@ public class FirstPersonController extends Controller {
 
 	private final MapSystem   mapSystem;
 	private final SoundSystem soundSystem;
+
+	private float screenShake;
 
 	public FirstPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
 			GuiContainer guiContainer) {
@@ -54,6 +61,21 @@ public class FirstPersonController extends Controller {
 		inputHandler.setMouseHiding(true);
 
 		soundSystem = map.getSystem(SoundSystem.class);
+
+		// TODO: move this to another class
+		map.getEventManager().register(EntityJumpEvent.class, event -> {
+			if (event.getEventType() == EntityJumpEvent.IMPACT) {
+				Entity entity = map.getEntityList().get(event.getEntity());
+
+				if (entity.getEntityID() == map.getGameSystem(GameObjectsSystem.class).getID("spider-boss")) {
+					PositionComponent position = entity.getComponent(PositionComponent.class);
+					map.getSystem(SoundSystem.class).playSound("res/sound/spiderBoss/impact.ogg", position.getX(), position.getY(), position.getZ());
+
+					screenShake += 1.0;
+				}
+
+			}
+		});
 	}
 
 	@Override
@@ -98,6 +120,21 @@ public class FirstPersonController extends Controller {
 		);
 		map.makeRequest(PlayerPositionUpdateRequestPacket.of(camPos));
 
+		// screen shake
+
+		float screenShakeX = (float) (Math.random() * screenShake * screenShake * SCREEN_SHAKE_FACTOR);
+		float screenShakeY = (float) (Math.random() * screenShake * screenShake * SCREEN_SHAKE_FACTOR);
+		float screenShakeZ = (float) (Math.random() * screenShake * screenShake * SCREEN_SHAKE_FACTOR);
+
+		camera.setXYZ(
+				camPos.getX() + screenShakeX,
+				camPos.getY() + screenShakeY,
+				camPos.getZ() + screenShakeZ
+		             );
+
+		screenShake *= 0.9f;
+
+		// shooting
 		float distanceMultiplier = 3.0f;
 		Vector3f dir = camera.getDirectionAt().normalized();
 		float soundPosX = camera.getX() + dir.getX() * distanceMultiplier;
