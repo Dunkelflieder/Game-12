@@ -73,11 +73,21 @@ public class ThirdPersonGui extends Gui {
 		));
 
 		buildPanelButtons.add(new GImageButton(
-				Texture2DLoader.loadTexture("res/gui/doorButton.png"),
+				Texture2DLoader.loadTexture("res/sprites/spider/color.png"),
 				Color.WHITE,
 				BUTTON_SIZE,
 				() -> {
 					activateButton(3);
+					mapBuilder.spiderBossButton();
+				}
+		));
+
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/sprites/fireball/color.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(4);
 					mapBuilder.turretButton();
 				}
 		));

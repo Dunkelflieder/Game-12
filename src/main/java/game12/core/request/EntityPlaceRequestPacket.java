@@ -13,13 +13,16 @@ public class EntityPlaceRequestPacket extends FactionRequestPacket {
 
 	private short blueprintId;
 
+	private int cost;
+
 	public EntityPlaceRequestPacket() {
 	}
 
-	public EntityPlaceRequestPacket(int x, int y, short blueprintId) {
+	public EntityPlaceRequestPacket(int x, int y, short blueprintId, int cost) {
 		this.x = x;
 		this.y = y;
 		this.blueprintId = blueprintId;
+		this.cost = cost;
 	}
 
 	@Override
@@ -27,6 +30,7 @@ public class EntityPlaceRequestPacket extends FactionRequestPacket {
 		x = in.readInt();
 		y = in.readInt();
 		blueprintId = in.readShort();
+		cost = in.readInt();
 	}
 
 	@Override
@@ -34,6 +38,7 @@ public class EntityPlaceRequestPacket extends FactionRequestPacket {
 		out.writeInt(x);
 		out.writeInt(y);
 		out.writeShort(blueprintId);
+		out.writeInt(cost);
 	}
 
 	public int getX()             { return x; }
@@ -41,4 +46,7 @@ public class EntityPlaceRequestPacket extends FactionRequestPacket {
 	public int getY()             { return y; }
 
 	public short getBlueprintId() { return blueprintId; }
+
+	public int getCost()          { return cost; }
+
 }

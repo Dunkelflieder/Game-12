@@ -10,6 +10,8 @@ import game12.core.event.MapChangeEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapSystem extends SynchronizedSystem {
 
@@ -48,6 +50,31 @@ public class MapSystem extends SynchronizedSystem {
 
 	}
 
+	public static class LockSyncParameter extends SystemSyncParameter {
+
+		private int roomId;
+
+		public LockSyncParameter() {
+		}
+
+		public LockSyncParameter(int roomId) {
+			this.roomId = roomId;
+		}
+
+		@Override
+		public void fromStream(DataInputStream in) throws IOException {
+			super.fromStream(in);
+			roomId = in.readInt();
+		}
+
+		@Override
+		public void toStream(DataOutputStream out) throws IOException {
+			super.toStream(out);
+			out.writeInt(roomId);
+		}
+
+	}
+
 	private static final int MAX_ROOMS     = 1024;
 	private static final int MIN_ROOM_SIZE = 20;
 
@@ -59,20 +86,19 @@ public class MapSystem extends SynchronizedSystem {
 	private int   height;
 	private int[] rooms;
 
-	private boolean[] lockedRooms = new boolean[MAX_ROOMS];
-	private int[]     cellCount   = new int[MAX_ROOMS];
+	private Map<Integer, Room> roomMap;
 
 	public MapSystem(int width, int height) {
 		this.width = width;
 		this.height = height;
 		this.rooms = new int[width * height];
+		this.roomMap = new HashMap<>();
 
 		for (int x = 1; x <= 20; x++) {
 			for (int y = 1; y <= 20; y++) {
 				rooms[y * width + x] = 1;
 			}
 		}
-		lockRoom(1);
 
 	}
 
@@ -81,6 +107,9 @@ public class MapSystem extends SynchronizedSystem {
 		super.init();
 
 		registerSyncFunction(UpdateSyncParameter.class, this::syncSet);
+		registerSyncFunction(LockSyncParameter.class, this::syncLock);
+
+		lockRoom(1);
 	}
 
 	public int getWidth()  { return width; }
@@ -109,7 +138,7 @@ public class MapSystem extends SynchronizedSystem {
 
 		int oldRoom = rooms[y * width + x];
 
-		if(oldRoom == roomId) return false;
+		if (oldRoom == roomId) return false;
 
 		if (!isRoomLocked(oldRoom)) {
 			boolean valid = false;
@@ -122,8 +151,14 @@ public class MapSystem extends SynchronizedSystem {
 
 			if (valid) {
 				rooms[y * width + x] = roomId;
-				if (roomId > VOID) cellCount[roomId]++;
-				if (oldRoom > VOID) cellCount[oldRoom]--;
+				if (roomId > VOID) getRoom(roomId).cellCount++;
+				if (oldRoom > VOID) getRoom(oldRoom).cellCount--;
+				if (roomId == DOOR) {
+					if (get(x - 1, y) > VOID) getRoom(get(x - 1, y)).hasDoor = true;
+					if (get(x + 1, y) > VOID) getRoom(get(x + 1, y)).hasDoor = true;
+					if (get(x, y - 1) > VOID) getRoom(get(x, y - 1)).hasDoor = true;
+					if (get(x, y + 1) > VOID) getRoom(get(x, y + 1)).hasDoor = true;
+				}
 				getEventManager().trigger(new MapChangeEvent(x, y, oldRoom, roomId));
 				callSyncFunction(new UpdateSyncParameter(x, y, roomId));
 				return true;
@@ -136,7 +171,7 @@ public class MapSystem extends SynchronizedSystem {
 	private boolean checkSpaceRoom(int x, int y, int roomId) {
 		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return false;
 
-		if (roomId > VOID && cellCount[roomId] > 0) {
+		if (roomId > VOID && getRoom(roomId).cellCount > 0) {
 			if (get(x - 1, y) != roomId && get(x + 1, y) != roomId && get(x, y - 1) != roomId && get(x, y + 1) != roomId) return false;
 		}
 
@@ -156,8 +191,8 @@ public class MapSystem extends SynchronizedSystem {
 		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) return false;
 
 		if (get(x, y) == VOID) {
-			if ((get(x - 1, y) > VOID && get(x + 1, y) > VOID) && (get(x, y - 1) == VOID && get(x, y + 1) == VOID)) return true;
-			if ((get(x, y - 1) > VOID && get(x, y + 1) > VOID) && (get(x - 1, y) == VOID && get(x + 1, y) == VOID)) return true;
+			if (get(x - 1, y) > VOID && get(x + 1, y) > VOID && get(x - 1, y) != get(x + 1, y) && (get(x, y - 1) == VOID && get(x, y + 1) == VOID)) return true;
+			if (get(x, y - 1) > VOID && get(x, y + 1) > VOID && get(x, y - 1) != get(x, y + 1) && (get(x - 1, y) == VOID && get(x + 1, y) == VOID)) return true;
 			return false;
 		}
 
@@ -166,14 +201,22 @@ public class MapSystem extends SynchronizedSystem {
 
 	public boolean isRoomLocked(int roomId) {
 		if (roomId >= 0) {
-			return lockedRooms[roomId];
+			return getRoom(roomId).locked;
 		} else {
 			return false;
 		}
 	}
 
 	public void lockRoom(int roomId) {
-		lockedRooms[roomId] = true;
+		getRoom(roomId).locked = true;
+
+		if (checkSide(Side.SERVER)) {
+			callSyncFunction(new LockSyncParameter(roomId));
+		}
+	}
+
+	private void syncLock(LockSyncParameter parameter) {
+		lockRoom(parameter.roomId);
 	}
 
 	private void syncSet(UpdateSyncParameter parameter) {
@@ -199,7 +242,20 @@ public class MapSystem extends SynchronizedSystem {
 	}
 
 	public boolean checkRoom(int roomId) {
-		return cellCount[roomId] >= MIN_ROOM_SIZE;
+		return getRoom(roomId).cellCount >= MIN_ROOM_SIZE
+				&& getRoom(roomId).hasDoor;
+	}
+
+	private Room getRoom(int id) {
+		if (id < VOID) return null;
+		return roomMap.computeIfAbsent(id, i -> new Room());
+	}
+
+	private class Room {
+
+		private boolean locked;
+		private int     cellCount;
+		private boolean hasDoor;
 	}
 
 }

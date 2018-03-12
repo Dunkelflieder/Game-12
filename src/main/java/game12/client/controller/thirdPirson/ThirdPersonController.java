@@ -50,7 +50,7 @@ public class ThirdPersonController extends Controller {
 
 		//camera = maps.get(0).getSystem(RenderSystem.class).getCamera();
 
-		camera.setXYZ(0, 10, 0);
+		camera.setXYZ(0, 100, 0);
 		camera.setPitch((float) (-Math.PI / 2));
 
 	}
@@ -71,7 +71,7 @@ public class ThirdPersonController extends Controller {
 		zoom -= inputHandler.getScrollDeltaY() * 2;
 		zoom = Math.max(4, Math.min(80, zoom));
 
-		camera.setXYZ(cameraPosition.getX(), 10, cameraPosition.getY());
+		camera.setXYZ(cameraPosition.getX(), 100, cameraPosition.getY());
 		camera.setHeight(zoom);
 
 		// room building
