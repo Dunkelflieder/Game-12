@@ -30,13 +30,13 @@ public class GameSetupSystem extends LogicSystem {
 		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
 		Entity skeleton = entityFactorySystem.createEntity(testEnemyBlueprintId, 1, 0, 1);
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 0; i++) {
 			short turretBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret");
 			Entity turret = entityFactorySystem.createEntity(turretBlueprintId, 10 + i, 0, 10);
 		}
 
-		for (int i = 0; i < 5; i++) {
-			short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
+		for (int i = 0; i < 1; i++) {
+			short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider-boss");
 			Entity spider = entityFactorySystem.createEntity(spiderBlueprintId, 10, 0, 10);
 			spider.getComponent(JumpBehaviorComponent.class).setOwnRoom(1);
 		}

@@ -1,0 +1,43 @@
+{
+	"name": "spider-boss",
+	"components": {
+		"super": [
+			"enemy"
+		],
+		"core": [
+		],
+		"client": [
+			{
+				"name": "sprite",
+				"data": {
+					"skinId": "spider",
+					"scale": 2.0,
+					"offset": [
+						0.0,
+						0.5,
+						0.0
+					]
+				}
+			}
+		],
+		"server": [
+			{
+				"name": "jumpBehavior",
+				"data": {
+					"jumpDelay": 8.0,
+					"speed": 4.0,
+					"maxDistance": 8.0,
+					"playerProbability": 1.0
+				}
+			},
+			{
+				"name": "spawnEntitiesBehavior",
+				"data": {
+					"entity": "spider",
+					"spawnDelay": 5.0,
+					"maxSpawnDistance": 5.0
+				}
+			}
+		]
+	}
+}

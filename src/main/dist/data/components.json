@@ -71,6 +71,10 @@
 		{
 			"name": "turretBehavior",
 			"class": "TurretBehaviorComponent"
+		},
+		{
+			"name": "spawnEntitiesBehavior",
+			"class": "SpawnEntitiesBehaviorComponent"
 		}
 	]
 }

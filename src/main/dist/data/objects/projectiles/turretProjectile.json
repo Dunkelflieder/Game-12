@@ -41,7 +41,7 @@
 			{
 				"name": "sprite",
 				"data": {
-					"skinId": "test",
+					"skinId": "fireball",
 					"scale": 0.3
 				}
 			},
