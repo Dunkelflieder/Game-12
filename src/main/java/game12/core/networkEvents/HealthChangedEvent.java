@@ -1,4 +1,4 @@
-package game12.server.event;
+package game12.core.networkEvents;
 
 import game12.core.network.NetworkEvent;
 import game12.core.network.StrategyPacketInfo;

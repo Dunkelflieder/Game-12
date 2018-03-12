@@ -5,8 +5,8 @@ import de.nerogar.noise.event.EventManager;
 import game12.client.gui.GHealthbar;
 import game12.client.gui.Gui;
 import game12.client.map.ClientMap;
+import game12.core.networkEvents.HealthChangedEvent;
 import game12.core.systems.PlayerSystem;
-import game12.server.event.HealthChangedEvent;
 
 public class FirstPersonGui extends Gui {
 

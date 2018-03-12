@@ -6,11 +6,11 @@ import game12.client.map.ClientMap;
 import game12.core.EntityFactorySystem;
 import game12.core.LogicSystem;
 import game12.core.components.LifetimeComponent;
-import game12.core.event.ProjectileHitEvent;
 import game12.core.map.Entity;
+import game12.core.networkEvents.HealthChangedEvent;
+import game12.core.networkEvents.ProjectileHitEvent;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.utils.VectorUtils;
-import game12.server.event.HealthChangedEvent;
 
 import java.util.Random;
 

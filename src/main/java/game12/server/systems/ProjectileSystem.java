@@ -6,8 +6,8 @@ import game12.core.components.ActorComponent;
 import game12.core.components.BoundingComponent;
 import game12.core.components.PositionComponent;
 import game12.core.components.ProjectileComponent;
-import game12.core.event.ProjectileHitEvent;
 import game12.core.event.UpdateEvent;
+import game12.core.networkEvents.ProjectileHitEvent;
 import game12.server.map.ServerMap;
 
 import java.util.HashSet;

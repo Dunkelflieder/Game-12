@@ -7,8 +7,8 @@ import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.CoreMap;
 import game12.core.map.Entity;
+import game12.core.networkEvents.HealthChangedEvent;
 import game12.core.utils.EventContainer;
-import game12.server.event.HealthChangedEvent;
 
 import java.util.Iterator;
 
@@ -28,7 +28,7 @@ public class PlayerSystem extends OnUpdateSystem {
 	public void init() {
 		super.init();
 		mapSystem = getContainer().getSystem(MapSystem.class);
-		getEventManager().register(game12.server.event.HealthChangedEvent.class, event -> {
+		getEventManager().register(HealthChangedEvent.class, event -> {
 			Entity entity = map.getEntity(event.entityID);
 			if (entity != null && entity.isValid() && entity.hasComponent(PlayerComponent.class)) {
 				playerHealthChangedEvent.trigger(event);

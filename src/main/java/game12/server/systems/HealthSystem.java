@@ -2,9 +2,9 @@ package game12.server.systems;
 
 import game12.core.LogicSystem;
 import game12.core.components.HealthComponent;
-import game12.core.event.ProjectileHitEvent;
 import game12.core.map.Entity;
-import game12.server.event.HealthChangedEvent;
+import game12.core.networkEvents.HealthChangedEvent;
+import game12.core.networkEvents.ProjectileHitEvent;
 import game12.server.map.ServerMap;
 
 public class HealthSystem extends LogicSystem {

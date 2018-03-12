@@ -3,8 +3,8 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import game12.core.map.Component;
+import game12.core.networkEvents.HealthChangedEvent;
 import game12.core.systems.GameObjectsSystem;
-import game12.server.event.HealthChangedEvent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

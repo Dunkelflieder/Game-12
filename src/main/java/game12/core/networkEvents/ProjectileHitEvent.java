@@ -1,4 +1,4 @@
-package game12.core.event;
+package game12.core.networkEvents;
 
 import de.nerogar.noise.util.Vector3f;
 import game12.core.components.ProjectileComponent;
