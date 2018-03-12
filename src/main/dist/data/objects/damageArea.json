@@ -1,38 +1,34 @@
 {
-	"name": "projectile",
+	"name": "damageArea",
 	"components": {
 		"super": [
 			"entity"
 		],
 		"core": [
 			{
-				"name": "projectile",
+				"name": "bounding",
 				"data": {
-					"speed": 20.0
+					"type": "aabb",
+					"sizeX": 1.0,
+					"sizeY": 10.0,
+					"sizeZ": 1.0
 				}
 			}
 		],
 		"client": [
-			{
-				"name": "sprite",
-				"data": {
-					"skinId": "pellet",
-					"scale": 0.05
-				}
-			}
 		],
 		"server": [
 			{
 				"name": "lifetime",
 				"data": {
-					"lifetime": 0.2
+					"lifetime": 0.1
 				}
 			},
 			{
 				"name": "damage",
 				"data": {
 					"damage": 1,
-					"damageType": "ranged"
+					"damageType": "melee"
 				}
 			}
 		]

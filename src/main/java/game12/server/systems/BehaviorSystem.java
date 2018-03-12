@@ -8,9 +8,10 @@ import game12.server.map.ServerMap;
 
 public abstract class BehaviorSystem<T extends BehaviorComponent> extends OnUpdateSystem {
 
-	private final Class<T>     behaviourClass;
-	private final ServerMap    map;
-	private       PlayerSystem playerSystem;
+	private final Class<T> behaviourClass;
+
+	protected final ServerMap    map;
+	protected       PlayerSystem playerSystem;
 
 	public BehaviorSystem(Class<T> behaviourClass, ServerMap map) {
 		this.behaviourClass = behaviourClass;
@@ -33,5 +34,4 @@ public abstract class BehaviorSystem<T extends BehaviorComponent> extends OnUpda
 			}
 		}
 	}
-
 }

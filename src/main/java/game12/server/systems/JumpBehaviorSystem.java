@@ -2,10 +2,15 @@ package game12.server.systems;
 
 import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;
+import game12.core.EntityFactorySystem;
+import game12.core.components.ActorComponent;
+import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
+import game12.core.map.Entity;
 import game12.core.networkEvents.EntityJumpEvent;
+import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
-import game12.core.systems.PlayerSystem;
+import game12.server.components.DamageComponent;
 import game12.server.components.JumpBehaviorComponent;
 import game12.server.map.ServerMap;
 
@@ -15,8 +20,9 @@ public class JumpBehaviorSystem extends BehaviorSystem<JumpBehaviorComponent> {
 
 	private Random random;
 
-	private PlayerSystem playerSystem;
-	private MapSystem    mapSystem;
+	private MapSystem           mapSystem;
+	private short               damageAreaId;
+	private EntityFactorySystem entityFactorySystem;
 
 	public JumpBehaviorSystem(ServerMap map) {
 		super(JumpBehaviorComponent.class, map);
@@ -28,8 +34,9 @@ public class JumpBehaviorSystem extends BehaviorSystem<JumpBehaviorComponent> {
 
 		this.random = new Random();
 
-		playerSystem = getContainer().getSystem(PlayerSystem.class);
 		mapSystem = getContainer().getSystem(MapSystem.class);
+		damageAreaId = map.getGameSystem(GameObjectsSystem.class).getID("damageArea");
+		entityFactorySystem = map.getSystem(EntityFactorySystem.class);
 	}
 
 	private void nextTarget(JumpBehaviorComponent behavior) {
@@ -55,6 +62,16 @@ public class JumpBehaviorSystem extends BehaviorSystem<JumpBehaviorComponent> {
 			getEventManager().trigger(new EntityJumpEvent(EntityJumpEvent.JUMP, behavior.getEntity().getID()));
 			getNetworkAdapter().send(new EntityJumpEvent(EntityJumpEvent.JUMP, behavior.getEntity().getID()));
 		}
+	}
+
+	private void doImpactDamage(JumpBehaviorComponent jumpBehaviorComponent) {
+		if (jumpBehaviorComponent.impactDamage == 0) return;
+		Entity entity = jumpBehaviorComponent.getEntity();
+		PositionComponent positionComponent = entity.getComponent(PositionComponent.class);
+		Entity damageEntity = entityFactorySystem.createEntity(damageAreaId, positionComponent.getX(), positionComponent.getY(), positionComponent.getZ());
+		ActorComponent actorComponent = entity.getComponent(ActorComponent.class);
+		DamageComponent damageComponent = damageEntity.getComponent(DamageComponent.class);
+		damageComponent.fromPlayer = actorComponent.isPlayer;
 	}
 
 	@Override
@@ -97,6 +114,7 @@ public class JumpBehaviorSystem extends BehaviorSystem<JumpBehaviorComponent> {
 
 				getEventManager().trigger(new EntityJumpEvent(EntityJumpEvent.IMPACT, behaviour.getEntity().getID()));
 				getNetworkAdapter().send(new EntityJumpEvent(EntityJumpEvent.IMPACT, behaviour.getEntity().getID()));
+				doImpactDamage(behaviour);
 
 			} else if (behaviour.jumpProgress < behaviour.totalJumpTime) {
 

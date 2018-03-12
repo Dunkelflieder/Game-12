@@ -17,6 +17,7 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 	public  float      speed;
 	public  float      maxDistance;
 	public  float      playerProbability;
+	public  int        impactDamage;
 
 	public Vector3f jumpSource;
 	public Vector3f jumpTarget;
@@ -28,17 +29,18 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 	public float jumpParabolaA;
 	public float jumpParabolaB;
 
-	public  PositionComponent positionComponent;
+	public PositionComponent positionComponent;
 
 	public JumpBehaviorComponent() {
 	}
 
-	public JumpBehaviorComponent(float jumpDelay, float speed, float maxDistance, float playerProbability) {
+	public JumpBehaviorComponent(float jumpDelay, float speed, float maxDistance, float playerProbability, int impactDamage) {
 		this.jumpDelay = jumpDelay;
 		jumpTimer = new EventTimer(jumpDelay, true);
 		this.speed = speed;
 		this.maxDistance = maxDistance;
 		this.playerProbability = playerProbability;
+		this.impactDamage = impactDamage;
 
 	}
 
@@ -53,11 +55,16 @@ public class JumpBehaviorComponent extends BehaviorComponent {
 		this.speed = data.getFloat("speed");
 		this.maxDistance = data.getFloat("maxDistance");
 		this.playerProbability = data.getFloat("playerProbability");
+		if (data.contains("impactDamage")) {
+			impactDamage = data.getInt("impactDamage");
+		} else {
+			impactDamage = 0;
+		}
 	}
 
 	@Override
 	public Component clone() {
-		return new JumpBehaviorComponent(jumpDelay, speed, maxDistance, playerProbability);
+		return new JumpBehaviorComponent(jumpDelay, speed, maxDistance, playerProbability, impactDamage);
 	}
 
 }

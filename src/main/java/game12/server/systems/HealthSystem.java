@@ -3,8 +3,8 @@ package game12.server.systems;
 import game12.core.LogicSystem;
 import game12.core.components.HealthComponent;
 import game12.core.map.Entity;
+import game12.core.networkEvents.DamageCollisionEvent;
 import game12.core.networkEvents.HealthChangedEvent;
-import game12.core.networkEvents.ProjectileHitEvent;
 import game12.server.map.ServerMap;
 
 public class HealthSystem extends LogicSystem {
@@ -17,17 +17,17 @@ public class HealthSystem extends LogicSystem {
 
 	@Override
 	public void init() {
-		getEventManager().register(ProjectileHitEvent.class, this::onHit);
+		getEventManager().register(DamageCollisionEvent.class, this::onHit);
 	}
 
-	private void onHit(ProjectileHitEvent event) {
+	private void onHit(DamageCollisionEvent event) {
 		Entity entity = map.getEntity(event.entityID);
 		if (entity == null) return;
 		HealthComponent healthComponent = entity.getComponent(HealthComponent.class);
 		if (healthComponent == null) return;
 		int oldHealth = healthComponent.health;
 
-		healthComponent.health -= event.projectile.damage;
+		healthComponent.health -= event.damage;
 		if (healthComponent.health < 0) healthComponent.health = 0;
 		final HealthChangedEvent healthChangedEvent = new HealthChangedEvent(
 				entity.getID(),

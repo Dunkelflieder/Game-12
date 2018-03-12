@@ -7,8 +7,8 @@ import game12.core.EntityFactorySystem;
 import game12.core.LogicSystem;
 import game12.core.components.LifetimeComponent;
 import game12.core.map.Entity;
+import game12.core.networkEvents.DamageCollisionEvent;
 import game12.core.networkEvents.HealthChangedEvent;
-import game12.core.networkEvents.ProjectileHitEvent;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.utils.VectorUtils;
 
@@ -33,7 +33,7 @@ public class ParticleSystem extends LogicSystem {
 		GameObjectsSystem gameObjectsSystem = map.getGameSystem(GameObjectsSystem.class);
 		short blood = gameObjectsSystem.getID("blood-particle");
 
-		getEventManager().register(ProjectileHitEvent.class, event -> spawnParticles(blood, 10, event.position, event.projectile.direction));
+		getEventManager().register(DamageCollisionEvent.class, event -> spawnParticles(blood, 10, event.position, event.direction.multiplied(-1f)));
 		getEventManager().register(HealthChangedEvent.class, event -> {
 			System.out.println("Damage taken: " + event.entityID + " from " + event.oldHealth + " to " + event.newHealth);
 		});

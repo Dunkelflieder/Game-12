@@ -6,6 +6,7 @@ import game12.core.map.Entity;
 import game12.core.request.ShootRequestPacket;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.utils.VectorUtils;
+import game12.server.components.DamageComponent;
 import game12.server.map.ServerMap;
 import game12.server.systems.RequestSystem;
 
@@ -38,9 +39,9 @@ public class ShootRequestSystem extends RequestSystem<ShootRequestPacket> {
 						request.start.getY() - 0.2f,
 						request.start.getZ() + request.direction.getZ() * 0.1f
 				                                          );
-				ProjectileComponent projectile = entity.getComponent(ProjectileComponent.class);
-				projectile.fromPlayer = true;
-				projectile.direction = VectorUtils.mutateVector(request.direction, 0.4f);
+				entity.getComponent(DamageComponent.class).fromPlayer = true;
+				entity.getComponent(ProjectileComponent.class).direction
+						= VectorUtils.mutateVector(request.direction, 0.4f);
 			}
 		} else {
 			throw new UnsupportedOperationException("Not implemented");

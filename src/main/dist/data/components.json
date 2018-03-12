@@ -75,6 +75,10 @@
 		{
 			"name": "spawnEntitiesBehavior",
 			"class": "SpawnEntitiesBehaviorComponent"
+		},
+		{
+			"name": "damage",
+			"class": "DamageComponent"
 		}
 	]
 }
