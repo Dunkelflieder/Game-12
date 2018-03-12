@@ -7,6 +7,7 @@ import game12.core.components.ActorComponent;
 import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.Entity;
+import game12.core.misc.DamageType;
 import game12.core.networkEvents.EntityJumpEvent;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
@@ -72,6 +73,8 @@ public class JumpBehaviorSystem extends BehaviorSystem<JumpBehaviorComponent> {
 		ActorComponent actorComponent = entity.getComponent(ActorComponent.class);
 		DamageComponent damageComponent = damageEntity.getComponent(DamageComponent.class);
 		damageComponent.fromPlayer = actorComponent.isPlayer;
+		damageComponent.damage = jumpBehaviorComponent.impactDamage;
+		damageComponent.damageType = DamageType.MELEE;
 	}
 
 	@Override
