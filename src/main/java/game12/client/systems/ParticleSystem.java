@@ -37,7 +37,7 @@ public class ParticleSystem extends LogicSystem {
 			spawnParticles(blood, 10, event.position, event.direction.multiplied(-1f));
 		});
 		getEventManager().register(HealthChangedEvent.class, event -> {
-			System.out.println("Damage taken: " + event.entityID + " from " + event.oldHealth + " to " + event.newHealth);
+			System.out.println("Damage taken: entity " + event.entityID + ", from " + event.oldHealth + " to " + event.newHealth + " health, invulnerable: " + event.isInvulnerable);
 		});
 	}
 

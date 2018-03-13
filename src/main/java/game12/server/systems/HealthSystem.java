@@ -31,7 +31,7 @@ public class HealthSystem extends OnUpdateSystem {
 		for (HealthComponent healthComponent : map.getEntityList().getComponents(HealthComponent.class)) {
 			if (healthComponent.invulnerability > event.getDelta()) {
 				healthComponent.invulnerability -= event.getDelta();
-			} else {
+			} else if (healthComponent.invulnerability != 0) {
 				healthComponent.invulnerability = 0;
 				HealthChangedEvent healthChangedEvent = new HealthChangedEvent(
 						healthComponent.getEntity().getID(),
