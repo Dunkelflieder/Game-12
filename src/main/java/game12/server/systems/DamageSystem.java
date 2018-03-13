@@ -1,12 +1,10 @@
 package game12.server.systems;
 
-import de.nerogar.noise.util.Vector3f;
 import game12.core.components.ActorComponent;
 import game12.core.components.BoundingComponent;
-import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.Entity;
-import game12.core.networkEvents.DamageCollisionEvent;
+import game12.core.networkEvents.DamageAreaCollidingEvent;
 import game12.core.systems.OnUpdateSystem;
 import game12.server.components.DamageComponent;
 import game12.server.map.ServerMap;
@@ -32,21 +30,12 @@ public class DamageSystem extends OnUpdateSystem {
 		positionLookupSystem = getContainer().getSystem(PositionLookupSystem.class);
 	}
 
-	private void emitDamageCollisionEvent(DamageComponent damageComponent, Entity targetEntity) {
-		PositionComponent targetPositionComponent = targetEntity.getComponent(PositionComponent.class);
-		PositionComponent positionComponent = damageComponent.getEntity().getComponent(PositionComponent.class);
-		Vector3f impactDir = new Vector3f(
-				targetPositionComponent.getX() - positionComponent.getX(),
-				targetPositionComponent.getY() - positionComponent.getY(),
-				targetPositionComponent.getZ() - positionComponent.getZ()
-		);
-		impactDir.normalize();
-		DamageCollisionEvent event = new DamageCollisionEvent(
+	private void emitDamageAreaCollidingEvent(DamageComponent damageComponent, Entity targetEntity) {
+		DamageAreaCollidingEvent event = new DamageAreaCollidingEvent(
 				damageComponent.damage,
 				damageComponent.damageType,
 				targetEntity.getID(),
-				new Vector3f(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ()),
-				impactDir
+				damageComponent.getEntity().getID()
 		);
 		map.getNetworkAdapter().send(event);
 		getEventManager().trigger(event);
@@ -72,7 +61,7 @@ public class DamageSystem extends OnUpdateSystem {
 				if (actor == null) continue;
 				if (actor.isPlayer == damageComponent.fromPlayer) continue;
 
-				emitDamageCollisionEvent(damageComponent, hit.getEntity());
+				emitDamageAreaCollidingEvent(damageComponent, hit.getEntity());
 				if (damageComponent.selfDestruct) toRemove.add(entity);
 			}
 		}

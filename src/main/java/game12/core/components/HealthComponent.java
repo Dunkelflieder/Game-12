@@ -12,8 +12,9 @@ import java.io.IOException;
 
 public class HealthComponent extends SynchronizedComponent {
 
-	public int health;
-	public int maxHealth;
+	public int   health;
+	public int   maxHealth;
+	public float invulnerability;
 
 	public HealthComponent() {
 	}
@@ -21,7 +22,7 @@ public class HealthComponent extends SynchronizedComponent {
 	@Override
 	protected void init() {
 		getEntity().getMap().getEventManager().trigger(
-				new HealthChangedEvent(getEntity().getID(), 0, 0, health, maxHealth));
+				new HealthChangedEvent(getEntity().getID(), 0, 0, health, maxHealth, false, invulnerability > 0));
 	}
 
 	@Override

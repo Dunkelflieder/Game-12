@@ -10,6 +10,15 @@
 				"data": {
 					"speed": 1.0
 				}
+			},
+			{
+				"name": "bounding",
+				"data": {
+					"type": "aabb",
+					"sizeX": 0.3,
+					"sizeY": 10.0,
+					"sizeZ": 0.3
+				}
 			}
 		],
 		"client": [
@@ -27,6 +36,14 @@
 			}
 		],
 		"server": [
+			{
+				"name": "damage",
+				"data": {
+					"damage": 1,
+					"damageType": "melee",
+					"selfDestruct": false
+				}
+			}
 		]
 	}
 }

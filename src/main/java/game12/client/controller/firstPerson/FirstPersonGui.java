@@ -20,18 +20,19 @@ public class FirstPersonGui extends Gui {
 		playerSystem = map.getSystem(PlayerSystem.class);
 
 		healthbar = new GHealthbar(500, 20, playerSystem.getPlayerHealth().maxHealth);
-		playerSystem.getPlayerHealthChangedEvent().register(onPlayerHealthChanged);
+		playerSystem.healthChangedEvent.register(onPlayerHealthChanged);
 		addElement(healthbar, Gui.ALIGNMENT_CENTER, Gui.ALIGNMENT_BOTTOM, 0, 10);
 	}
 
 	private void onPlayerHealthChanged(HealthChangedEvent event) {
 		healthbar.setHealth(event.newHealth);
 		healthbar.setMaxHealth(event.newMaxHealth);
+		healthbar.setBlinking(event.isInvulnerable);
 	}
 
 	@Override
 	public void cleanup() {
 		super.cleanup();
-		playerSystem.getPlayerHealthChangedEvent().unregister(onPlayerHealthChanged);
+		playerSystem.healthChangedEvent.unregister(onPlayerHealthChanged);
 	}
 }

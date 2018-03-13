@@ -8,21 +8,25 @@ import java.io.IOException;
 
 public class HealthChangedEvent extends NetworkEvent {
 
-	public int entityID;
-	public int oldHealth;
-	public int oldMaxHealth;
-	public int newHealth;
-	public int newMaxHealth;
+	public int     entityID;
+	public int     oldHealth;
+	public int     oldMaxHealth;
+	public int     newHealth;
+	public int     newMaxHealth;
+	public boolean wasInvulnerable;
+	public boolean isInvulnerable;
 
 	public HealthChangedEvent() {
 	}
 
-	public HealthChangedEvent(int entityID, int oldHealth, int oldMaxHealth, int newHealth, int newMaxHealth) {
+	public HealthChangedEvent(int entityID, int oldHealth, int oldMaxHealth, int newHealth, int newMaxHealth, boolean wasInvulnerable, boolean isInvulnerable) {
 		this.entityID = entityID;
 		this.oldHealth = oldHealth;
 		this.oldMaxHealth = oldMaxHealth;
 		this.newHealth = newHealth;
 		this.newMaxHealth = newMaxHealth;
+		this.wasInvulnerable = wasInvulnerable;
+		this.isInvulnerable = isInvulnerable;
 	}
 
 	@Override
@@ -32,6 +36,8 @@ public class HealthChangedEvent extends NetworkEvent {
 		oldMaxHealth = in.readInt();
 		newHealth = in.readInt();
 		newMaxHealth = in.readInt();
+		wasInvulnerable = in.readBoolean();
+		isInvulnerable = in.readBoolean();
 	}
 
 	@Override
@@ -41,5 +47,7 @@ public class HealthChangedEvent extends NetworkEvent {
 		out.writeInt(oldMaxHealth);
 		out.writeInt(newHealth);
 		out.writeInt(newMaxHealth);
+		out.writeBoolean(wasInvulnerable);
+		out.writeBoolean(isInvulnerable);
 	}
 }

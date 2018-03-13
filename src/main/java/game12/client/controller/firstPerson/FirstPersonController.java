@@ -20,14 +20,20 @@ import game12.core.request.PlayerPositionUpdateRequestPacket;
 import game12.core.request.ShootRequestPacket;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
+import game12.core.systems.PlayerSystem;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
+import java.util.Random;
 
 public class FirstPersonController extends Controller {
 
-	private static final float  CAMERA_SPEED        = 3f;
-	private static final double SCREEN_SHAKE_FACTOR = 0.1f;
+	private static final float  CAMERA_SPEED           = 3f;
+	private static final double SCREEN_SHAKE_FACTOR    = 0.1f;
+	private static final float  KNOCKBACK_DECELERATION = 30f;
+	private static final float  KNOCKBACK              = 5f;
+	private static final Random RANDOM                 = new Random();
+
 	private ClientMap map;
 
 	private final Camera   camera;
@@ -38,6 +44,7 @@ public class FirstPersonController extends Controller {
 	private final SoundSystem soundSystem;
 
 	private float screenShake;
+	private Vector2f knockback = new Vector2f();
 
 	public FirstPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
 			GuiContainer guiContainer) {
@@ -76,6 +83,18 @@ public class FirstPersonController extends Controller {
 
 			}
 		});
+
+		PlayerSystem playerSystem = map.getSystem(PlayerSystem.class);
+		playerSystem.hitEvent.register(event -> {
+			knockback.setX(event.direction.getX());
+			knockback.setY(event.direction.getZ());
+			if (knockback.getSquaredValue() == 0) {
+				// prevent NaN
+				knockback.setX(RANDOM.nextFloat() - 0.5f);
+				knockback.setY(RANDOM.nextFloat() - 0.5f);
+			}
+			knockback.setValue(KNOCKBACK);
+		});
 	}
 
 	@Override
@@ -102,6 +121,17 @@ public class FirstPersonController extends Controller {
 
 		float deltaX = (float) (deltaXlocal * Math.cos(yaw) + deltaYlocal * Math.sin(yaw));
 		float deltaY = (float) (deltaXlocal * Math.sin(-yaw) + deltaYlocal * Math.cos(-yaw));
+
+		if (knockback.getSquaredValue() > 0.01) {
+			deltaX += knockback.getX() * timeDelta;
+			deltaY += knockback.getY() * timeDelta;
+			float decelerationDelta = KNOCKBACK_DECELERATION * timeDelta;
+			if (decelerationDelta >= knockback.getValue()) {
+				knockback.set(0);
+			} else {
+				knockback.setValue(knockback.getValue() - decelerationDelta);
+			}
+		}
 
 		if (mapSystem.isWalkable((int) (cameraPosition.getX() + deltaX), (int) cameraPosition.getY(), true)) {
 			cameraPosition.addX(deltaX);

@@ -7,6 +7,7 @@ import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.CoreMap;
 import game12.core.map.Entity;
+import game12.core.networkEvents.DamageImpactEvent;
 import game12.core.networkEvents.HealthChangedEvent;
 import game12.core.utils.EventContainer;
 
@@ -31,7 +32,13 @@ public class PlayerSystem extends OnUpdateSystem {
 		getEventManager().register(HealthChangedEvent.class, event -> {
 			Entity entity = map.getEntity(event.entityID);
 			if (entity != null && entity.isValid() && entity.hasComponent(PlayerComponent.class)) {
-				playerHealthChangedEvent.trigger(event);
+				healthChangedEvent.trigger(event);
+			}
+		});
+		getEventManager().register(DamageImpactEvent.class, event -> {
+			Entity entity = map.getEntity(event.entityID);
+			if (entity != null && entity.isValid() && entity.hasComponent(PlayerComponent.class)) {
+				hitEvent.trigger(event);
 			}
 		});
 	}
@@ -78,9 +85,8 @@ public class PlayerSystem extends OnUpdateSystem {
 		}
 	}
 
-	private final EventContainer<HealthChangedEvent> playerHealthChangedEvent = new EventContainer<>();
+	public final EventContainer<HealthChangedEvent> healthChangedEvent = new EventContainer<>();
 
-	public EventContainer<HealthChangedEvent> getPlayerHealthChangedEvent() {
-		return playerHealthChangedEvent;
-	}
+	public final EventContainer<DamageImpactEvent> hitEvent = new EventContainer<>();
+
 }

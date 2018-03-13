@@ -10,8 +10,6 @@ import de.nerogar.noise.util.Color;
 import de.nerogar.noise.util.Matrix4f;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_ONE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_DST_ALPHA;
 import static org.lwjgl.opengl.GL14.glBlendFuncSeparate;
 
 public class GPanel extends GElementContainer {
@@ -86,4 +84,11 @@ public class GPanel extends GElementContainer {
 
 	}
 
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
 }
