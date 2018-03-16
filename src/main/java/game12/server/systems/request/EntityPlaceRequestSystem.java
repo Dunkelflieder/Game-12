@@ -47,7 +47,7 @@ public class EntityPlaceRequestSystem extends RequestSystem<EntityPlaceRequestPa
 
 		int roomId = mapSystem.get(request.getX(), request.getY());
 		int roomPoints = getRoomPoints(roomId);
-		if (roomPoints <= request.getCost()) return;
+		if (roomPoints < request.getCost()) return;
 
 		setRoomPoints(roomId, roomPoints - request.getCost());
 		if (getRoomPoints(roomId) <= 0) mapSystem.lockRoom(roomId);

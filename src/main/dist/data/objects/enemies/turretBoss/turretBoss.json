@@ -1,0 +1,39 @@
+{
+	"name": "turret-boss",
+	"components": {
+		"super": [
+			"enemy"
+		],
+		"core": [
+			{
+				"name": "bounding",
+				"data": {
+					"type": "aabb",
+					"sizeX": 1.2,
+					"sizeY": 10.0,
+					"sizeZ": 1.2
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "turretBossAnimation",
+				"data": {
+				}
+			}
+		],
+		"server": [
+			{
+				"name": "health",
+				"data": {
+					"maxHealth": 300
+				}
+			},
+			{
+				"name": "turretBossBehavior",
+				"data": {
+				}
+			}
+		]
+	}
+}

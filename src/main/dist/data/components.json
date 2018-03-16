@@ -61,6 +61,10 @@
 		{
 			"name": "particlePhysics",
 			"class": "ParticlePhysicsComponent"
+		},
+		{
+			"name": "turretBossAnimation",
+			"class": "TurretBossAnimationComponent"
 		}
 	],
 	"server": [
@@ -75,6 +79,10 @@
 		{
 			"name": "spawnEntitiesBehavior",
 			"class": "SpawnEntitiesBehaviorComponent"
+		},
+		{
+			"name": "turretBossBehavior",
+			"class": "TurretBossBehaviorComponent"
 		},
 		{
 			"name": "damage",

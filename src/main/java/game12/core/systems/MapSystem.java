@@ -82,9 +82,14 @@ public class MapSystem extends SynchronizedSystem {
 	public static final int DOOR        = -1;
 	public static final int LOCKED_DOOR = -2;
 
+	public static final int TILE_FLOOR = 1;
+	public static final int TILE_ENEMY = 1;
+	public static final int TILE_LAVA  = 2;
+
 	private int   width;
 	private int   height;
 	private int[] rooms;
+	private int[] tiles;
 
 	private Map<Integer, Room> roomMap;
 
@@ -92,6 +97,7 @@ public class MapSystem extends SynchronizedSystem {
 		this.width = width;
 		this.height = height;
 		this.rooms = new int[width * height];
+		this.tiles = new int[width * height];
 		this.roomMap = new HashMap<>();
 
 		for (int x = 1; x <= 20; x++) {
@@ -99,6 +105,8 @@ public class MapSystem extends SynchronizedSystem {
 				rooms[y * width + x] = 1;
 			}
 		}
+
+		getRoom(1).locked = true;
 
 	}
 
@@ -108,8 +116,6 @@ public class MapSystem extends SynchronizedSystem {
 
 		registerSyncFunction(UpdateSyncParameter.class, this::syncSet);
 		registerSyncFunction(LockSyncParameter.class, this::syncLock);
-
-		lockRoom(1);
 	}
 
 	public int getWidth()  { return width; }
@@ -163,6 +169,39 @@ public class MapSystem extends SynchronizedSystem {
 				callSyncFunction(new UpdateSyncParameter(x, y, roomId));
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	public int getTile(int x, int y) {
+		if (x < 0 || x >= width || y < 0 || y >= width) return VOID;
+
+		return tiles[y * width + x];
+	}
+
+
+	public boolean setTile(int x, int y, int tileId) {
+		if (!checkSide(Side.SERVER)) return false;
+
+		if (x < 0 || x >= width || y < 0 || y >= width) return false;
+
+		int roomId = rooms[y * width + x];
+		int oldTile = tiles[y * width + x];
+
+		if (oldTile == tileId) return false;
+
+		if (!isRoomLocked(roomId)) {
+			boolean valid = false;
+
+			if (roomId > VOID) {
+				valid = checkSpaceRoom(x, y, roomId);
+			} else if (roomId == DOOR || roomId == LOCKED_DOOR) {
+				valid = checkSpaceDoor(x, y, roomId);
+			}
+
+			// TODO set the tile and synchronize
+
 		}
 
 		return false;

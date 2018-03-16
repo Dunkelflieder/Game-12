@@ -1,0 +1,22 @@
+{
+	"name": "turret-boss-top",
+	"components": {
+		/*"super": [
+			"enemy"
+		],*/
+		"core": [
+		],
+		"client": [
+			{
+				"name": "render",
+				"data": {
+					"skinIDs": [
+						"turretBoss/top"
+					]
+				}
+			},
+		],
+		"server": [
+		]
+	}
+}
