@@ -3,6 +3,8 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.EventTimer;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
@@ -14,6 +16,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+@ComponentInfo(name = "followPath", side = ComponentSide.CORE)
 public class FollowPathComponent extends SynchronizedComponent {
 
 	private int        progressNode;

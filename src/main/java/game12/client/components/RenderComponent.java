@@ -5,6 +5,8 @@ import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderable;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderer;
 import de.nerogar.noise.serialization.NDSNodeObject;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.client.map.ClientMap;
 import game12.client.systems.EntityRenderResourcesSystem;
 import game12.client.systems.UpdateRenderablesSystem;
@@ -15,6 +17,7 @@ import game12.core.systems.GameObjectsSystem;
 
 import java.util.Random;
 
+@ComponentInfo(name = "render", side = ComponentSide.CLIENT)
 public class RenderComponent extends Component {
 
 	private DeferredRenderer renderer;

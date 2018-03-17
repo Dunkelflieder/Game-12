@@ -4,12 +4,15 @@ import de.nerogar.noise.render.deferredRenderer.Light;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Color;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.client.systems.UpdateLightsSystem;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 import game12.core.map.CoreMap;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "light", side = ComponentSide.CLIENT)
 public class LightComponent extends Component {
 
 	private Light    light;

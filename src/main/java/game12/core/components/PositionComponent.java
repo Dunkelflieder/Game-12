@@ -1,9 +1,12 @@
 package game12.core.components;
 
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.event.EntityMoveEvent;
 import game12.core.map.Component;
 import game12.server.systems.PositionLookupSystem;
 
+@ComponentInfo(name = "position", side = ComponentSide.CORE)
 public class PositionComponent extends Component {
 
 	private float x;
@@ -11,6 +14,9 @@ public class PositionComponent extends Component {
 	private float z;
 	private float rotation;
 	private float scale;
+
+	public PositionComponent() {
+	}
 
 	public PositionComponent(float x, float y, float z) {
 		this(x, y, z, 0, 1);

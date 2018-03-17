@@ -2,6 +2,8 @@ package game12.core.components;
 
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.map.Component;
 import game12.core.networkEvents.HealthChangedEvent;
 import game12.core.systems.GameObjectsSystem;
@@ -10,6 +12,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+@ComponentInfo(name = "health", side = ComponentSide.CORE)
 public class HealthComponent extends SynchronizedComponent {
 
 	public int   health;

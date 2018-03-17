@@ -1,10 +1,13 @@
 package game12.client.components;
 
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.EntityFactorySystem;
 import game12.core.map.Component;
 import game12.core.map.Entity;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "turretBossAnimation", side = ComponentSide.CLIENT)
 public class TurretBossAnimationComponent extends Component {
 
 	public Entity turretBossBase;

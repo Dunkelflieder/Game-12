@@ -3,11 +3,14 @@ package game12.server.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.EventTimer;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "jumpBehavior", side = ComponentSide.SERVER)
 public class JumpBehaviorComponent extends BehaviorComponent {
 
 	public static final float GRAVITY = -20f;

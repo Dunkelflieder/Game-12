@@ -3,9 +3,12 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "projectile", side = ComponentSide.CORE)
 public class ProjectileComponent extends Component {
 
 	public float speed;

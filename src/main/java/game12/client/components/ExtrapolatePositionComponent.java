@@ -1,8 +1,11 @@
 package game12.client.components;
 
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 
+@ComponentInfo(name = "extrapolatePosition", side = ComponentSide.CLIENT)
 public class ExtrapolatePositionComponent extends Component {
 
 	private float time;

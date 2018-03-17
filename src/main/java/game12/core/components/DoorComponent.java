@@ -3,6 +3,8 @@ package game12.core.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.client.event.DoorCloseEvent;
 import game12.client.event.DoorOpenEvent;
 import game12.core.map.Component;
@@ -12,6 +14,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+@ComponentInfo(name = "door", side = ComponentSide.CORE)
 public class DoorComponent extends SynchronizedComponent {
 
 	private Vector3f position;

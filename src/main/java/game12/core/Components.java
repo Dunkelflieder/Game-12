@@ -34,9 +34,9 @@ public class Components {
 		NDSNodeObject[] serverArray = file.getData().getObjectArray("server");
 		NDSNodeObject[] clientArray = file.getData().getObjectArray("client");
 
-		initArray("core", coreArray);
-		initArray("server", serverArray);
-		initArray("client", clientArray);
+		initArray(coreArray);
+		initArray(serverArray);
+		initArray(clientArray);
 
 		// init IDs for core components
 		for (NDSNodeObject ndsNodeObject : coreArray) {
@@ -49,13 +49,11 @@ public class Components {
 
 	}
 
-	private static void initArray(String packageName, NDSNodeObject[] array) {
-		packageName = Game12.PACKAGE_NAME + "." + packageName + ".components.";
-
+	private static void initArray(NDSNodeObject[] array) {
 		for (NDSNodeObject ndsNodeObject : array) {
 			classNames.put(
 					ndsNodeObject.getStringUTF8("name"),
-					packageName + ndsNodeObject.getStringUTF8("class")
+					ndsNodeObject.getStringUTF8("class")
 			              );
 
 		}

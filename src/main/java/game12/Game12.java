@@ -10,7 +10,6 @@ public class Game12 {
 	public static final Logger renderLogger;
 
 	public static final String DATA_DIR     = "data/";
-	public static       String PACKAGE_NAME = "game12";
 
 	public static final int NETWORK_ADAPTER_DEFAULT    = 1;
 	public static final int NETWORK_ADAPTER_START_MAPS = 10;

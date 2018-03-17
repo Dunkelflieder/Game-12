@@ -1,8 +1,11 @@
 package game12.server.components;
 
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.EventTimer;
 import game12.core.map.Component;
 
+@ComponentInfo(name = "turretBossBehavior", side = ComponentSide.SERVER)
 public class TurretBossBehaviorComponent extends BehaviorComponent {
 
 	public EventTimer moveTimer;

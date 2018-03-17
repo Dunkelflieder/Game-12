@@ -3,15 +3,18 @@ package game12.client.components;
 import de.nerogar.noise.serialization.NDSException;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.sound.Sound;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.client.systems.SoundSystem;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "sound", side = ComponentSide.CLIENT)
 public class SoundComponent extends Component {
 
 	private String soundFile;
-	public Sound sound;
+	public  Sound  sound;
 
 	public SoundComponent() {
 	}

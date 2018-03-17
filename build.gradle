@@ -10,6 +10,7 @@ version = '0.1.0'
 
 dependencies {
     compile project(':noise-engine')
+    compile project(':annotations')
 
     // Use JUnit test framework
     testCompile 'junit:junit:4.12'
@@ -19,6 +20,7 @@ dependencies {
 task createRun(type: Copy) {
     from 'dist'
     from 'src/main/dist'
+    from 'src-gen/main/dist'
     into 'run'
 }
 
@@ -32,6 +34,7 @@ distributions {
         contents {
             from 'dist'
             from 'src/main/dist'
+            from 'src-gen/main/dist'
         }
     }
 }

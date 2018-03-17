@@ -1,11 +1,14 @@
 package game12.client.components;
 
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.map.Component;
 
 /**
  * Is affected by gravity and doesn't intersect with the map
  */
+@ComponentInfo(name = "particlePhysics", side = ComponentSide.CLIENT)
 public class ParticlePhysicsComponent extends Component {
 
 	public static final Vector3f DEFAULT_GRAVITY = new Vector3f(0, -10f, 0);

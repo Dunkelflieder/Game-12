@@ -5,11 +5,14 @@ import de.nerogar.noise.util.Bounding;
 import de.nerogar.noise.util.BoundingAABB;
 import de.nerogar.noise.util.BoundingSphere;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.core.event.BoundingChangeEvent;
 import game12.core.map.Component;
 import game12.core.systems.GameObjectsSystem;
 import game12.server.systems.PositionLookupSystem;
 
+@ComponentInfo(name = "bounding", side = ComponentSide.CORE)
 public class BoundingComponent extends Component {
 
 	private Bounding bounding;

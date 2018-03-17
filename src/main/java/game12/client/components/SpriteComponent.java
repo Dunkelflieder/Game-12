@@ -5,12 +5,15 @@ import de.nerogar.noise.render.deferredRenderer.DeferredContainer;
 import de.nerogar.noise.render.deferredRenderer.DeferredRenderable;
 import de.nerogar.noise.serialization.NDSNodeObject;
 import de.nerogar.noise.util.Vector3f;
+import game12.annotations.ComponentInfo;
+import game12.annotations.ComponentSide;
 import game12.client.systems.SpriteSystem;
 import game12.core.components.PositionComponent;
 import game12.core.map.Component;
 import game12.core.map.CoreMap;
 import game12.core.systems.GameObjectsSystem;
 
+@ComponentInfo(name = "sprite", side = ComponentSide.CLIENT)
 public class SpriteComponent extends Component {
 
 	private RenderProperties3f renderProperties;

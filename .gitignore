@@ -13,3 +13,6 @@ run/
 # gradle
 .gradle/
 build/
+
+# Generated
+src-gen/
