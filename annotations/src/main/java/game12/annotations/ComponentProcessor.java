@@ -62,7 +62,8 @@ public class ComponentProcessor extends AbstractProcessor {
 		}
 
 		if (roundEnv.processingOver()) {
-			if (!new File(OUTPUT_PATH).mkdirs()) {
+			File outputPath = new File(OUTPUT_PATH);
+			if (!outputPath.exists() && !outputPath.mkdirs()) {
 				messager.printMessage(Diagnostic.Kind.ERROR, "Could not create generated source directory: " + OUTPUT_PATH);
 			}
 			try (OutputStream stream = new FileOutputStream(OUTPUT_PATH + "components.json")) {
