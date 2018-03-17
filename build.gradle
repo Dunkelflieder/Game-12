@@ -24,10 +24,15 @@ task createRun(type: Copy) {
     into 'run'
 }
 
+task deleteSrcGen(type: Delete) {
+    delete 'src-gen'
+}
+
 run.workingDir 'run'
 run.dependsOn createRun
 
 clean.dependsOn cleanCreateRun
+clean.dependsOn deleteSrcGen
 
 distributions {
     main {
