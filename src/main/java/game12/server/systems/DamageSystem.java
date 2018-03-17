@@ -1,7 +1,9 @@
 package game12.server.systems;
 
+import de.nerogar.noise.util.Vector3f;
 import game12.core.components.ActorComponent;
 import game12.core.components.BoundingComponent;
+import game12.core.components.PositionComponent;
 import game12.core.event.UpdateEvent;
 import game12.core.map.Entity;
 import game12.core.networkEvents.DamageAreaCollidingEvent;
@@ -31,11 +33,12 @@ public class DamageSystem extends OnUpdateSystem {
 	}
 
 	private void emitDamageAreaCollidingEvent(DamageComponent damageComponent, Entity targetEntity) {
+		PositionComponent positionComponent = damageComponent.getEntity().getComponent(PositionComponent.class);
 		DamageAreaCollidingEvent event = new DamageAreaCollidingEvent(
 				damageComponent.damage,
 				damageComponent.damageType,
 				targetEntity.getID(),
-				damageComponent.getEntity().getID()
+				new Vector3f(positionComponent.getX(), positionComponent.getY(), positionComponent.getZ())
 		);
 		map.getNetworkAdapter().send(event);
 		getEventManager().trigger(event);

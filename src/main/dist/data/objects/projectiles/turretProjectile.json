@@ -6,13 +6,6 @@
 		],
 		"core": [
 			{
-				"name": "bounding",
-				"data": {
-					"type": "sphere",
-					"radius": 0.1
-				}
-			},
-			{
 				"name": "projectile",
 				"data": {
 					"speed": 5.0
