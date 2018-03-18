@@ -6,6 +6,8 @@ import de.nerogar.noise.input.MouseButtonEvent;
 import de.nerogar.noise.render.Texture2DLoader;
 import de.nerogar.noise.util.Color;
 import game12.client.gui.*;
+import game12.client.map.ClientMap;
+import game12.core.systems.PlayerSystem;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -24,7 +26,9 @@ public class ThirdPersonGui extends Gui {
 	private GPanel             buildPanel;
 	private List<GImageButton> buildPanelButtons;
 
-	public ThirdPersonGui(EventManager eventManager, MapBuilder mapBuilder) {
+	private final GHealthbar healthbar;
+
+	public ThirdPersonGui(ClientMap map, EventManager eventManager, MapBuilder mapBuilder) {
 		super(eventManager);
 		this.mapBuilder = mapBuilder;
 
@@ -37,6 +41,16 @@ public class ThirdPersonGui extends Gui {
 		buildPanel = new GPanel(GuiConstants.GUI_BACKGROUND_COLOR, 120, 1000000);
 		addElement(buildPanel, ALIGNMENT_RIGHT, ALIGNMENT_TOP, 0, 0);
 		buildPanelButtons = new ArrayList<>();
+
+		PlayerSystem playerSystem = map.getSystem(PlayerSystem.class);
+
+		healthbar = new GHealthbar(500, 20, playerSystem.getPlayerHealth().maxHealth);
+		playerSystem.healthChangedEvent.register(event -> {
+			healthbar.setHealth(event.newHealth);
+			healthbar.setMaxHealth(event.newMaxHealth);
+			healthbar.setBlinking(event.isInvulnerable);
+		});
+		addElement(healthbar, Gui.ALIGNMENT_CENTER, Gui.ALIGNMENT_BOTTOM, 0, 10);
 
 		createBuildPanel(mapBuilder);
 	}

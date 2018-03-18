@@ -37,7 +37,7 @@ public class ThirdPersonController extends Controller {
 		map.setActive(true);
 
 		this.mapBuilder = new MapBuilder(map);
-		gui = new ThirdPersonGui(eventManager, mapBuilder);
+		gui = new ThirdPersonGui(map, eventManager, mapBuilder);
 		this.guiContainer.setActiveGui(gui);
 
 		gameProgressSystem = map.getSystem(GameProgressSystem.class);

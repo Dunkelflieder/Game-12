@@ -43,7 +43,7 @@ public class MapBuilder {
 		BuildType.SPIDER.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
 		BuildType.TURRET.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret");
 		BuildType.SPIDER_BOSS.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spiderBoss");
-		BuildType.SPIKE_TRAP.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spike-trap");
+		BuildType.SPIKE_TRAP.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spikeTrap");
 	}
 
 	public void update(InputHandler inputHandler, int mouseX, int mouseY, float zoom, Camera camera, Vector3f cameraPosition, int currentRoom) {
