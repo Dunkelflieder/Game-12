@@ -81,8 +81,8 @@ public class ComponentProcessor extends AbstractProcessor {
 	private void toJsonSingle(StringBuilder stringBuilder, Map<String, String> map) {
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			stringBuilder.append("        {\n");
-			stringBuilder.append("            \"name\": \"" + entry.getKey() + "\",\n");
-			stringBuilder.append("            \"class\": \"" + entry.getValue() + "\"\n");
+			stringBuilder.append("            \"name\": \"").append(entry.getKey()).append("\",\n");
+			stringBuilder.append("            \"class\": \"").append(entry.getValue()).append("\"\n");
 			stringBuilder.append("        },\n");
 		}
 	}

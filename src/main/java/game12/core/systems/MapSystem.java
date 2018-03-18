@@ -105,6 +105,7 @@ public class MapSystem extends SynchronizedSystem {
 				rooms[y * width + x] = 1;
 			}
 		}
+		rooms[5 * width + 2] = 0;
 
 		getRoom(1).locked = true;
 

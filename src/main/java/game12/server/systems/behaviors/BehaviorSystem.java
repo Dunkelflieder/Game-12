@@ -1,4 +1,4 @@
-package game12.server.systems;
+package game12.server.systems.behaviors;
 
 import game12.core.event.UpdateEvent;
 import game12.core.systems.OnUpdateSystem;

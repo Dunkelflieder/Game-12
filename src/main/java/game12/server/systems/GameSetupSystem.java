@@ -27,8 +27,8 @@ public class GameSetupSystem extends LogicSystem {
 		short playerBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("player");
 		entityFactorySystem.createEntity(playerBlueprintId, 1, 0, 1);
 
-		short testEnemyBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
-		Entity skeleton = entityFactorySystem.createEntity(testEnemyBlueprintId, 1, 0, 1);
+		short skeletonBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("skeleton");
+		Entity skeleton = entityFactorySystem.createEntity(skeletonBlueprintId, 1, 0, 1);
 
 		for (int i = 0; i < 0; i++) {
 			short turretBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret");
@@ -39,6 +39,9 @@ public class GameSetupSystem extends LogicSystem {
 			short turretBossBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret-boss");
 			Entity turretBoss = entityFactorySystem.createEntity(turretBossBlueprintId, 5.5f, 0, 5.5f);
 		}
+
+		short spikeTrapBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spikeTrap");
+		Entity spikeTrap = entityFactorySystem.createEntity(spikeTrapBlueprintId, 5.5f, 0, 5.5f);
 
 		for (int i = 0; i < 0; i++) {
 			short spiderBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider-boss");

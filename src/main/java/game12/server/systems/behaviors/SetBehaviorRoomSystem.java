@@ -1,4 +1,4 @@
-package game12.server.systems;
+package game12.server.systems.behaviors;
 
 import game12.core.LogicSystem;
 import game12.core.components.PositionComponent;

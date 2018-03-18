@@ -1,4 +1,4 @@
-package game12.server.systems;
+package game12.server.systems.behaviors;
 
 import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;

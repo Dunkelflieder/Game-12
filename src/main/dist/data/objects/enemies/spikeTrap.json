@@ -1,0 +1,44 @@
+{
+	"name": "spikeTrap",
+	"components": {
+		"super": [
+			"enemy"
+		],
+		"core": [
+			{
+				"name": "bounding",
+				"data": {
+					"type": "aabb",
+					"sizeX": 0.9,
+					"sizeY": 10.0,
+					"sizeZ": 0.9
+				}
+			}
+		],
+		"client": [
+			{
+				"name": "render",
+				"data": {
+					"skinIDs": [
+						"spikeTrap"
+					]
+				}
+			}
+		],
+		"server": [
+			{
+				"name": "spikeTrapBehavior",
+				"data": {
+				}
+			},
+			{
+				"name": "damage",
+				"data": {
+					"damage": 3,
+					"damageType": "melee",
+					"selfDestruct": false
+				}
+			}
+		]
+	}
+}

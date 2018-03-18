@@ -5,6 +5,7 @@ import game12.core.MapSystemContainer;
 import game12.core.Side;
 import game12.server.map.ServerMap;
 import game12.server.systems.*;
+import game12.server.systems.behaviors.*;
 import game12.server.systems.request.*;
 
 public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
@@ -29,6 +30,7 @@ public class ServerMapSystemContainer extends MapSystemContainer<ServerMap> {
 		addSystem(new TurretBehaviorSystem(getMap()));
 		addSystem(new SpawnEntitiesBehaviorSystem(getMap()));
 		addSystem(new TurretBossBehaviorSystem(getMap()));
+		addSystem(new SpikeTrapBehaviorSystem(getMap()));
 
 		addSystem(new GameSetupSystem(getMap()));
 		addSystem(new ProjectileSystem(getMap()));
