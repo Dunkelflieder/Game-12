@@ -92,6 +92,26 @@ public class ThirdPersonGui extends Gui {
 				}
 		));
 
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/sprites/fireball/color.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(5);
+					mapBuilder.spikeTrapButton();
+				}
+		));
+
+		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/sprites/fireball/color.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(6);
+					mapBuilder.lavaButton();
+				}
+		));
+
 		for (int i = 0; i < buildPanelButtons.size(); i++) {
 			buildPanel.addElement(
 					buildPanelButtons.get(i),

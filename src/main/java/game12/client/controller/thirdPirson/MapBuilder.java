@@ -7,6 +7,7 @@ import de.nerogar.noise.util.Vector3f;
 import game12.client.map.ClientMap;
 import game12.core.request.EntityPlaceRequestPacket;
 import game12.core.request.MapChangeRequestPacket;
+import game12.core.request.MapTileChangeRequestPacket;
 import game12.core.systems.GameObjectsSystem;
 import game12.core.systems.MapSystem;
 import org.lwjgl.glfw.GLFW;
@@ -17,10 +18,12 @@ public class MapBuilder {
 
 	private enum BuildType {
 		ROOM(false, 0),
+		LAVA(false, 0),
 		DOOR(false, 0),
 		SPIDER(true, 1),
 		TURRET(true, 2),
-		SPIDER_BOSS(true, 15);
+		SPIDER_BOSS(true, 15),
+		SPIKE_TRAP(true, 2);
 
 		private boolean isEntity;
 		private short   blueprintId;
@@ -40,6 +43,7 @@ public class MapBuilder {
 		BuildType.SPIDER.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
 		BuildType.TURRET.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret");
 		BuildType.SPIDER_BOSS.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider-boss");
+		BuildType.SPIKE_TRAP.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spike-trap");
 	}
 
 	public void update(InputHandler inputHandler, int mouseX, int mouseY, float zoom, Camera camera, Vector3f cameraPosition, int currentRoom) {
@@ -57,6 +61,9 @@ public class MapBuilder {
 				switch (buildType) {
 					case ROOM:
 						map.getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, currentRoom));
+						break;
+					case LAVA:
+						map.getNetworkAdapter().send(new MapTileChangeRequestPacket(mouseX, mouseY, MapSystem.TILE_LAVA));
 						break;
 					case DOOR:
 						map.getNetworkAdapter().send(new MapChangeRequestPacket(mouseX, mouseY, MapSystem.DOOR));
@@ -89,6 +96,14 @@ public class MapBuilder {
 
 	public void spiderBossButton() {
 		buildType = BuildType.SPIDER_BOSS;
+	}
+
+	public void spikeTrapButton() {
+		buildType = BuildType.SPIKE_TRAP;
+	}
+
+	public void lavaButton() {
+		buildType = BuildType.LAVA;
 	}
 }
 

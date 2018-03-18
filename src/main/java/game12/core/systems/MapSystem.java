@@ -50,6 +50,41 @@ public class MapSystem extends SynchronizedSystem {
 
 	}
 
+	public static class UpdateTileSyncParameter extends SystemSyncParameter {
+
+		private int x;
+		private int y;
+		private int tile;
+
+		public UpdateTileSyncParameter() {
+		}
+
+		public UpdateTileSyncParameter(int x, int y, int tile) {
+			this.x = x;
+			this.y = y;
+			this.tile = tile;
+		}
+
+		@Override
+		public void fromStream(DataInputStream in) throws IOException {
+			super.fromStream(in);
+
+			x = in.readInt();
+			y = in.readInt();
+			tile = in.readInt();
+		}
+
+		@Override
+		public void toStream(DataOutputStream out) throws IOException {
+			super.toStream(out);
+
+			out.writeInt(x);
+			out.writeInt(y);
+			out.writeInt(tile);
+		}
+
+	}
+
 	public static class LockSyncParameter extends SystemSyncParameter {
 
 		private int roomId;
@@ -82,9 +117,9 @@ public class MapSystem extends SynchronizedSystem {
 	public static final int DOOR        = -1;
 	public static final int LOCKED_DOOR = -2;
 
-	public static final int TILE_FLOOR = 1;
-	public static final int TILE_ENEMY = 1;
-	public static final int TILE_LAVA  = 2;
+	public static final int TILE_FLOOR = 0;
+	public static final int TILE_LAVA  = 1;
+	public static final int TILE_ENEMY = 2;
 
 	private int   width;
 	private int   height;
@@ -106,6 +141,7 @@ public class MapSystem extends SynchronizedSystem {
 			}
 		}
 		rooms[5 * width + 2] = 0;
+		tiles[5 * width + 3] = TILE_LAVA;
 
 		getRoom(1).locked = true;
 
@@ -116,6 +152,7 @@ public class MapSystem extends SynchronizedSystem {
 		super.init();
 
 		registerSyncFunction(UpdateSyncParameter.class, this::syncSet);
+		registerSyncFunction(UpdateTileSyncParameter.class, this::syncSetTile);
 		registerSyncFunction(LockSyncParameter.class, this::syncLock);
 	}
 
@@ -124,10 +161,12 @@ public class MapSystem extends SynchronizedSystem {
 	public int getHeight() { return height; }
 
 	public boolean isWalkable(int x, int y, boolean isPlayer) {
-		int tile = get(x, y);
-		if (tile == VOID) return false;
-		if (tile == DOOR) return isPlayer;
-		if (tile == LOCKED_DOOR) return false;
+		int roomId = get(x, y);
+		int tile = getTile(x, y);
+
+		if (roomId == VOID) return false;
+		if (roomId == DOOR) return isPlayer;
+		if (roomId == LOCKED_DOOR) return false;
 
 		return true;
 	}
@@ -181,7 +220,6 @@ public class MapSystem extends SynchronizedSystem {
 		return tiles[y * width + x];
 	}
 
-
 	public boolean setTile(int x, int y, int tileId) {
 		if (!checkSide(Side.SERVER)) return false;
 
@@ -202,6 +240,11 @@ public class MapSystem extends SynchronizedSystem {
 			}
 
 			// TODO set the tile and synchronize
+
+			if (valid) {
+				tiles[y * width + x] = tileId;
+				callSyncFunction(new UpdateTileSyncParameter(x, y, tileId));
+			}
 
 		}
 
@@ -263,6 +306,12 @@ public class MapSystem extends SynchronizedSystem {
 		int oldRoom = rooms[parameter.y * width + parameter.x];
 		rooms[parameter.y * width + parameter.x] = parameter.roomId;
 		getEventManager().trigger(new MapChangeEvent(parameter.x, parameter.y, oldRoom, parameter.roomId));
+	}
+
+	private void syncSetTile(UpdateTileSyncParameter parameter) {
+		int oldTile = tiles[parameter.y * width + parameter.x];
+		tiles[parameter.y * width + parameter.x] = parameter.tile;
+		//getEventManager().trigger(new MapChangeEvent(parameter.x, parameter.y, oldTile, parameter.tile));
 	}
 
 	@Override

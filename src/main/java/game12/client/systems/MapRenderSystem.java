@@ -14,6 +14,17 @@ import game12.core.systems.MapSystem;
 
 public class MapRenderSystem extends LogicSystem {
 
+	private class TileTexture {
+
+		private float u;
+		private float v;
+
+		public TileTexture(float u, float v) {
+			this.u = u;
+			this.v = v;
+		}
+	}
+
 	private static final float WALL_OFFSET = 0.3f;
 	private static final int   TILE_COUNT  = 8;
 	private static final float TILE_SIZE   = 1f / TILE_COUNT;
@@ -43,6 +54,12 @@ public class MapRenderSystem extends LogicSystem {
 
 	private MapSystem          mapSystem;
 	private GameProgressSystem gameProgressSystem;
+
+	private TileTexture[] tileTextures = {
+			new TileTexture(1, 7),
+			new TileTexture(2, 7),
+			new TileTexture(1, 7)
+	};
 
 	@Override
 	public void init() {
@@ -144,18 +161,20 @@ public class MapRenderSystem extends LogicSystem {
 
 		for (int x = 0; x < mapSystem.getWidth(); x++) {
 			for (int y = 0; y < mapSystem.getHeight(); y++) {
-				int tile = mapSystem.get(x, y);
+				int room = mapSystem.get(x, y);
+				int tile = mapSystem.getTile(x, y);
+
 				Color color = Color.BLACK;
 
 				if (markRooms) {
-					if (tile == gameProgressSystem.getCurrentRoom()) {
+					if (room == gameProgressSystem.getCurrentRoom()) {
 						color = COLOR_CURRENT_ROOM;
-					} else if (mapSystem.isRoomLocked(tile)) {
+					} else if (mapSystem.isRoomLocked(room)) {
 						color = COLOR_LOCKED_ROOM;
 					}
 				}
 
-				if (tile == MapSystem.VOID) {
+				if (room == MapSystem.VOID) {
 					createWall(vertexList, x + 0, y + 0, x + 0, y + 1, 1, 0,
 					           mapSystem.get(x - 1, y - 1) > MapSystem.VOID || mapSystem.get(x, y - 1) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y + 1) > MapSystem.VOID || mapSystem.get(x, y + 1) > MapSystem.VOID,
@@ -181,8 +200,8 @@ public class MapRenderSystem extends LogicSystem {
 					           mapSystem.get(x, y - 1) == MapSystem.DOOR || mapSystem.get(x, y - 1) == MapSystem.LOCKED_DOOR
 					          );
 				} else {
-					float u = 1;
-					float v = 7;
+					float u = tileTextures[tile].u;
+					float v = tileTextures[tile].v;
 
 					int indexNN = vertexList.addVertex(x + 0, 0, y + 0, u, v + 1, color.getR(), color.getG(), color.getB());
 					int indexPN = vertexList.addVertex(x + 1, 0, y + 0, u + 1, v + 1, color.getR(), color.getG(), color.getB());
