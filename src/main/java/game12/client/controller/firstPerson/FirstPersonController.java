@@ -95,6 +95,8 @@ public class FirstPersonController extends Controller {
 			}
 			knockback.setValue(KNOCKBACK);
 			screenShake += 1;
+			Vector3f playerPosition = playerSystem.getPlayerPosition();
+			soundSystem.playSound("res/sound/player/hurt.ogg", playerPosition.getX(), playerPosition.getY(), playerPosition.getZ());
 		});
 	}
 
