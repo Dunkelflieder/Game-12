@@ -33,7 +33,7 @@ public class GHealthbar extends GPanel {
 		addElement(innerPanel, Gui.ALIGNMENT_LEFT, Gui.ALIGNMENT_CENTER, 0, 0);
 		innerText = new GLabel(FONT, COLOR_TEXT, "");
 		addElement(innerText, Gui.ALIGNMENT_CENTER, Gui.ALIGNMENT_TOP, 0, -height / 10);
-		update();
+		updateContents();
 	}
 
 	@Override
@@ -47,10 +47,11 @@ public class GHealthbar extends GPanel {
 		renderCounter++;
 	}
 
-	private void update() {
+	private void updateContents() {
 		float percentage = health / (float) maxHealth;
 		innerPanel.setSize((int) (getWidth() * percentage), getHeight());
 		innerText.setText(health + "/" + maxHealth);
+		innerText.recalculatePosition(posX, posY, getWidth(), getHeight());
 	}
 
 	public int getMaxHealth() {
@@ -59,7 +60,7 @@ public class GHealthbar extends GPanel {
 
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
-		update();
+		updateContents();
 	}
 
 	public int getHealth() {
@@ -68,7 +69,7 @@ public class GHealthbar extends GPanel {
 
 	public void setHealth(int health) {
 		this.health = health;
-		update();
+		updateContents();
 	}
 
 	public boolean isBlinking() {
