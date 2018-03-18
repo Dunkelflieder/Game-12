@@ -27,7 +27,7 @@ public class TurretBehaviorSystem extends BehaviorSystem<TurretBehaviorComponent
 	@Override
 	public void init() {
 		super.init();
-		projectileBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret-projectile");
+		projectileBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turretProjectile");
 		playerSystem = getContainer().getSystem(PlayerSystem.class);
 	}
 

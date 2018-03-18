@@ -33,7 +33,7 @@ public class TurretBossBehaviorSystem extends BehaviorSystem<TurretBossBehaviorC
 
 		this.random = new Random();
 
-		projectileBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret-projectile");
+		projectileBlueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turretProjectile");
 
 		entityFactory = map.getSystem(EntityFactorySystem.class);
 		mapSystem = map.getSystem(MapSystem.class);

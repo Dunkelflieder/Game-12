@@ -25,10 +25,10 @@ public class TurretBossAnimationComponent extends Component {
 
 		scale = 0.5f;
 
-		short turretBossBaseBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turret-boss-base");
-		short turretBossSpikesBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turret-boss-spikes");
-		short turretBossRingBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turret-boss-ring");
-		short turretBossTopBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turret-boss-top");
+		short turretBossBaseBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turretBossBase");
+		short turretBossSpikesBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turretBossSpikes");
+		short turretBossRingBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turretBossRing");
+		short turretBossTopBlueprintId = getEntity().getMap().getGameSystem(GameObjectsSystem.class).getID("turretBossTop");
 
 		turretBossBase = entityFactory.createEntity(turretBossBaseBlueprintId, 10, 0 * scale, 10);
 		turretBossSpikes1 = entityFactory.createEntity(turretBossSpikesBlueprintId, 10, 1 * scale, 10);

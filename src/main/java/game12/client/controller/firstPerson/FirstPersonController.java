@@ -74,7 +74,7 @@ public class FirstPersonController extends Controller {
 			if (event.getEventType() == EntityJumpEvent.IMPACT) {
 				Entity entity = map.getEntityList().get(event.getEntity());
 
-				if (entity.getEntityID() == map.getGameSystem(GameObjectsSystem.class).getID("spider-boss")) {
+				if (entity.getEntityID() == map.getGameSystem(GameObjectsSystem.class).getID("spiderBoss")) {
 					PositionComponent position = entity.getComponent(PositionComponent.class);
 					map.getSystem(SoundSystem.class).playSound("res/sound/spiderBoss/impact.ogg", position.getX(), position.getY(), position.getZ());
 

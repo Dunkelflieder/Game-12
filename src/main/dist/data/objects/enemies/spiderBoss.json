@@ -1,5 +1,5 @@
 {
-	"name": "spider-boss",
+	"name": "spiderBoss",
 	"components": {
 		"super": [
 			"enemy"

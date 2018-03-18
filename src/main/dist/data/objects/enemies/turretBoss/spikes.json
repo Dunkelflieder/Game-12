@@ -1,9 +1,6 @@
 {
-	"name": "turret-boss-spikes",
+	"name": "turretBossSpikes",
 	"components": {
-		/*"super": [
-			"enemy"
-		],*/
 		"core": [
 		],
 		"client": [
@@ -14,7 +11,7 @@
 						"turretBoss/spikes"
 					]
 				}
-			},
+			}
 		],
 		"server": [
 		]

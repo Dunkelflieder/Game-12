@@ -1,5 +1,5 @@
 {
-	"name": "pellet-projectile",
+	"name": "pelletProjectile",
 	"components": {
 		"super": [
 			"projectile"

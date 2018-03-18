@@ -1,9 +1,6 @@
 {
-	"name": "turret-boss-top",
+	"name": "turretBossTop",
 	"components": {
-		/*"super": [
-			"enemy"
-		],*/
 		"core": [
 		],
 		"client": [
@@ -14,7 +11,7 @@
 						"turretBoss/top"
 					]
 				}
-			},
+			}
 		],
 		"server": [
 		]

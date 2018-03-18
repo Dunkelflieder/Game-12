@@ -31,7 +31,7 @@ public class ParticleSystem extends LogicSystem {
 
 		entityFactory = getContainer().getSystem(EntityFactorySystem.class);
 		GameObjectsSystem gameObjectsSystem = map.getGameSystem(GameObjectsSystem.class);
-		short blood = gameObjectsSystem.getID("blood-particle");
+		short blood = gameObjectsSystem.getID("bloodParticle");
 
 		getEventManager().register(DamageImpactEvent.class, event -> {
 			spawnParticles(blood, 10, event.position, event.direction.multiplied(-1f));

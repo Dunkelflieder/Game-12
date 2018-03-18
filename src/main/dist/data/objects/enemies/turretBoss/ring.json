@@ -1,9 +1,6 @@
 {
-	"name": "turret-boss-ring",
+	"name": "turretBossRing",
 	"components": {
-		/*"super": [
-			"enemy"
-		],*/
 		"core": [
 		],
 		"client": [
@@ -14,7 +11,7 @@
 						"turretBoss/ring"
 					]
 				}
-			},
+			}
 		],
 		"server": [
 		]

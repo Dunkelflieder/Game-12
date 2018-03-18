@@ -25,7 +25,7 @@ public class ShootRequestSystem extends RequestSystem<ShootRequestPacket> {
 	public void init() {
 		super.init();
 		entityFactory = getContainer().getSystem(EntityFactorySystem.class);
-		shotgunProjectileBlueprintID = map.getGameSystem(GameObjectsSystem.class).getID("pellet-projectile");
+		shotgunProjectileBlueprintID = map.getGameSystem(GameObjectsSystem.class).getID("pelletProjectile");
 	}
 
 	@Override
