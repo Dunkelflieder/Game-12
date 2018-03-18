@@ -81,6 +81,5 @@ public class SpikeTrapBehaviorComponent extends BehaviorComponent {
 		} else {
 			throw new IllegalStateException("unknown state: " + state);
 		}
-		System.out.println("\rState: " + state + ", target: " + target + ", delta: " + event.getDelta());
 	}
 }

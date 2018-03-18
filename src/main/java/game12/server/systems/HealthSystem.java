@@ -83,17 +83,16 @@ public class HealthSystem extends OnUpdateSystem {
 		if (entity == null) return;
 		HealthComponent healthComponent = entity.getComponent(HealthComponent.class);
 		if (healthComponent == null) return;
-		int damage = event.damage;
 		if (healthComponent.invulnerability > 0) {
-			damage = 0;
-		} else if (entity.hasComponent(HealthComponent.class)) {
+			return;
+		} else {
 			// TODO decide smarter what gets invulnerability and what doesn't
 			healthComponent.invulnerability = 0.5f;
 		}
 
 		int oldHealth = healthComponent.health;
 
-		healthComponent.health -= damage;
+		healthComponent.health -= event.damage;
 		if (healthComponent.health < 0) healthComponent.health = 0;
 		final HealthChangedEvent healthChangedEvent = new HealthChangedEvent(
 				entity.getID(),

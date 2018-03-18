@@ -94,7 +94,7 @@ public class FirstPersonController extends Controller {
 				knockback.setY(RANDOM.nextFloat() - 0.5f);
 			}
 			knockback.setValue(KNOCKBACK);
-			screenShake += 0.2;
+			screenShake += 1;
 		});
 	}
 
