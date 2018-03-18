@@ -42,6 +42,10 @@ public class SpikeTrapBehaviorSystem extends BehaviorSystem<SpikeTrapBehaviorCom
 		PositionComponent trapPosition = behaviour.getEntity().getComponent(PositionComponent.class);
 		int trapX = (int) trapPosition.getX();
 		int trapY = (int) trapPosition.getZ();
+		if (playerX == trapX && playerY == trapY) {
+			// avoid 0-distance
+			playerX++;
+		}
 
 		final Vector2i diff = Vector2i.of(playerX - trapX, playerY - trapY);
 		final Vector2i diffSig = Vector2i.of((int) Math.signum(diff.x), (int) Math.signum(diff.y));
