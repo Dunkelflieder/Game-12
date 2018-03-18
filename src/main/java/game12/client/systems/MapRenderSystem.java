@@ -160,25 +160,25 @@ public class MapRenderSystem extends LogicSystem {
 					           mapSystem.get(x - 1, y - 1) > MapSystem.VOID || mapSystem.get(x, y - 1) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y + 1) > MapSystem.VOID || mapSystem.get(x, y + 1) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y) <= MapSystem.VOID,
-					           mapSystem.get(x - 1, y) == MapSystem.DOOR
+					           mapSystem.get(x - 1, y) == MapSystem.DOOR || mapSystem.get(x - 1, y) == MapSystem.LOCKED_DOOR
 					          );
 					createWall(vertexList, x + 0, y + 1, x + 1, y + 1, 0, -1,
 					           mapSystem.get(x - 1, y + 1) > MapSystem.VOID || mapSystem.get(x - 1, y) > MapSystem.VOID,
 					           mapSystem.get(x + 1, y + 1) > MapSystem.VOID || mapSystem.get(x + 1, y) > MapSystem.VOID,
 					           mapSystem.get(x, y + 1) <= 0,
-					           mapSystem.get(x, y + 1) == MapSystem.DOOR
+					           mapSystem.get(x, y + 1) == MapSystem.DOOR || mapSystem.get(x, y + 1) == MapSystem.LOCKED_DOOR
 					          );
 					createWall(vertexList, x + 1, y + 1, x + 1, y + 0, -1, 0,
 					           mapSystem.get(x + 1, y + 1) > MapSystem.VOID || mapSystem.get(x, y + 1) > MapSystem.VOID,
 					           mapSystem.get(x + 1, y - 1) > MapSystem.VOID || mapSystem.get(x, y - 1) > MapSystem.VOID,
 					           mapSystem.get(x + 1, y) <= 0,
-					           mapSystem.get(x + 1, y) == MapSystem.DOOR
+					           mapSystem.get(x + 1, y) == MapSystem.DOOR || mapSystem.get(x + 1, y) == MapSystem.LOCKED_DOOR
 					          );
 					createWall(vertexList, x + 1, y + 0, x + 0, y + 0, 0, 1,
 					           mapSystem.get(x + 1, y - 1) > MapSystem.VOID || mapSystem.get(x + 1, y) > MapSystem.VOID,
 					           mapSystem.get(x - 1, y - 1) > MapSystem.VOID || mapSystem.get(x - 1, y) > MapSystem.VOID,
 					           mapSystem.get(x, y - 1) <= 0,
-					           mapSystem.get(x, y - 1) == MapSystem.DOOR
+					           mapSystem.get(x, y - 1) == MapSystem.DOOR || mapSystem.get(x, y - 1) == MapSystem.LOCKED_DOOR
 					          );
 				} else {
 					float u = 1;

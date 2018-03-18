@@ -108,6 +108,8 @@ public class DoorComponent extends SynchronizedComponent {
 		openDirection.setZ(in.readFloat());
 
 		targetState = in.readFloat();
+
+		isLocked = in.readBoolean();
 	}
 
 	@Override
@@ -121,6 +123,8 @@ public class DoorComponent extends SynchronizedComponent {
 		out.writeFloat(openDirection.getZ());
 
 		out.writeFloat(state);
+
+		out.writeBoolean(isLocked);
 	}
 
 	@Override
