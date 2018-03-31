@@ -110,8 +110,9 @@ public class MapSystem extends SynchronizedSystem {
 
 	}
 
-	private static final int MAX_ROOMS     = 1024;
-	private static final int MIN_ROOM_SIZE = 20;
+	private static final int MAX_ROOMS       = 1024;
+	private static final int MIN_ROOM_SIZE   = 20;
+	private static final int START_ROOM_SIZE = 3;
 
 	public static final int VOID        = 0;
 	public static final int DOOR        = -1;
@@ -135,13 +136,11 @@ public class MapSystem extends SynchronizedSystem {
 		this.tiles = new int[width * height];
 		this.roomMap = new HashMap<>();
 
-		for (int x = 1; x <= 20; x++) {
-			for (int y = 1; y <= 20; y++) {
+		for (int x = 1; x <= START_ROOM_SIZE; x++) {
+			for (int y = 1; y <= START_ROOM_SIZE; y++) {
 				rooms[y * width + x] = 1;
 			}
 		}
-		rooms[5 * width + 2] = 0;
-		tiles[5 * width + 3] = TILE_LAVA;
 
 		getRoom(1).locked = true;
 
