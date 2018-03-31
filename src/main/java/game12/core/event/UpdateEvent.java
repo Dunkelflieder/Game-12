@@ -14,4 +14,10 @@ public class UpdateEvent implements Event {
 		return delta;
 	}
 
+	@Override
+	public String toString() {
+		return "UpdateEvent{" +
+				"delta=" + delta +
+				'}';
+	}
 }

@@ -12,9 +12,9 @@ import java.io.IOException;
 
 public class GameProgressSystem extends SynchronizedSystem {
 
-	private static final float ROOM_TIME      = 120;
-	private static final float OVERTIME       = 30;
-	private static final int   OVERTIME_COUNT = 2;
+	public static final float ROOM_TIME      = 120;
+	public static final float OVERTIME       = 30;
+	public static final int   OVERTIME_COUNT = 2;
 
 	private CoreMap map;
 

@@ -59,4 +59,11 @@ public class Entity {
 		return entityList.getComponents(this);
 	}
 
+	@Override
+	public String toString() {
+		return "Entity{" +
+				"entityID=" + entityID +
+				", id=" + id +
+				'}';
+	}
 }
