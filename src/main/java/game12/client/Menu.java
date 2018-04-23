@@ -109,13 +109,13 @@ public class Menu {
 		return true;
 	}
 
-	public boolean connectStartServer(Client.ControllerType controllerType) {
+	public boolean connectStartServer(Client.ControllerType controllerType, String host) {
 		if (activeGame) return false;
 		activeGame = true;
 
 		try {
 			// connection
-			connection = new Connection(new Socket("localhost", 34543));
+			connection = new Connection(new Socket(host, 34543));
 			networkAdapter = connection.getNetworkAdapter(Game12.NETWORK_ADAPTER_DEFAULT);
 
 			// start client
