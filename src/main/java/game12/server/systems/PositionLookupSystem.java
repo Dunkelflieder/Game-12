@@ -32,11 +32,11 @@ public class PositionLookupSystem extends LogicSystem {
 	}
 
 	public void updateEntity(Entity entity) {
-		/*BoundingComponent boundingComponent = entity.getComponent(BoundingComponent.class);
+		BoundingComponent boundingComponent = entity.getComponent(BoundingComponent.class);
 		if (boundingComponent != null) {
 			boundingComponent.refreshBounding();
-			components.update(boundingComponent);
-		}*/
+			//components.update(boundingComponent);
+		}
 	}
 
 	public void unregisterEntity(Entity entity) {
