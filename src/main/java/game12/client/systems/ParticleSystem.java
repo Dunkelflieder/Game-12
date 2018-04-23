@@ -34,7 +34,7 @@ public class ParticleSystem extends LogicSystem {
 		short blood = gameObjectsSystem.getID("bloodParticle");
 
 		getEventManager().register(DamageImpactEvent.class, event -> {
-			spawnParticles(blood, 10, event.position, event.direction.multiplied(-1f));
+			spawnParticles(blood, 30, event.position, event.direction.multiplied(-1f));
 		});
 		getEventManager().register(HealthChangedEvent.class, event -> {
 			System.out.println("Damage taken: entity " + event.entityID + ", from " + event.oldHealth + " to " + event.newHealth + " health, invulnerable: " + event.isInvulnerable);

@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 @SupportedAnnotationTypes("game12.annotations.ComponentInfo")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
+@SupportedSourceVersion(SourceVersion.RELEASE_9)
 public class ComponentProcessor extends AbstractProcessor {
 
 	private static final String OUTPUT_PATH = "src-gen/main/dist/data/";
