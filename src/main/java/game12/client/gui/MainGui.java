@@ -36,8 +36,9 @@ public class MainGui extends Gui {
 	private float testBlendOut = 2;
 	private float testBlendDirection;
 
-	private float panelBlendOut = 0;
+	private float    panelBlendOut = 0;
 	private Runnable afterBlendOutAction;
+	private GLabel   errorTextLabel;
 
 	public MainGui(Menu menu, EventManager eventManager) {
 		super(eventManager);
@@ -121,6 +122,10 @@ public class MainGui extends Gui {
 		testPanelButton.setColors(fontColor, fontHoverColor);
 		mainPanel.addElement(testPanelButton, GElement.ALIGNMENT_LEFT, GElement.ALIGNMENT_TOP, BUTTON_OFFSET, offsetStep * offsetNum++);
 */
+
+		errorTextLabel = new GLabel(font, Color.RED, "");
+		mainPanel.addElement(errorTextLabel, ALIGNMENT_LEFT, ALIGNMENT_TOP, CATEGORY_OFFSET, offsetStep * offsetNum++);
+
 	}
 
 	private void createTestPanel(Font font, Color fontColor, Color fontHoverColor) {
@@ -137,6 +142,11 @@ public class MainGui extends Gui {
 		});
 		backButton.setColors(fontColor, fontHoverColor);
 		testPanel.addElement(backButton, ALIGNMENT_LEFT, ALIGNMENT_TOP, BUTTON_OFFSET, 100);
+	}
+
+	private void blendPanelIn() {
+		mainBlendDirection = -10;
+		panelBlendOut = 0f;
 	}
 
 	private void blendPanelOut(Runnable action) {
@@ -193,7 +203,12 @@ public class MainGui extends Gui {
 
 		if (panelBlendOut == 1) {
 			if (afterBlendOutAction != null) {
-				afterBlendOutAction.run();
+				try {
+					afterBlendOutAction.run();
+				} catch (Exception e) {
+					blendPanelIn();
+					errorTextLabel.setText(e.getMessage());
+				}
 				afterBlendOutAction = null;
 			}
 		}

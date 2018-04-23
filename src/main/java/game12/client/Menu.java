@@ -129,7 +129,7 @@ public class Menu {
 			networkAdapter.send(startPacket);
 
 		} catch (IOException e) {
-			e.printStackTrace(Game12.logger.getErrorStream());
+			throw new RuntimeException("Failed to connect to server: " + host, e);
 		}
 
 		return true;
