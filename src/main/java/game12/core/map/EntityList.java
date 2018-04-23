@@ -69,28 +69,9 @@ public class EntityList {
 		return entities.values();
 	}
 
-	private Map<Class<? extends Component>, List<Class<? extends Component>>> superclassLookup = new HashMap<>();
-
-	@SuppressWarnings("unchecked")
-	private List<Class<? extends Component>> getWithSuperclasses(Class<? extends Component> clazz) {
-		return superclassLookup.computeIfAbsent(clazz, c -> {
-			List<Class<? extends Component>> classes = new ArrayList<>();
-			while (c != Component.class) {
-				classes.add(c);
-				c = (Class<? extends Component>) c.getSuperclass();
-			}
-			classes.add(c);
-			return classes;
-		});
-	}
-
 	public void addComponent(Entity entity, Component component) {
-		List<Class<? extends Component>> classes = getWithSuperclasses(component.getClass());
-		Map<Class<? extends Component>, Component> componentMap = entityComponentMap.get(entity);
-		for (Class<? extends Component> clazz : classes) {
-			componentMap.put(clazz, component);
-			allComponentsMap.computeIfAbsent(clazz, c -> new HashSet<>()).add(component);
-		}
+		entityComponentMap.get(entity).put(component.getClass(), component);
+		allComponentsMap.computeIfAbsent(component.getClass(), c -> new HashSet<>()).add(component);
 
 		component.setEntity(entity);
 	}

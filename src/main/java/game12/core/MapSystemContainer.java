@@ -28,7 +28,6 @@ public abstract class MapSystemContainer<T extends CoreMap> extends SystemContai
 		addSystem(new GameProgressSystem(getMap()));
 		addSystem(new LifetimeSystem(getMap()));
 		addSystem(new PlayerSystem(getMap()));
-		addSystem(new SimpleOnUpdateSystem(getMap()));
 	}
 
 	@Override
