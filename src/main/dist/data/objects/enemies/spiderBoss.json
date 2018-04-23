@@ -35,7 +35,7 @@
 				"name": "spawnEntitiesBehavior",
 				"data": {
 					"entity": "spider",
-					"spawnDelay": 5.0,
+					"spawnDelay": 8.0,
 					"maxSpawnDistance": 1.0
 				}
 			},

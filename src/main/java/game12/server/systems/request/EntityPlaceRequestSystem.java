@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class EntityPlaceRequestSystem extends RequestSystem<EntityPlaceRequestPacket> {
 
-	private static final int MAX_ROOM_POINTS = 20;
-	private ServerMap map;
+	private static final int       MAX_ROOM_POINTS = 30;
+	private              ServerMap map;
 
 	private MapSystem mapSystem;
 

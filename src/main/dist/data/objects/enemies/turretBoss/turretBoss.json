@@ -33,6 +33,14 @@
 				"name": "turretBossBehavior",
 				"data": {
 				}
+			},
+			{
+				"name": "damage",
+				"data": {
+					"damage": 3,
+					"damageType": "melee",
+					"selfDestruct": false
+				}
 			}
 		]
 	}
