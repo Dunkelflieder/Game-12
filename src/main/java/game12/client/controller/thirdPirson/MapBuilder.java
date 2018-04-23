@@ -22,6 +22,7 @@ public class MapBuilder {
 		DOOR(false, 0),
 		SPIDER(true, 1),
 		TURRET(true, 2),
+		TURRET_BOSS(true, 10),
 		SPIDER_BOSS(true, 15),
 		SPIKE_TRAP(true, 2);
 
@@ -42,6 +43,7 @@ public class MapBuilder {
 
 		BuildType.SPIDER.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spider");
 		BuildType.TURRET.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turret");
+		BuildType.TURRET_BOSS.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("turretBoss");
 		BuildType.SPIDER_BOSS.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spiderBoss");
 		BuildType.SPIKE_TRAP.blueprintId = map.getGameSystem(GameObjectsSystem.class).getID("spikeTrap");
 	}
@@ -90,8 +92,13 @@ public class MapBuilder {
 		buildType = BuildType.SPIDER;
 	}
 
+
 	public void turretButton() {
 		buildType = BuildType.TURRET;
+	}
+
+	public void turretBossButton() {
+		buildType = BuildType.TURRET_BOSS;
 	}
 
 	public void spiderBossButton() {

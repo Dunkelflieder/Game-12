@@ -2,6 +2,18 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'distribution'
 
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.3'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
 repositories {
     jcenter()
 }
@@ -17,6 +29,17 @@ dependencies {
 
 }
 
+jar {
+    // Keep jar clean:
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    manifest {
+        attributes 'Main-Class': 'game12.ClientMain'
+    }
+    // How-to add class path:
+    //     https://stackoverflow.com/questions/22659463/add-classpath-in-manifest-using-gradle
+    //     https://gist.github.com/simon04/6865179
+}
 task createRun(type: Copy) {
     from 'dist'
     from 'src/main/dist'

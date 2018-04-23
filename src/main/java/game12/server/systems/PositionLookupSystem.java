@@ -2,24 +2,23 @@ package game12.server.systems;
 
 import de.nerogar.noise.util.Bounding;
 import de.nerogar.noise.util.BoundingSphere;
-import de.nerogar.noise.util.SpaceOctree;
 import de.nerogar.noise.util.Vector3f;
 import game12.core.LogicSystem;
 import game12.core.components.BoundingComponent;
 import game12.core.components.PositionComponent;
 import game12.core.map.Entity;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 public class PositionLookupSystem extends LogicSystem {
 
-	private SpaceOctree<BoundingComponent> components;
+	//private SpaceOctree<BoundingComponent> components;
+	private Set<BoundingComponent> components;
 
 	private BoundingSphere sphereInstance;
 
 	public PositionLookupSystem() {
-		components = new SpaceOctree<>(BoundingComponent::getBounding);
+		components = new HashSet<>();
 
 		sphereInstance = new BoundingSphere(new Vector3f(), 0);
 	}
@@ -33,11 +32,11 @@ public class PositionLookupSystem extends LogicSystem {
 	}
 
 	public void updateEntity(Entity entity) {
-		BoundingComponent boundingComponent = entity.getComponent(BoundingComponent.class);
+		/*BoundingComponent boundingComponent = entity.getComponent(BoundingComponent.class);
 		if (boundingComponent != null) {
 			boundingComponent.refreshBounding();
 			components.update(boundingComponent);
-		}
+		}*/
 	}
 
 	public void unregisterEntity(Entity entity) {
@@ -48,7 +47,12 @@ public class PositionLookupSystem extends LogicSystem {
 	}
 
 	public Collection<BoundingComponent> getBoundings(Bounding bounding) {
-		return components.getFilteredExact(new ArrayList<>(), bounding);
+		List<BoundingComponent> filteredList = new ArrayList<>(components);
+
+		filteredList.removeIf(b -> !b.getBounding().overlapsBounding(bounding));
+
+		return filteredList;
+		//return components.getFilteredExact(new ArrayList<>(), bounding);
 	}
 
 	public Collection<BoundingComponent> getBoundingsAround(Vector3f center, float radius) {

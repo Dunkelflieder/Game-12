@@ -14,7 +14,7 @@
 
 	// profiler settings
 	"profiler": {
-		"enabled": true,
+		"enabled": false,
 		"historySize": 1024
 	},
 

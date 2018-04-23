@@ -5,6 +5,7 @@ import de.nerogar.noise.event.EventManager;
 import de.nerogar.noise.opencl.CLContext;
 import de.nerogar.noise.opencl.CLException;
 import de.nerogar.noise.render.GLWindow;
+import de.nerogar.noise.render.Monitor;
 import de.nerogar.noise.util.Logger;
 import de.nerogar.noise.util.Timer;
 import game12.client.Client;

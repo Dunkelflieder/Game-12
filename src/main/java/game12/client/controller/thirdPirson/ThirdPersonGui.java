@@ -100,7 +100,7 @@ public class ThirdPersonGui extends Gui {
 
 		buildPanelButtons.add(new GImageButton(
 				Texture2DLoader.loadTexture("res/sprites/spider/color.png"),
-				Color.WHITE,
+				Color.RED,
 				BUTTON_SIZE,
 				() -> {
 					activateButton(3);
@@ -120,15 +120,25 @@ public class ThirdPersonGui extends Gui {
 
 		buildPanelButtons.add(new GImageButton(
 				Texture2DLoader.loadTexture("res/sprites/fireball/color.png"),
-				Color.WHITE,
+				Color.RED,
 				BUTTON_SIZE,
 				() -> {
 					activateButton(5);
-					mapBuilder.spikeTrapButton();
+					mapBuilder.turretBossButton();
 				}
 		));
 
 		buildPanelButtons.add(new GImageButton(
+				Texture2DLoader.loadTexture("res/gui/spikeTrapButton.png"),
+				Color.WHITE,
+				BUTTON_SIZE,
+				() -> {
+					activateButton(6);
+					mapBuilder.spikeTrapButton();
+				}
+		));
+
+		/*buildPanelButtons.add(new GImageButton(
 				Texture2DLoader.loadTexture("res/sprites/fireball/color.png"),
 				Color.WHITE,
 				BUTTON_SIZE,
@@ -136,7 +146,7 @@ public class ThirdPersonGui extends Gui {
 					activateButton(6);
 					mapBuilder.lavaButton();
 				}
-		));
+		));*/
 
 		for (int i = 0; i < buildPanelButtons.size(); i++) {
 			buildPanel.addElement(
