@@ -6,6 +6,9 @@ import game12.core.systems.PlayerSystem;
 import game12.server.components.BehaviorComponent;
 import game12.server.map.ServerMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class BehaviorSystem<T extends BehaviorComponent> extends OnUpdateSystem {
 
 	private final Class<T> behaviourClass;
@@ -28,10 +31,15 @@ public abstract class BehaviorSystem<T extends BehaviorComponent> extends OnUpda
 
 	@Override
 	protected void updateListenerFunction(UpdateEvent event) {
+		List<T> components = new ArrayList<>();
 		for (T behaviorComponent : map.getEntityList().getComponents(behaviourClass)) {
 			if (behaviorComponent.getOwnRoom() == playerSystem.getPlayerRoomID()) {
-				behaviourFunction(event, behaviorComponent);
+				components.add(behaviorComponent);
 			}
+		}
+		// TODO avoid concurrent modification exceptions more elegantly and performable
+		for (T component : components) {
+			behaviourFunction(event, component);
 		}
 	}
 }
