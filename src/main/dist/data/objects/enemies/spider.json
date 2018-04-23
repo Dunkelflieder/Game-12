@@ -27,7 +27,8 @@
 					"jumpDelay": 4.0,
 					"speed": 5.0,
 					"maxDistance": 5.0,
-					"playerProbability": 0.3
+					"playerProbability": 0.3,
+					"impactDamage": 1
 				}
 			}
 		]
