@@ -18,7 +18,7 @@ repositories {
     jcenter()
 }
 
-version = '0.1.0'
+version = '2018.1.' + file('.git/refs/heads/master').text.substring(0, 7)
 sourceCompatibility = 1.8
 
 dependencies {
