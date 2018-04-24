@@ -1,7 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'application'
-apply plugin: 'distribution'
-
 
 buildscript {
     repositories {
@@ -12,13 +8,18 @@ buildscript {
     }
 }
 
-apply plugin: 'com.github.johnrengelman.shadow'
+plugins {
+    id 'java'
+    id 'application'
+    id 'distribution'
+}
 
 repositories {
     jcenter()
 }
 
 version = '0.1.0'
+sourceCompatibility = 1.8
 
 dependencies {
     compile project(':noise-engine')
