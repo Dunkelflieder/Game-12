@@ -37,6 +37,8 @@ public class ThirdPersonGui extends Gui {
 
 	private final GProgressbar healthbar;
 
+	private GLabel winLabel;
+
 	public ThirdPersonGui(ClientMap map, EventManager eventManager, MapBuilder mapBuilder) {
 		super(eventManager);
 		this.mapBuilder = mapBuilder;
@@ -189,6 +191,12 @@ public class ThirdPersonGui extends Gui {
 	public void setTime(float time) {
 		timeProgressbar.setValue((int) time);
 		timeLabel.setText(formatTime(time));
+	}
+
+	public void addWinLabel(String message) {
+		if (winLabel != null) removeElement(winLabel);
+		winLabel = new GLabel(GuiConstants.DEFAULT_FONT, GuiConstants.FONT_COLOR, message);
+		addElement(winLabel, Gui.ALIGNMENT_CENTER, Gui.ALIGNMENT_CENTER, 0, 0);
 	}
 
 	@Override

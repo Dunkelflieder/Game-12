@@ -10,6 +10,7 @@ import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.MapRenderSystem;
 import game12.client.systems.RenderSystem;
+import game12.core.networkEvents.GameEndEvent;
 import game12.core.systems.GameProgressSystem;
 import org.lwjgl.glfw.GLFW;
 
@@ -52,6 +53,17 @@ public class ThirdPersonController extends Controller {
 
 		camera.setXYZ(0, 100, 0);
 		camera.setPitch((float) (-Math.PI / 2));
+
+
+		map.getEventManager().register(GameEndEvent.class, event -> {
+			if (event.winner == GameEndEvent.PLAYER_FIRST) {
+				gui.addWinLabel("you lost the game");
+			} else if (event.winner == GameEndEvent.PLAYER_THIRD) {
+				gui.addWinLabel("you won the game");
+			} else if (event.winner == GameEndEvent.PLAYER_NONE) {
+				gui.addWinLabel("nobody won the game");
+			}
+		});
 
 	}
 

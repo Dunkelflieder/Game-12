@@ -8,7 +8,6 @@ import de.nerogar.noise.render.GLWindow;
 import de.nerogar.noise.util.Vector2f;
 import de.nerogar.noise.util.Vector3f;
 import game12.client.Controller;
-import game12.client.gui.Gui;
 import game12.client.gui.GuiContainer;
 import game12.client.map.ClientMap;
 import game12.client.systems.RenderSystem;
@@ -16,6 +15,7 @@ import game12.client.systems.SoundSystem;
 import game12.core.components.PositionComponent;
 import game12.core.map.Entity;
 import game12.core.networkEvents.EntityJumpEvent;
+import game12.core.networkEvents.GameEndEvent;
 import game12.core.request.PlayerPositionUpdateRequestPacket;
 import game12.core.request.ShootRequestPacket;
 import game12.core.systems.GameObjectsSystem;
@@ -43,7 +43,7 @@ public class FirstPersonController extends Controller {
 	private final MapSystem   mapSystem;
 	private final SoundSystem soundSystem;
 
-	private float screenShake;
+	private float    screenShake;
 	private Vector2f knockback = new Vector2f();
 
 	public FirstPersonController(GLWindow window, EventManager eventManager, List<ClientMap> maps, INetworkAdapter networkAdapter,
@@ -56,7 +56,7 @@ public class FirstPersonController extends Controller {
 		//map.getSystem(RenderSystem.class).setResolution(480, 270);
 		map.getSystem(RenderSystem.class).setResolution(640, 360);
 
-		Gui gui = new FirstPersonGui(eventManager, map);
+		FirstPersonGui gui = new FirstPersonGui(eventManager, map);
 		this.guiContainer.setActiveGui(gui);
 
 		map.setActive(true);
@@ -81,6 +81,16 @@ public class FirstPersonController extends Controller {
 					screenShake += 1.0;
 				}
 
+			}
+		});
+
+		map.getEventManager().register(GameEndEvent.class, event -> {
+			if (event.winner == GameEndEvent.PLAYER_FIRST) {
+				gui.addWinLabel("you won the game");
+			} else if (event.winner == GameEndEvent.PLAYER_THIRD) {
+				gui.addWinLabel("you lost the game");
+			} else if (event.winner == GameEndEvent.PLAYER_NONE) {
+				gui.addWinLabel("nobody won the game");
 			}
 		});
 

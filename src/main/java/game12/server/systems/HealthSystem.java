@@ -32,6 +32,11 @@ public class HealthSystem extends OnUpdateSystem {
 
 	@Override
 	protected void updateListenerFunction(UpdateEvent event) {
+		for (Entity entity : toRemove) {
+			if (entity.isValid()) map.removeEntity(entity.getID());
+		}
+		toRemove.clear();
+
 		for (HealthComponent healthComponent : map.getEntityList().getComponents(HealthComponent.class)) {
 			if (healthComponent.invulnerability > event.getDelta()) {
 				healthComponent.invulnerability -= event.getDelta();
@@ -74,11 +79,6 @@ public class HealthSystem extends OnUpdateSystem {
 	}
 
 	private void onHit(DamageAreaCollidingEvent event) {
-		for (Entity entity : toRemove) {
-			if (entity.isValid()) map.removeEntity(entity.getID());
-		}
-		toRemove.clear();
-
 		Entity entity = map.getEntity(event.entityID);
 		if (entity == null) return;
 		HealthComponent healthComponent = entity.getComponent(HealthComponent.class);

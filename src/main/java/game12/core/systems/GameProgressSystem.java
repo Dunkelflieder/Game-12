@@ -5,6 +5,8 @@ import game12.core.SynchronizedSystem;
 import game12.core.SystemSyncParameter;
 import game12.core.event.UpdateEvent;
 import game12.core.map.CoreMap;
+import game12.core.networkEvents.GameEndEvent;
+import game12.core.networkEvents.HealthChangedEvent;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,7 +24,10 @@ public class GameProgressSystem extends SynchronizedSystem {
 	private float time;
 	private int   state; // 0 = room build tim, >0 = overtime
 
-	private MapSystem mapSystem;
+	private boolean hasGameEnded;
+
+	private MapSystem    mapSystem;
+	private PlayerSystem playerSystem;
 
 	public GameProgressSystem(CoreMap map) {
 		this.map = map;
@@ -33,6 +38,7 @@ public class GameProgressSystem extends SynchronizedSystem {
 		super.init();
 
 		this.mapSystem = getContainer().getSystem(MapSystem.class);
+		this.playerSystem = getContainer().getSystem(PlayerSystem.class);
 
 		time = ROOM_TIME;
 		currentRoom = 2;
@@ -40,6 +46,7 @@ public class GameProgressSystem extends SynchronizedSystem {
 		registerSyncFunction(StateSyncParameter.class, this::syncNextRoom);
 
 		getEventManager().register(UpdateEvent.class, this::onUpdate);
+		playerSystem.healthChangedEvent.register(this::checkFirstPersonPlayer);
 	}
 
 	@Override
@@ -77,9 +84,21 @@ public class GameProgressSystem extends SynchronizedSystem {
 					nextState(state + 1, OVERTIME, currentRoom);
 					callSyncFunction(new StateSyncParameter(state, time, currentRoom));
 				} else {
-					// TODO end the game
-					//System.out.println("game lost!");
+					if (!hasGameEnded) {
+						getNetworkAdapter().send(new GameEndEvent(GameEndEvent.PLAYER_FIRST));
+						hasGameEnded = true;
+					}
 				}
+			}
+		}
+
+	}
+
+	private void checkFirstPersonPlayer(HealthChangedEvent event) {
+		if (event.newHealth <= 0) {
+			if (!hasGameEnded) {
+				getNetworkAdapter().send(new GameEndEvent(GameEndEvent.PLAYER_THIRD));
+				hasGameEnded = true;
 			}
 		}
 	}

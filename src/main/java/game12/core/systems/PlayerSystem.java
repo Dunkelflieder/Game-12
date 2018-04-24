@@ -15,6 +15,10 @@ import java.util.Iterator;
 
 public class PlayerSystem extends OnUpdateSystem {
 
+	public final EventContainer<HealthChangedEvent> healthChangedEvent = new EventContainer<>();
+
+	public final EventContainer<DamageImpactEvent> hitEvent = new EventContainer<>();
+
 	private CoreMap           map;
 	private Entity            player;
 	private PositionComponent playerPosition;
@@ -84,9 +88,5 @@ public class PlayerSystem extends OnUpdateSystem {
 			return player.getComponent(HealthComponent.class);
 		}
 	}
-
-	public final EventContainer<HealthChangedEvent> healthChangedEvent = new EventContainer<>();
-
-	public final EventContainer<DamageImpactEvent> hitEvent = new EventContainer<>();
 
 }
